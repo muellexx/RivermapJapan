@@ -1,3 +1,10 @@
 from django.contrib import admin
+from .models import River
 
-# Register your models here.
+
+class RivermapAdmin(admin.ModelAdmin):
+    list_display = ('name', 'url')
+
+
+admin.site.register(River, RivermapAdmin)
+

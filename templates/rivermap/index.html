@@ -1,0 +1,23 @@
+{% load static %}
+
+<html lang="en">
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>Rivermap Japan</title>
+    <link rel="stylesheet" href="{% static "css/style.css" %}">
+    <script src="{% static "js/map.js" %}"></script>
+  </head>
+  <body>
+    <div id="map"></div>
+
+    <!--
+    {% load static %}
+    <script src="{% static 'js/map.js' %}"></script>
+    <script src="./templates/js/map.js"></script>
+    -->
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB4FzVGy5foAnrj5soy0wTrRF2Htq_ZZdI&callback=initMap">
+    </script>
+  </body>
+</html>
