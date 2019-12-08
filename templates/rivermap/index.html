@@ -6,8 +6,11 @@
     <meta charset="utf-8">
     <title>Rivermap Japan</title>
     <link rel="stylesheet" href="{% static "css/style.css" %}">
-    <script type="text/javascript" src="{% static "js/river.json" %}"></script>
+    <!--<script type="text/javascript" src="{% static "js/river.json" %}"></script>-->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="{% static "js/map.js" %}"></script>
+    <script src="{% static "js/init-map.js" %}"></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB4FzVGy5foAnrj5soy0wTrRF2Htq_ZZdI&callback=initMap"></script>
   </head>
   <body>
     <div id="map"></div>
@@ -17,8 +20,7 @@
     <script src="{% static 'js/map.js' %}"></script>
     <script src="./templates/js/map.js"></script>
     -->
-    <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB4FzVGy5foAnrj5soy0wTrRF2Htq_ZZdI&callback=initMap">
-    </script>
+
   </body>
+
 </html>
