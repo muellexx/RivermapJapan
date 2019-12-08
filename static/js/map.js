@@ -21,7 +21,7 @@ function loadRivers() {
 function setRivers(json) {
     rivers = json.rivers;
     for (let i = 0; i < rivers.length; i++) {
-        var id = 0;
+        river = rivers[i];
         var riverCoordinates = [{
                 lat: rivers[i].start_lat,
                 lng: rivers[i].start_lng
@@ -32,10 +32,21 @@ function setRivers(json) {
             }
         ];
 
+        var river_color;
+        if (river.level >= river.highwater){
+            river_color = '#FF0000';
+        } else if (river.level >= river.middlewater){
+            river_color = '#00FF00';
+        } else if (river.level >= river.lowwater){
+            river_color = '#0000FF';
+        } else {
+            river_color = '#999999';
+        }
+        console.log(river_color);
         var river = new google.maps.Polyline({
             path: riverCoordinates,
             geodesic: true,
-            strokeColor: '#FF0000',
+            strokeColor: river_color,
             strokeOpacity: 1.0,
             strokeWeight: 5
         });
@@ -43,10 +54,10 @@ function setRivers(json) {
         var contentString = '<div id="content">' +
             '<div id="siteNotice">' +
             '</div>' +
-            '<h1 id="firstHeading" class="firstHeading">Tama River</h1>' +
+            '<h1 id="firstHeading" class="firstHeading">' + rivers[i].name + '</h1>' +
             '<div id="bodyContent">' +
-            '<p><b>Tama River</b>, located in <b>Tokyo Prefecture</b>, is a local ' +
-            'River of WhiteWater Level II-III.</p>' +
+            '<p><b>Waterevel:</b>' + rivers[i].level + '</p>' +
+            '<p><a href="' + rivers[i].url + '" target="_blank">Source</a></p>' +
             '</div>' +
             '</div>';
 
