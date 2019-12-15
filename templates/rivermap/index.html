@@ -5,6 +5,13 @@
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
     <meta charset="utf-8">
     <title>Rivermap Japan</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static "favicon/apple-touch-icon.png" %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static "favicon/favicon-32x32.png" %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static "favicon/favicon-16x16.png" %}">
+    <link rel="manifest" href="{% static "favicon/site.webmanifest" %}">
+    <link rel="mask-icon" href="{% static "favicon/safari-pinned-tab.svg" color="#5bbad5" %}">
+    <meta name="msapplication-TileColor" content="#00a300">
+    <meta name="theme-color" content="#ffffff">
     <link rel="stylesheet" href="{% static "css/style.css" %}">
     <!--<script type="text/javascript" src="{% static "js/river.json" %}"></script>-->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
@@ -14,12 +21,9 @@
   </head>
   <body>
     <div id="map"></div>
-
-    <!--
-    {% load static %}
-    <script src="{% static 'js/map.js' %}"></script>
-    <script src="./templates/js/map.js"></script>
-    -->
+    <div id="content">
+      Hello world!
+    </div>
 
   </body>
 
