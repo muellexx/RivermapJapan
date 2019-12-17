@@ -14,11 +14,11 @@ function loadRivers(popup) {
         ];
 
         var river_color;
-        if (iriver.level >= iriver.highwater){
+        if (iriver.level >= iriver.high_water){
             river_color = '#FF0000';
-        } else if (iriver.level >= iriver.middlewater){
+        } else if (iriver.level >= iriver.middle_water){
             river_color = '#00FF00';
-        } else if (iriver.level >= iriver.lowwater){
+        } else if (iriver.level >= iriver.low_water){
             river_color = '#0000FF';
         } else {
             river_color = '#999999';

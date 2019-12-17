@@ -190,8 +190,8 @@ function createPopupClass() {
         //console.log(river);
         content.innerHTML = "<h3>" + river.name + "</h3>";
         content.innerHTML += "<p><b>Current Level: " + river.level + " m</b></br>";
-        content.innerHTML += "Updated: " + river.updated + "</p>";
-        content.innerHTML += "LW: " + river.lowwater + " &nbsp; MW: " + river.middlewater + " &nbsp; HW: " + river.highwater;
+        content.innerHTML += "Updated: " + river.date + "</p>";
+        content.innerHTML += "LW: " + river.low_water + " &nbsp; MW: " + river.middle_water + " &nbsp; HW: " + river.high_water;
         content.innerHTML += '<p align="right"><a href="' + river.url + '" target="_blank">Source</a></p>';
     }
   };
