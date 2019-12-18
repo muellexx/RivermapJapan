@@ -14,6 +14,7 @@ class Command(BaseCommand):
         cur.execute("SELECT * FROM rivermap_river")
         rows = cur.fetchall()
         for row in rows:
+            # TODO multithread
             river_id = '0' * (3 - len(str(row[0]))) + str(row[0])
             river_name = row[1]
             url = row[2]
