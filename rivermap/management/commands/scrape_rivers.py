@@ -31,7 +31,7 @@ class Command(BaseCommand):
             bs4rows = table.find_all("tr")
 
             # Create and initialize file for result
-            filename = 'test' + river_id + '(' + river_name.replace(" ", "_") + ').json'
+            filename = 'static/js/data/river/' + river_id + '(' + river_name.replace(" ", "_") + ').json'
 
             data = {'level': []}
 
@@ -92,7 +92,7 @@ class Command(BaseCommand):
                 'end_lng': row[7],
             })
 
-        with open('testriver.json', 'w') as outfile:
+        with open('static/js/data/river.json', 'w') as outfile:
             json.dump(rivers, outfile, indent=4)
 
         conn.close()

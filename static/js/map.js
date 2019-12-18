@@ -1,5 +1,5 @@
 function loadRivers(popup) {
-    $.getJSON("static/js/river.json", function(json){
+    $.getJSON("static/js/data/river.json", function(json){
         rivers = json.rivers;
         for (let i = 0; i < rivers.length; i++) {
         var iriver = rivers[i];
