@@ -82,7 +82,7 @@ function initMap() {
     Popup = createPopupClass();
     popup = new Popup(
         new google.maps.LatLng(35.8, 139.19),
-        document.getElementById('content'));
+        document.getElementById('riverinfo'));
     popup.setMap(map);
     loadRivers(popup);
 }
@@ -98,19 +98,19 @@ function createPopupClass() {
   /**
    * A customized popup on the map.
    * @param {!google.maps.LatLng} position
-   * @param {!Element} content The bubble div.
+   * @param {!Element} riverinfo The bubble div.
    * @constructor
    * @extends {google.maps.OverlayView}
    */
-  function Popup(position, content) {
+  function Popup(position, riverinfo) {
     this.position = position;
 
-    content.classList.add('popup-bubble');
+    riverinfo.classList.add('popup-bubble');
 
     // This zero-height div is positioned at the bottom of the bubble.
     var bubbleAnchor = document.createElement('div');
     bubbleAnchor.classList.add('popup-bubble-anchor');
-    bubbleAnchor.appendChild(content);
+    bubbleAnchor.appendChild(riverinfo);
 
     // This zero-height div is positioned at the bottom of the tip.
     this.containerDiv = document.createElement('div');
@@ -139,14 +139,14 @@ function createPopupClass() {
   /** Called each frame when the popup needs to draw itself. */
   Popup.prototype.draw = function() {
     var divPosition = this.getProjection().fromLatLngToDivPixel(this.position);
-    //content.innerHTML = divPosition.y + ", ";
-    //content.innerHTML = this.containerDiv.children[0].className; //divPosition.y + ", ";
+    //riverinfo.innerHTML = divPosition.y + ", ";
+    //riverinfo.innerHTML = this.containerDiv.children[0].className; //divPosition.y + ", ";
     if(divPosition.y > 0){
-        content.className = "popup-bubble";
+        riverinfo.className = "popup-bubble";
         this.containerDiv.children[0].className = "popup-bubble-anchor";
         this.containerDiv.className = "popup-container";
     }else{
-        content.className = "popdown-bubble";
+        riverinfo.className = "popdown-bubble";
         this.containerDiv.children[0].className = "popdown-bubble-anchor";
         this.containerDiv.className = "popdown-container";
         //bubbleAnchor.className = "popdown-bubble-anchor";
@@ -188,11 +188,11 @@ function createPopupClass() {
 
     Popup.prototype.setContent = function(river) {
         //console.log(river);
-        content.innerHTML = "<h3>" + river.name + "</h3>";
-        content.innerHTML += "<p><b>Current Level: " + river.level + " m</b></br>";
-        content.innerHTML += "Updated: " + river.date + "</p>";
-        content.innerHTML += "LW: " + river.low_water + " &nbsp; MW: " + river.middle_water + " &nbsp; HW: " + river.high_water;
-        content.innerHTML += '<p align="right"><a href="' + river.url + '" target="_blank">Source</a></p>';
+        riverinfo.innerHTML = "<h3>" + river.name + "</h3>";
+        riverinfo.innerHTML += "<p><b>Current Level: " + river.level + " m</b></br>";
+        riverinfo.innerHTML += "Updated: " + river.date + "</p>";
+        riverinfo.innerHTML += "LW: " + river.low_water + " &nbsp; MW: " + river.middle_water + " &nbsp; HW: " + river.high_water;
+        riverinfo.innerHTML += '<p align="right"><a href="' + river.url + '" target="_blank">Source</a></p>';
     }
   };
 
