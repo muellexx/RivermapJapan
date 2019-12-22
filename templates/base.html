@@ -18,7 +18,10 @@
     <meta name="msapplication-TileColor" content="#00a300">
     <meta name="theme-color" content="#ffffff">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
-
+    {% url 'rivermap' as map_url %}
+    {% if request.get_full_path == map_url %}
+    <link rel="stylesheet" href="{% static 'css/map.css' %}">
+    {% endif %}
     {% if title %}
         <title>Rivermap Japan - {{ title }}</title>
     {% else %}
@@ -42,8 +45,13 @@
                 </div>
                 <!-- Navbar Right Side -->
                 <div class="navbar-nav">
-                    <a class="nav-item nav-link" href="#">Login</a>
-                    <a class="nav-item nav-link" href="{% url 'register' %}">Register</a>
+                    {% if user.is_authenticated %}
+                        <a class="nav-item nav-link" href="{% url 'profile' %}">Profile</a>
+                        <a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>
+                    {% else %}
+                        <a class="nav-item nav-link" href="{% url 'login' %}">Login</a>
+                        <a class="nav-item nav-link" href="{% url 'register' %}">Register</a>
+                    {% endif %}
                 </div>
             </div>
         </div>
