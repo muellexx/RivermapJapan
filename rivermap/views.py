@@ -2,6 +2,6 @@ from django.shortcuts import render
 from .models import River
 
 
-def index(request):
+def rivermap(request):
     rivers = River.objects.all()
-    return render(request, 'rivermap/index.html', {'rivers': rivers})
+    return render(request, 'rivermap/map.html', {'title': 'Map', 'rivers': rivers})

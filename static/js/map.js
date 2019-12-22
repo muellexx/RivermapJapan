@@ -21,7 +21,7 @@ function loadRivers(popup) {
         } else if (iriver.level >= iriver.low_water){
             river_color = '#0000FF';
         } else {
-            river_color = '#999999';
+            river_color = '#8a8a8a';
         }
 
         var river = new google.maps.Polyline({
@@ -29,7 +29,7 @@ function loadRivers(popup) {
             geodesic: true,
             strokeColor: river_color,
             strokeOpacity: 1.0,
-            strokeWeight: 5,
+            strokeWeight: 7,
             id: i
         });
 
