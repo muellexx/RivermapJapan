@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
 
@@ -7,10 +8,17 @@ from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
 def register(request):
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
-        if form.is_valid():
+        email_exists = False
+        for user in User.objects.all():
+            if user.email == form.data['email']:
+                email_exists = True
+        if form.is_valid() and not email_exists:
             form.save()
             messages.success(request, f'You are now able to log in!')
             return redirect('login')
+        elif email_exists:
+            messages.warning(request, f'An account with this email already exists. Reset Password?')
+            return redirect('password_reset')
     else:
         form = UserRegisterForm()
     return render(request, 'users/register.html', {'form': form})
