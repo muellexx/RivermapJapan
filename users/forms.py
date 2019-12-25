@@ -11,6 +11,13 @@ class UserRegisterForm(UserCreationForm):
         model = User
         fields = ['username', 'email', 'password1', 'password2']
 
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        if User.objects.filter(email=email).exists():
+            raise forms.ValidationError(
+                'A user with this email address already exists')
+        return email
+
 
 class UserUpdateForm(forms.ModelForm):
     email = forms.EmailField()
