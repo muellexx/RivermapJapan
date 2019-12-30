@@ -30,6 +30,12 @@ class UserPostListView(ListView):
         user = get_object_or_404(User, username=self.kwargs.get('username'))
         return Post.objects.filter(author=user).order_by('-date_posted')
 
+    def get_context_data(self, **kwargs):
+        context = super(UserPostListView, self).get_context_data(**kwargs)
+        user = get_object_or_404(User, username=self.kwargs.get('username'))
+        context['imageurl'] = User.objects.filter(username=user)[0].profile.image.url
+        return context
+
 
 class PostDetailView(DetailView):
     model = Post
