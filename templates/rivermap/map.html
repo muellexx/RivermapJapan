@@ -1,8 +1,14 @@
 {% extends "base.html" %}
+{% load static %}
 {% block content %}
 <div id="map"></div>
 
 <div id="riverinfo">
     If you see this message, something went wrong.
 </div>
+
+<script src="{% static 'js/map.js' %}"></script>
+<script src="{% static 'js/init-map.js' %}"></script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB4FzVGy5foAnrj5soy0wTrRF2Htq_ZZdI&callback=initMap"></script>
+
 {% endblock content %}
