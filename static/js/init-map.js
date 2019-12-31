@@ -80,6 +80,20 @@ function initMap() {
             }
         ]
     });
+
+    // Get Location of User.
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+            var pos = {
+                lat: position.coords.latitude,
+                lng: position.coords.longitude
+            };
+            if (pos.lat > 21 && pos.lat < 47 && pos.lng > 119 && pos.lng < 151) {
+                map.setCenter(pos);
+            }
+        });
+    }
+
     Popup = createPopupClass();
     popup = new Popup(
         new google.maps.LatLng(35.8, 139.19),
