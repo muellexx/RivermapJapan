@@ -6,9 +6,12 @@
         <div class="media-body">
             <h2 class="account-heading">{{ user.username }}</h2>
             <p class="text-secondary">{{ user.email }}</p>
+            <div align="right">
+                <a href="{% url 'profile-edit' %}">Edit Account</a>
+            </div>
         </div>
-        <a href="{% url 'profile-edit' %}">Edit Account</a>
     </div>
+
     <h4 class="mb-3">Posts ({{ page_obj.paginator.count }}):</h4>
     {% for post in posts %}
         <article class="media content-section">

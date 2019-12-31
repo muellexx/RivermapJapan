@@ -14,6 +14,9 @@
             <fieldset class="form-group">
                 <legend class="border-bottom mb-4">Profile Info</legend>
                 {{ u_form|crispy }}
+                <p>email: {{ user.email }} </br>The email address can currently not be changed for security reasons.
+                    If you wish to change it, please send an email
+                    to <a href="mailto:rivermapjapan@gmail.com?subject=Change email">rivermapjapan@gmail.com</a></p>
                 {{ p_form|crispy }}
             </fieldset>
             <div class="form-group">
