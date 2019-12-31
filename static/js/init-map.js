@@ -8,6 +8,7 @@ function initMap() {
             lat: 35.802514,
             lng: 139.194369
         },
+        scaleControl: true,
         mapTypeId: 'terrain',
         styles: [{
                 elementType: 'all',
