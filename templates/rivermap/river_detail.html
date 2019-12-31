@@ -1,0 +1,13 @@
+{% extends "base_container.html" %}
+{% block container_content %}
+    <article class="media content-section">
+        <div class="media-body">
+            <div class="article-metadata">
+                <a class="mr-2" href="#">{{ object.name }}</a>
+                <small class="text-muted">{{ object.level }}</small>
+            </div>
+            <h2 class="article-title">{{ object.name }}</h2>
+            <p class="article-content">{{ object.url }}</p>
+        </div>
+    </article>
+{% endblock container_content %}
