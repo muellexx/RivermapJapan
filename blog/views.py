@@ -28,6 +28,7 @@ class UserPostListView(ListView):
 
     def get_queryset(self):
         user = get_object_or_404(User, username=self.kwargs.get('username'))
+        print(user)
         return Post.objects.filter(author=user).order_by('-date_posted')
 
     def get_context_data(self, **kwargs):

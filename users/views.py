@@ -1,4 +1,5 @@
-from django.shortcuts import render, redirect
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_bytes, force_text
@@ -9,6 +10,9 @@ from django.contrib.auth import login
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.views.generic import ListView
+
+from blog.models import Post
 from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
 from .tokens import account_activation_token
 
@@ -63,8 +67,20 @@ def activate(request, uidb64, token):
         return redirect('blog-home')
 
 
+class ProfileView(LoginRequiredMixin, ListView):
+    model = Post
+    template_name = 'users/profile.html'
+    context_object_name = 'posts'
+    paginate_by = 5
+
+    def get_queryset(self):
+        user = self.request.user
+        return Post.objects.filter(author=user).order_by('-date_posted')
+
+
 @login_required
-def profile(request):
+def profile_edit(request):
+    print(request.user)
     if request.method == 'POST':
         u_form = UserUpdateForm(request.POST, instance=request.user)
         p_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
@@ -82,7 +98,7 @@ def profile(request):
         'p_form': p_form
     }
 
-    return render(request, 'users/profile.html', context)
+    return render(request, 'users/profile_edit.html', context)
 
 
 @login_required
