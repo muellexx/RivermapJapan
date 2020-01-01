@@ -16,11 +16,11 @@ class RiverDetailView(DetailView):
 
 class RiverCreateView(LoginRequiredMixin, CreateView):
     model = River
-    fields = ['name', 'url', 'level', 'date', 'high_water', 'middle_water', 'low_water', 'start_lat', 'start_lng',
+    fields = ['name', 'url', 'high_water', 'middle_water', 'low_water', 'start_lat', 'start_lng',
               'end_lat', 'end_lng', 'difficulty', 'section']
 
 
 class RiverUpdateView(LoginRequiredMixin, UpdateView):
     model = River
-    fields = ['name', 'url', 'level', 'date', 'high_water', 'middle_water', 'low_water', 'start_lat', 'start_lng',
+    fields = ['name', 'url', 'high_water', 'middle_water', 'low_water', 'start_lat', 'start_lng',
               'end_lat', 'end_lng', 'difficulty', 'section']
