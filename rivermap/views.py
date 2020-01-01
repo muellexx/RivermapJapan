@@ -1,6 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render
-from django.views.generic import CreateView, DetailView, UpdateView
+from django.views.generic import CreateView, DetailView, UpdateView, ListView
 
 from .models import River
 
@@ -8,6 +8,14 @@ from .models import River
 def rivermap(request):
     rivers = River.objects.all()
     return render(request, 'rivermap/map.html', {'title': 'Map', 'rivers': rivers})
+
+
+class RiverListView(ListView):
+    model = River
+    template_name = 'rivermap/home.html'
+    context_object_name = 'rivers'
+    ordering = ['name']
+    paginate_by = 5
 
 
 class RiverDetailView(DetailView):
