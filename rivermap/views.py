@@ -1,6 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render
-from django.views.generic import CreateView, DetailView
+from django.views.generic import CreateView, DetailView, UpdateView
 
 from .models import River
 
@@ -18,8 +18,9 @@ class RiverCreateView(LoginRequiredMixin, CreateView):
     model = River
     fields = ['name', 'url', 'level', 'date', 'high_water', 'middle_water', 'low_water', 'start_lat', 'start_lng',
               'end_lat', 'end_lng', 'difficulty', 'section']
-    success_url = '/'
 
-    def form_valid(self, form):
-        return super().form_valid(form)
 
+class RiverUpdateView(LoginRequiredMixin, UpdateView):
+    model = River
+    fields = ['name', 'url', 'level', 'date', 'high_water', 'middle_water', 'low_water', 'start_lat', 'start_lng',
+              'end_lat', 'end_lng', 'difficulty', 'section']

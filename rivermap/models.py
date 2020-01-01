@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 
 
 class River(models.Model):
@@ -16,4 +17,6 @@ class River(models.Model):
     difficulty = models.CharField(max_length=255, default='')
     section = models.CharField(max_length=255, default='')
 
+    def get_absolute_url(self):
+        return reverse('river-detail', kwargs={'pk': self.pk})
 
