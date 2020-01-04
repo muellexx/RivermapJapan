@@ -1,10 +1,16 @@
 asgiref==3.2.3
 beautifulsoup4==4.8.1
 bs4==0.0.1
+certifi==2019.11.28
+chardet==3.0.4
 Django==3.0
 django-crispy-forms==1.8.1
+googletrans==2.4.0
+idna==2.8
 Pillow==6.2.1
 pytz==2019.3
+requests==2.22.0
 six==1.13.0
 soupsieve==1.9.5
 sqlparse==0.3.0
+urllib3==1.25.7
