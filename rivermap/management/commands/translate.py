@@ -10,7 +10,7 @@ import time
 
 
 class Command(BaseCommand):
-    help = 'Scape Info of all the rivers in Japan'
+    help = 'Translate names of Rivers, Observatories and Dams to English'
 
     def handle(self, *args, **options):
         translator = Translator()
@@ -34,6 +34,7 @@ class Command(BaseCommand):
                         river.name = river.name + " River"
                     elif " River" not in river.name:
                         river.name.replace("River", " River")
+                    print(river.name)
                 except ValueError:
                     limit_reached = True
 

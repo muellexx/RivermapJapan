@@ -25,7 +25,7 @@ class River(models.Model):
     region = models.ManyToManyField(Region)
     prefecture = models.ManyToManyField(Prefecture)
     name = models.CharField(max_length=255)
-    name_jp = models.CharField(max_length=255, unique=True, null=True)
+    name_jp = models.CharField(max_length=255, unique=True)
 
     def __str__(self):
         return self.name
@@ -36,9 +36,11 @@ class River(models.Model):
 
 class Observatory(models.Model):
     river = models.ManyToManyField(River)
-    name = models.CharField(max_length=255, default='')
-    name_jp = models.CharField(max_length=255, default='')
-    url = models.CharField(max_length=2083)
+    region = models.ForeignKey(Region, on_delete=models.PROTECT)
+    prefecture = models.ForeignKey(Prefecture, on_delete=models.PROTECT)
+    name = models.CharField(max_length=255)
+    name_jp = models.CharField(max_length=255)
+    url = models.CharField(max_length=2083, unique=True)
     level = models.FloatField(null=True, blank=True)
     date = models.DateTimeField(max_length=255, null=True, blank=True)
 
@@ -48,9 +50,11 @@ class Observatory(models.Model):
 
 class Dam(models.Model):
     river = models.ManyToManyField(River)
-    name = models.CharField(max_length=255, default='')
-    name_jp = models.CharField(max_length=255, default='')
-    url = models.CharField(max_length=2083)
+    region = models.ForeignKey(Region, on_delete=models.PROTECT)
+    prefecture = models.ForeignKey(Prefecture, on_delete=models.PROTECT)
+    name = models.CharField(max_length=255)
+    name_jp = models.CharField(max_length=255)
+    url = models.CharField(max_length=2083, unique=True)
     level = models.FloatField(null=True, blank=True)
     date = models.DateTimeField(max_length=255, null=True, blank=True)
 
