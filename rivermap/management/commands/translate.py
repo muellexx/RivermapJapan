@@ -1,12 +1,7 @@
-from bs4 import BeautifulSoup as soup
-from django.core.management.base import BaseCommand, CommandError
-from urllib.request import urlopen as uReq
-from selenium import webdriver
+from django.core.management.base import BaseCommand
 
-from django.core.serializers import json
 from googletrans import Translator
-from rivermap.models import Prefecture, River, Observatory, Dam
-import time
+from rivermap.models import River, Observatory, Dam
 
 
 class Command(BaseCommand):
@@ -35,6 +30,41 @@ class Command(BaseCommand):
                     elif " River" not in river.name:
                         river.name.replace("River", " River")
                     print(river.name)
+                    river.save()
+                except ValueError:
+                    limit_reached = True
+
+        rivers = Observatory.objects.all()
+        for river in rivers:
+            if limit_reached:
+                break
+            if river.name == 'TODO':
+                try:
+                    river.name = translator.translate(river.name_jp, src='ja', dest='ja').pronunciation
+                    if not river.name:
+                        river.name = translator.translate(river.name_jp, src='ja', dest='en').text
+                    print(river.name)
+                    river.save()
+                except ValueError:
+                    limit_reached = True
+
+        rivers = Dam.objects.all()
+        for river in rivers:
+            if limit_reached:
+                break
+            if river.name == 'TODO':
+                try:
+                    river.name = translator.translate(river.name_jp, src='ja', dest='ja').pronunciation
+                    if not river.name:
+                        river.name = translator.translate(river.name_jp, src='ja', dest='en').text
+                    if river.name.endswith(" damu"):
+                        river.name = river.name.replace("damu", "Dam")
+                    elif river.name.endswith("damu"):
+                        river.name = river.name.replace("damu", " Dam")
+                    else:
+                        river.name = river.name + " Dam"
+                    print(river.name)
+                    river.save()
                 except ValueError:
                     limit_reached = True
 

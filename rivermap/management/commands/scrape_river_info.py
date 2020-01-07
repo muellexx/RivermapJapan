@@ -1,14 +1,12 @@
 import sys
 
 from bs4 import BeautifulSoup as soup
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 from urllib.request import urlopen as uReq
 from selenium import webdriver
 
-from django.core.serializers import json
 from googletrans import Translator
 from rivermap.models import Prefecture, River, Observatory, Dam
-import time
 
 
 class Command(BaseCommand):
