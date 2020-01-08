@@ -1,0 +1,16 @@
+{% extends "base_container.html" %}
+{% block container_content %}
+    <div class="content-section">
+        <div class="media-head">
+            <h2 class="article-title">{{ object.name }}</h2>
+            <h5 class="article-title">{{ object.region }}</h5>
+        </div>
+        {% for river in object.river_set.all %}
+        <article class="media content-section">
+            <div class="media-body">
+                <small class="text-muted">{{ river.name }}</small>
+            </div>
+        </article>
+        {% endfor %}
+    </div>
+{% endblock container_content %}

@@ -16,9 +16,13 @@ class Prefecture(models.Model):
     region = models.ForeignKey(Region, on_delete=models.PROTECT)
     name = models.CharField(max_length=255, unique=True)
     name_jp = models.CharField(max_length=255, unique=True)
+    slug = models.SlugField()
 
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse('prefecture-detail', kwargs={'slug': self.slug})
 
 
 class River(models.Model):

@@ -1,59 +1,74 @@
 {% extends "base_container.html" %}
 {% block container_content %}
-    {% if is_paginated %}
-
-        {% if page_obj.has_previous %}
-            <a class="btn btn-outline-info mb-4" href="?page=1">First</a>
-            <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+    <div class="content-section">
+        {% with rivers|first as river %}
+        {% with river.prefecture.all as prefectures %}
+        {% for prefecture in prefectures %}
+        {% if prefecture.slug == view.kwargs.slug %}
+        <div class="media-head">
+            <h2 class="article-title">{{ prefecture.name }}</h2>
+            <h5 class="article-title">{{ prefecture.region.name }}</h5>
+        </div>
         {% endif %}
-
-        {% for num in page_obj.paginator.page_range %}
-            {% if page_obj.number == num %}
-                <a class="btn btn-info mb-4" href="?page={{ num }}">{{ num }}</a>
-            {% elif num > page_obj.number|add:'-4' and num < page_obj.number|add:'4' %}
-                <a class="btn btn-outline-info mb-4" href="?page={{ num }}">{{ num }}</a>
-            {% endif %}
         {% endfor %}
+        {% endwith %}
+        {% endwith %}
 
-        {% if page_obj.has_next %}
-            <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.next_page_number }}">Next</a>
-            <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+        {% if is_paginated %}
+
+            {% if page_obj.has_previous %}
+                <a class="btn btn-outline-info mb-4" href="?page=1">First</a>
+                <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+            {% endif %}
+
+            {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                    <a class="btn btn-info mb-4" href="?page={{ num }}">{{ num }}</a>
+                {% elif num > page_obj.number|add:'-4' and num < page_obj.number|add:'4' %}
+                    <a class="btn btn-outline-info mb-4" href="?page={{ num }}">{{ num }}</a>
+                {% endif %}
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+                <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.next_page_number }}">Next</a>
+                <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+            {% endif %}
+
         {% endif %}
-
-    {% endif %}
-    {% if user.is_authenticated %}
-        <a class="btn btn-primary btn-sm mt-1 mb-4" style="float: right;" href="{% url 'river-create' %}">New River</a>
-    {% endif %}
-    {% for river in rivers %}
-        <article class="media content-section">
-            <div class="media-body">
-                <div class="article-metadata">
-                    <h3><a class="article-title" href="{% url 'river-detail' river.id %}">{{ river.name }}</a></h3>
-                    <small class="text-muted">{{ river.section }}</small>
+        {% if user.is_authenticated %}
+            <a class="btn btn-primary btn-sm mt-1 mb-4" style="float: right;" href="{% url 'river-create' %}">New River</a>
+        {% endif %}
+        {% for river in rivers %}
+            <article class="media content-section">
+                <div class="media-body">
+                    <div class="article-metadata">
+                        <h3><a class="article-title" href="{% url 'river-detail' view.kwargs.slug river.id %}">{{ river.name }}</a></h3>
+                        <small class="text-muted">{{ river.section }}</small>
+                    </div>
+                    <p class="article-content">Current level: {{ river.level }} ({{ river.date }})</p>
                 </div>
-                <p class="article-content">Current level: {{ river.level }} ({{ river.date }})</p>
-            </div>
-        </article>
-    {% endfor %}
-    {% if is_paginated %}
-
-        {% if page_obj.has_previous %}
-            <a class="btn btn-outline-info mb-4" href="?page=1">First</a>
-            <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.previous_page_number }}">Previous</a>
-        {% endif %}
-
-        {% for num in page_obj.paginator.page_range %}
-            {% if page_obj.number == num %}
-                <a class="btn btn-info mb-4" href="?page={{ num }}">{{ num }}</a>
-            {% elif num > page_obj.number|add:'-4' and num < page_obj.number|add:'4' %}
-                <a class="btn btn-outline-info mb-4" href="?page={{ num }}">{{ num }}</a>
-            {% endif %}
+            </article>
         {% endfor %}
+        {% if is_paginated %}
 
-        {% if page_obj.has_next %}
-            <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.next_page_number }}">Next</a>
-            <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+            {% if page_obj.has_previous %}
+                <a class="btn btn-outline-info mb-4" href="?page=1">First</a>
+                <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+            {% endif %}
+
+            {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                    <a class="btn btn-info mb-4" href="?page={{ num }}">{{ num }}</a>
+                {% elif num > page_obj.number|add:'-4' and num < page_obj.number|add:'4' %}
+                    <a class="btn btn-outline-info mb-4" href="?page={{ num }}">{{ num }}</a>
+                {% endif %}
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+                <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.next_page_number }}">Next</a>
+                <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+            {% endif %}
+
         {% endif %}
-
-    {% endif %}
+    </div>
 {% endblock container_content %}

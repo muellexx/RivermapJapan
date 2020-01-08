@@ -1,13 +1,29 @@
 {% extends "base_container.html" %}
 {% block container_content %}
-    <article class="media content-section">
-        <div class="media-body">
-            <div class="article-metadata">
-                <a class="mr-2" href="#">{{ object.name }}</a>
-                <small class="text-muted">{{ object.level }}</small>
-            </div>
+    <div class="content-section">
+        <div class="media-head">
             <h2 class="article-title">{{ object.name }}</h2>
-            <p class="article-content">{{ object.url }}</p>
         </div>
-    </article>
+        {% if river.section_set.count > 0 %}
+        <div class="content-section">
+            <div class="media-body">
+                <h6>White Water sections ({{ river.section_set.count }}):</h6>
+                {% for section in object.section_set.all %}
+                    <small class="text-muted">{{ section.name }}</small>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        <div class="content-section">
+            <div class="media-body">
+                <h6>Prefectures ({{ river.prefecture.count }}):</h6>
+                {% for prefecture in object.prefecture.all %}
+                    <small class="text-muted">
+                        <a href="{% url 'river-list' prefecture.slug %}">{{ prefecture.name }}</a>
+                        ({{ prefecture.region.name }})
+                    </small>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
 {% endblock container_content %}
