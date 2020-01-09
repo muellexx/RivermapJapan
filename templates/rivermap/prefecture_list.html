@@ -23,7 +23,7 @@
     {% for prefecture in prefectures %}
         <article class="media content-section">
             <div class="media-body">
-                <h6 class="mb-0"><a class="article-title" href="{% url 'river-list' prefecture.slug %}">{{ prefecture.name }}</a></h6>
+                <h6 class="mb-0"><a class="article-title" href="{% url 'prefecture-detail' prefecture.slug %}">{{ prefecture.name }}</a></h6>
                 <small class="text-muted">
                     {{ prefecture.region }}
                 </small>
@@ -31,8 +31,9 @@
                     <table class="table mb-0">
                         <tbody>
                             <tr>
-                                <td class="py-1">{{ prefecture.river_set.count }} rivers</td>
-                                <td class="py-1">{{ prefecture.section_set.count }} sections</td>
+                                <td class="py-1"><a href="{% url 'river-list' prefecture.slug %}">{{ prefecture.river_set.count }} Rivers</a></td>
+                                <td class="py-1"><a href="#">{{ prefecture.section_set.count }} Sections</a></td>
+                                <td class="py-1"><a href="#">{{ prefecture.spot_set.count }} Spots</a></td>
                             </tr>
                         </tbody>
                     </table>

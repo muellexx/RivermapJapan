@@ -4,7 +4,7 @@
         {% with rivers|first as river %}
         {% with river.prefecture.all as prefectures %}
         {% for prefecture in prefectures %}
-        {% if prefecture.slug == view.kwargs.slug %}
+        {% if prefecture.slug == view.kwargs.prefecture %}
         <div class="media-head">
             <h2 class="article-title">{{ prefecture.name }}</h2>
             <h5 class="article-title">{{ prefecture.region.name }}</h5>
@@ -42,7 +42,7 @@
             <article class="media content-section">
                 <div class="media-body">
                     <div class="article-metadata">
-                        <h3><a class="article-title" href="{% url 'river-detail' view.kwargs.slug river.id %}">{{ river.name }}</a></h3>
+                        <h3><a class="article-title" href="{% url 'river-detail' view.kwargs.prefecture river.id %}">{{ river.name }}</a></h3>
                         <small class="text-muted">{{ river.section }}</small>
                     </div>
                     <p class="article-content">Current level: {{ river.level }} ({{ river.date }})</p>

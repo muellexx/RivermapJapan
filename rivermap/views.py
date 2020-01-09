@@ -1,8 +1,11 @@
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import render
+from django.http import HttpResponse
+from django.shortcuts import render, get_object_or_404
 from django.views.generic import CreateView, DetailView, UpdateView, ListView
 
 from .models import River, Prefecture
+from .forms import SectionAddForm
 
 
 def rivermap(request):
@@ -10,24 +13,15 @@ def rivermap(request):
     return render(request, 'rivermap/map.html', {'title': 'Map', 'rivers': rivers})
 
 
-# class RiverListView(ListView):
-#     model = River
-#     template_name = 'rivermap/home.html'
-#     context_object_name = 'rivers'
-#     ordering = ['name']
-#     paginate_by = 5
-
-
 class RiverListView(ListView):
     model = River
-    template_name = 'rivermap/home.html'
+    # template_name = 'rivermap/river_list.html'
     context_object_name = 'rivers'
     ordering = ['name']
     paginate_by = 20
 
     def get_queryset(self):
-        #return River.objects.filter(prefecture__slug="hokkaido")
-        return River.objects.filter(prefecture__slug=self.kwargs['slug'])
+        return River.objects.filter(prefecture__slug=self.kwargs['prefecture']).order_by('name')
 
 
 class PrefectureListView(ListView):
@@ -56,3 +50,30 @@ class RiverUpdateView(LoginRequiredMixin, UpdateView):
     model = River
     fields = ['name', 'url', 'high_water', 'middle_water', 'low_water', 'start_lat', 'start_lng',
               'end_lat', 'end_lng', 'difficulty', 'section']
+
+
+@login_required
+def add_section(request):
+    if request.method == 'POST':
+        if 'prepair_comment' in request.POST:
+            river = get_object_or_404(River, pk=request.POST.get('river'))
+            prefecture = get_object_or_404(Prefecture, slug=request.POST.get('prefecture'))
+            print(prefecture.name)
+            form = SectionAddForm
+            return render(request, 'rivermap/add_section.html', {'form': form, 'river': river, 'prefecture': prefecture})
+        else:
+            form = SectionAddForm(request.POST)
+            if form.is_valid():
+                river = get_object_or_404(River, pk=request.POST.get('river'))
+                prefecture = get_object_or_404(Prefecture, slug=request.POST.get('prefecture'))
+                section = form.save(commit=False)
+                section.river = river
+                section.prefecture = prefecture
+                section.region = prefecture.region
+                print(section.river)
+                print(section.prefecture)
+                print(section.region)
+                return HttpResponse('thanks')
+    else:
+        form = SectionAddForm
+    return render(request, 'rivermap/add_section.html', {'form': form})

@@ -5,12 +5,34 @@
             <h2 class="article-title">{{ object.name }}</h2>
             <h5 class="article-title">{{ object.region }}</h5>
         </div>
-        {% for river in object.river_set.all %}
-        <article class="media content-section">
+        <div class="media content-section">
             <div class="media-body">
-                <small class="text-muted">{{ river.name }}</small>
+                <h5 class="text-muted">
+                    <a href="{% url 'river-list' object.slug %}">Rivers: {{ object.river_set.count }}</a>
+                </h5>
+                <table class="table mb-0">
+                    <tbody>
+                        <tr>
+                            <td class="py-1"><a href="#">{{ object.observatory_set.count }} Observatories</a></td>
+                            <td class="py-1"><a href="#">{{ object.dam_set.count }} Dams</a></td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
-        </article>
-        {% endfor %}
+        </div>
+        <div class="media content-section">
+            <div class="media-body">
+                <h5 class="text-muted">
+                    <a href="#">Sections: {{ object.section_set.all.count }}</a>
+                </h5>
+            </div>
+        </div>
+        <div class="media content-section">
+            <div class="media-body">
+                <h5 class="text-muted">
+                    <a href="#">Spots: {{ object.spot_set.all.count }}</a>
+                </h5>
+            </div>
+        </div>
     </div>
 {% endblock container_content %}
