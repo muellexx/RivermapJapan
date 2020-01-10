@@ -70,37 +70,44 @@ class Section(models.Model):
     river = models.ForeignKey(River, on_delete=models.PROTECT)
     region = models.ForeignKey(Region, on_delete=models.PROTECT)
     prefecture = models.ForeignKey(Prefecture, on_delete=models.PROTECT)
-    observatory = models.ForeignKey(Observatory, on_delete=models.PROTECT, blank=True)
-    dam = models.ForeignKey(Dam, on_delete=models.PROTECT, blank=True)
+    observatory = models.ForeignKey(Observatory, on_delete=models.PROTECT, blank=True, null=True)
+    dam = models.ForeignKey(Dam, on_delete=models.PROTECT, blank=True, null=True)
     name = models.CharField(max_length=255, default='')
     name_jp = models.CharField(max_length=255, default='')
-    high_water = models.FloatField(blank=True)
-    middle_water = models.FloatField(blank=True)
-    low_water = models.FloatField(blank=True)
+    high_water = models.FloatField(blank=True, null=True)
+    middle_water = models.FloatField(blank=True, null=True)
+    low_water = models.FloatField(blank=True, null=True)
     start_lat = models.FloatField(default=35.8)
     start_lng = models.FloatField(default=139.194)
     end_lat = models.FloatField(default=35.8)
     end_lng = models.FloatField(default=139.194)
-    difficulty = models.CharField(max_length=255, blank=True)
+    difficulty = models.CharField(max_length=255, blank=True, null=True)
+    date_posted = models.DateTimeField(default=timezone.now)
+    author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse('section-detail', kwargs={'pk': self.pk, 'prefecture': self.prefecture.slug})
 
 
 class Spot(models.Model):
     river = models.ForeignKey(River, on_delete=models.PROTECT)
     region = models.ForeignKey(Region, on_delete=models.PROTECT)
     prefecture = models.ForeignKey(Prefecture, on_delete=models.PROTECT)
-    observatory = models.ForeignKey(Observatory, on_delete=models.PROTECT, blank=True)
-    dam = models.ForeignKey(Dam, on_delete=models.PROTECT, blank=True)
+    observatory = models.ForeignKey(Observatory, on_delete=models.PROTECT, blank=True, null=True)
+    dam = models.ForeignKey(Dam, on_delete=models.PROTECT, blank=True, null=True)
     name = models.CharField(max_length=255, default='')
     name_jp = models.CharField(max_length=255, default='')
-    high_water = models.FloatField(blank=True)
-    middle_water = models.FloatField(blank=True)
-    low_water = models.FloatField(blank=True)
+    high_water = models.FloatField(blank=True, null=True)
+    middle_water = models.FloatField(blank=True, null=True)
+    low_water = models.FloatField(blank=True, null=True)
     lat = models.FloatField(default=35.8)
     lng = models.FloatField(default=139.194)
-    difficulty = models.CharField(max_length=255, blank=True)
+    difficulty = models.CharField(max_length=255, blank=True, null=True)
+    date_posted = models.DateTimeField(default=timezone.now)
+    author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
         return self.name

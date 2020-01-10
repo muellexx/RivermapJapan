@@ -1,0 +1,75 @@
+{% extends "base_container.html" %}
+{% block container_content %}
+    <div class="content-section">
+        {% with sections|first as section %}
+        <div class="media-head">
+            <h2 class="article-title">{{ section.prefecture.name }}</h2>
+            <h5 class="article-title">{{ section.region.name }}</h5>
+        </div>
+        {% with section.prefecture.all as prefectures %}
+        {% for prefecture in prefectures %}
+        {% if prefecture.slug == view.kwargs.prefecture %}
+        <div class="media-head">
+            <h2 class="article-title">{{ prefecture.name }}</h2>
+            <h5 class="article-title">{{ prefecture.region.name }}</h5>
+        </div>
+        {% endif %}
+        {% endfor %}
+        {% endwith %}
+        {% endwith %}
+
+        {% if is_paginated %}
+
+            {% if page_obj.has_previous %}
+                <a class="btn btn-outline-info mb-4" href="?page=1">First</a>
+                <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+            {% endif %}
+
+            {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                    <a class="btn btn-info mb-4" href="?page={{ num }}">{{ num }}</a>
+                {% elif num > page_obj.number|add:'-4' and num < page_obj.number|add:'4' %}
+                    <a class="btn btn-outline-info mb-4" href="?page={{ num }}">{{ num }}</a>
+                {% endif %}
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+                <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.next_page_number }}">Next</a>
+                <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+            {% endif %}
+
+        {% endif %}
+        {% for section in sections %}
+            <article class="media content-section">
+                <div class="media-body">
+                    <div class="article-metadata">
+                        <h3><a class="article-title" href="{% url 'section-detail' view.kwargs.prefecture section.id %}">{{ section.name }}</a></h3>
+                        <small class="text-muted">{{ section.section }}</small>
+                    </div>
+                    <p class="article-content">Current level: {{ section.level }} ({{ section.date }})</p>
+                </div>
+            </article>
+        {% endfor %}
+        {% if is_paginated %}
+
+            {% if page_obj.has_previous %}
+                <a class="btn btn-outline-info mb-4" href="?page=1">First</a>
+                <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+            {% endif %}
+
+            {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                    <a class="btn btn-info mb-4" href="?page={{ num }}">{{ num }}</a>
+                {% elif num > page_obj.number|add:'-4' and num < page_obj.number|add:'4' %}
+                    <a class="btn btn-outline-info mb-4" href="?page={{ num }}">{{ num }}</a>
+                {% endif %}
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+                <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.next_page_number }}">Next</a>
+                <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+            {% endif %}
+
+        {% endif %}
+    </div>
+{% endblock container_content %}

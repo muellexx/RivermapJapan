@@ -11,7 +11,23 @@
                     <legend>New Section in {{ river.name }}</legend>
                     <h6>{{ prefecture.name }} ({{prefecture.region.name}})</h6>
                 </div>
-                {{ form|crispy }}
+                {{ form.name_jp|as_crispy_field }}
+                <div class="form-row">
+                    <div class="form-group col-md-6 mb-0">
+                        {{ form.start_lat|as_crispy_field }}
+                    </div>
+                    <div class="form-group col-md-6 mb-0">
+                        {{ form.start_lng|as_crispy_field }}
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6 mb-0">
+                        {{ form.end_lat|as_crispy_field }}
+                    </div>
+                    <div class="form-group col-md-6 mb-0">
+                        {{ form.end_lng|as_crispy_field }}
+                    </div>
+                </div>
             </fieldset>
             <div class="form-group">
                 <button class="btn btn-outline-info" type="submit">Save Section</button>

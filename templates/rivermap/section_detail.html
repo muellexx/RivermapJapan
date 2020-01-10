@@ -3,26 +3,25 @@
     <div class="content-section">
         <div class="media-head">
             {% if user.is_authenticated %}
-            <form method="POST" action="{% url 'add-section' %}">
-                {% csrf_token %}
-                <input type="hidden" value="{{ object.id }}" name="river">
-                <input type="hidden" value="{{ view.kwargs.prefecture }}" name="prefecture">
-                <button class="btn btn-primary btn-sm mt-1 mb-4" style="float: right;" name="prepair_comment" type="submit">Add Section</button>
+                <a class="btn btn-primary btn-sm mt-1 mb-4" style="float: right;" href="{% url 'section-update' object.id %}">Edit</a>
             </form>
             {% endif %}
-            <h2 class="article-title">{{ object.name }}</h2>
-            <h2 class="article-title">{{ view.kwargs.prefecture }}</h2>
+            <h2 class="article-title">{{ object.name }} ({{ object.river.name }})</h2>
+            <h2 class="article-title">{{ object.prefecture }} ({{ object.region }})</h2>
         </div>
-        {% if river.section_set.count > 0 %}
         <div class="content-section">
             <div class="media-body">
-                <h6>White Water sections ({{ river.section_set.count }}):</h6>
-                {% for section in object.section_set.all %}
-                    <small class="text-muted">{{ section.name }}</small>
-                {% endfor %}
+                {% if object.difficulty %}
+                <p>Difficulty: {{ object.difficulty }}</p>
+                {% endif %}
+                {% if object.observatory %}
+                <p>Observatory: {{ object.observatory }} (<a href="{{ object.observatory.url }}" target="blank">source</a>)</p>
+                {% endif %}
+                {% if object.dam %}
+                <p>Dam: {{ object.dam }} (<a href="{{ object.dam.url }}" target="blank">source</a>)</p>
+                {% endif %}
             </div>
         </div>
-        {% endif %}
         <div class="content-section">
             <div class="media-body">
                 <h6>Prefecture{{ river.prefecture.count|pluralize }} ({{ river.prefecture.count }}):</h6>

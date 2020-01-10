@@ -23,7 +23,7 @@
         <div class="media content-section">
             <div class="media-body">
                 <h5 class="text-muted">
-                    <a href="#">Sections: {{ object.section_set.all.count }}</a>
+                    <a href="{% url 'section-list' prefecture.slug %}">Sections: {{ object.section_set.all.count }}</a>
                 </h5>
             </div>
         </div>
