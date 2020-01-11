@@ -7,9 +7,11 @@ from .models import Section
 class SectionAddForm(forms.ModelForm):
     class Meta:
         model = Section
-        fields = ['name_jp', 'start_lat', 'start_lng', 'end_lat', 'end_lng']
+        fields = ['name_jp', 'lat', 'lng', 'end_lat', 'end_lng']
         labels = {
-            "name_jp": "Name of the section"
+            "name_jp": "Name of the section",
+            "lat": "Start Lat",
+            "lng": "Start Lng"
         }
 
     def __init__(self, *args, **kwargs):
@@ -18,8 +20,8 @@ class SectionAddForm(forms.ModelForm):
         self.helper.layout = Layout(
             'name_jp',
             Row(
-                Column('start_lat', css_class='form-group col-md-6 mb-0'),
-                Column('start_lng', css_class='form-group col-md-6 mb-0'),
+                Column('lat', css_class='form-group col-md-6 mb-0'),
+                Column('lng', css_class='form-group col-md-6 mb-0'),
             ),
             Row(
                 Column('end_lat', css_class='form-group col-md-6 mb-0'),
@@ -33,10 +35,12 @@ class SectionEditForm(forms.ModelForm):
     class Meta:
         model = Section
         fields = ['name_jp', 'name', 'observatory', 'dam', 'difficulty', 'high_water', 'middle_water', 'low_water',
-                  'start_lat', 'start_lng', 'end_lat', 'end_lng']
+                  'lat', 'lng', 'end_lat', 'end_lng']
         labels = {
             "name_jp": "Name (Japanese)",
             "name": "Name (English)",
+            "lat": "Start Lat",
+            "lng": "Start Lng",
             "difficulty": "Difficulty (from I to VI e.g. II, III+, II(III+), IV-V)"
         }
 
@@ -61,8 +65,8 @@ class SectionEditForm(forms.ModelForm):
                 Column('high_water', css_class='form-group col-md-4 mb-0'),
             ),
             Row(
-                Column('start_lat', css_class='form-group col-md-6 mb-0'),
-                Column('start_lng', css_class='form-group col-md-6 mb-0'),
+                Column('lat', css_class='form-group col-md-6 mb-0'),
+                Column('lng', css_class='form-group col-md-6 mb-0'),
             ),
             Row(
                 Column('end_lat', css_class='form-group col-md-6 mb-0'),
