@@ -1,10 +1,13 @@
+import re
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.http import HttpResponse
+from django.db.models.functions import Lower
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils.safestring import mark_safe
 from django.views.generic import CreateView, DetailView, UpdateView, ListView
+from googletrans import Translator
 
 from .models import River, Prefecture, Section
 from .forms import SectionAddForm, SectionEditForm
@@ -23,26 +26,23 @@ class RiverListView(ListView):
     paginate_by = 20
 
     def get_queryset(self):
-        return River.objects.filter(prefecture__slug=self.kwargs['prefecture']).order_by('name')
+        return River.objects.filter(prefecture__slug=self.kwargs['prefecture']).order_by(Lower('name'))
 
 
 class SectionListView(ListView):
     model = Section
-    # template_name = 'rivermap/river_list.html'
     context_object_name = 'sections'
     ordering = ['name']
     paginate_by = 20
 
     def get_queryset(self):
-        return Section.objects.filter(prefecture__slug=self.kwargs['prefecture']).order_by('name')
+        return Section.objects.filter(prefecture__slug=self.kwargs['prefecture']).order_by(Lower('name'))
 
 
 class PrefectureListView(ListView):
     model = Prefecture
-    # template_name = 'rivermap/prefecture_list.html'
     context_object_name = 'prefectures'
     ordering = ['pk']
-    # paginate_by = 5
 
 
 class RiverDetailView(DetailView):
@@ -71,6 +71,7 @@ class RiverUpdateView(LoginRequiredMixin, UpdateView):
 
 @login_required
 def add_section(request):
+    translator = Translator()
     if request.method == 'POST':
         if 'prepair_comment' in request.POST:
             river = get_object_or_404(River, pk=request.POST.get('river'))
@@ -89,6 +90,16 @@ def add_section(request):
                 section.region = prefecture.region
                 section.name = section.name_jp
                 section.author = request.user
+                if re.search(u'[\u3000-\u9fff]', section.name):
+                    try:
+                        section.name = translator.translate(section.name_jp, src='ja', dest='en').text
+                    except ValueError:
+                        pass
+                else:
+                    try:
+                        section.name_jp = translator.translate(section.name, src='en', dest='ja').text
+                    except ValueError:
+                        pass
                 section.save()
                 message = f'The new section has successfully been saved!</br>' \
                           f'Please add some more details about the river</br>' \

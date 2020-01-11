@@ -11,58 +11,8 @@
                     <legend>{{ object.name }} ({{ object.river.name }})</legend>
                     <h6>{{ object.prefecture.name }} ({{object.region.name}})</h6>
                 </div>
-                <div class="form-row">
-                    <div class="form-group col-md-6 mb-0">
-                        {{ form.name_jp|as_crispy_field }}
-                    </div>
-                    <div class="form-group col-md-6 mb-0">
-                        {{ form.name|as_crispy_field }}
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group col-md-6 mb-0">
-                        {{ form.observatory|as_crispy_field }}
-                    </div>
-                    <div class="form-group col-md-6 mb-0">
-                        {{ form.dam|as_crispy_field }}
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group col-md-6 mb-0">
-                        {{ form.difficulty|as_crispy_field }}
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group col-md-4 mb-0">
-                        {{ form.high_water|as_crispy_field }}
-                    </div>
-                    <div class="form-group col-md-4 mb-0">
-                        {{ form.middle_water|as_crispy_field }}
-                    </div>
-                    <div class="form-group col-md-4 mb-0">
-                        {{ form.low_water|as_crispy_field }}
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group col-md-6 mb-0">
-                        {{ form.start_lat|as_crispy_field }}
-                    </div>
-                    <div class="form-group col-md-6 mb-0">
-                        {{ form.start_lng|as_crispy_field }}
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group col-md-6 mb-0">
-                        {{ form.end_lat|as_crispy_field }}
-                    </div>
-                    <div class="form-group col-md-6 mb-0">
-                        {{ form.end_lng|as_crispy_field }}
-                    </div>
-                </div>
+                {% crispy form %}
             </fieldset>
-            <div class="form-group">
-                <button class="btn btn-outline-info" type="submit">Save Section</button>
-            </div>
         </form>
     </div>
 {% endblock container_content %}

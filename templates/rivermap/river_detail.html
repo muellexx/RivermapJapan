@@ -3,6 +3,7 @@
     <div class="content-section">
         <div class="media-head">
             {% if user.is_authenticated %}
+            {% if view.kwargs.prefecture %}
             <form method="POST" action="{% url 'add-section' %}">
                 {% csrf_token %}
                 <input type="hidden" value="{{ object.id }}" name="river">
@@ -10,8 +11,9 @@
                 <button class="btn btn-primary btn-sm mt-1 mb-4" style="float: right;" name="prepair_comment" type="submit">Add Section</button>
             </form>
             {% endif %}
+            {% endif %}
             <h2 class="article-title">{{ object.name }}</h2>
-            <h2 class="article-title">{{ view.kwargs.prefecture }}</h2>
+            <h2 class="article-title">{{ view.kwargs.prefecture.capitalize }}</h2>
         </div>
         {% if river.section_set.count > 0 %}
         <div class="content-section">

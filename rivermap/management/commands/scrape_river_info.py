@@ -105,7 +105,6 @@ class Command(BaseCommand):
                     river.prefecture.add(prefecture)
                     river.region.add(region)
 
-
                     col = row.find_all("td")[0]
                     obs_url = ("http://www.river.go.jp/kawabou/ipSuiiKobetu.do?obsrvId=" +
                                col.a.get('href').split("'")[3] +

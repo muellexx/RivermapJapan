@@ -4,6 +4,7 @@
     <div class="content-section">
         <form method="POST">
             {% csrf_token %}
+
             <input type="hidden" value="{{ river.id }}" name="river">
             <input type="hidden" value="{{ prefecture.slug }}" name="prefecture">
             <fieldset class="form-group">
@@ -11,27 +12,8 @@
                     <legend>New Section in {{ river.name }}</legend>
                     <h6>{{ prefecture.name }} ({{prefecture.region.name}})</h6>
                 </div>
-                {{ form.name_jp|as_crispy_field }}
-                <div class="form-row">
-                    <div class="form-group col-md-6 mb-0">
-                        {{ form.start_lat|as_crispy_field }}
-                    </div>
-                    <div class="form-group col-md-6 mb-0">
-                        {{ form.start_lng|as_crispy_field }}
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group col-md-6 mb-0">
-                        {{ form.end_lat|as_crispy_field }}
-                    </div>
-                    <div class="form-group col-md-6 mb-0">
-                        {{ form.end_lng|as_crispy_field }}
-                    </div>
-                </div>
+                {% crispy form %}
             </fieldset>
-            <div class="form-group">
-                <button class="btn btn-outline-info" type="submit">Save Section</button>
-            </div>
         </form>
     </div>
 {% endblock container_content %}
