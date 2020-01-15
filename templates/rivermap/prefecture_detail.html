@@ -2,7 +2,7 @@
 {% block container_content %}
     <div class="content-section">
         <div class="media-head">
-            <h2 class="article-title">{{ object.name }}</h2>
+            <h2 class="article-title">{{ object }}</h2>
             <h5 class="article-title">{{ object.region }}</h5>
         </div>
         <div class="media content-section">
@@ -23,14 +23,14 @@
         <div class="media content-section">
             <div class="media-body">
                 <h5 class="text-muted">
-                    <a href="{% url 'section-list' prefecture.slug %}">Sections: {{ object.section_set.all.count }}</a>
+                    <a href="{% url 'section-list' prefecture.slug %}">Sections: {{ object.section_count }}</a>
                 </h5>
             </div>
         </div>
         <div class="media content-section">
             <div class="media-body">
                 <h5 class="text-muted">
-                    <a href="#">Spots: {{ object.spot_set.all.count }}</a>
+                    <a href="#">Spots: {{ object.spot_count }}</a>
                 </h5>
             </div>
         </div>

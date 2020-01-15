@@ -34,13 +34,14 @@ class SectionAddForm(forms.ModelForm):
 class SectionEditForm(forms.ModelForm):
     class Meta:
         model = Section
-        fields = ['name_jp', 'name', 'observatory', 'dam', 'difficulty', 'high_water', 'middle_water', 'low_water',
-                  'lat', 'lng', 'end_lat', 'end_lng']
+        fields = ['name_jp', 'name', 'observatory', 'dam', 'content', 'difficulty', 'high_water', 'middle_water',
+                  'low_water', 'lat', 'lng', 'end_lat', 'end_lng']
         labels = {
             "name_jp": "Name (Japanese)",
             "name": "Name (English)",
             "lat": "Start Lat",
             "lng": "Start Lng",
+            "content": "Useful Information:",
             "difficulty": "Difficulty (from I to VI e.g. II, III+, II(III+), IV-V)"
         }
 
@@ -56,6 +57,7 @@ class SectionEditForm(forms.ModelForm):
                 Column('observatory', css_class='form-group col-md-6 mb-0'),
                 Column('dam', css_class='form-group col-md-6 mb-0'),
             ),
+            'content',
             Row(
                 Column('difficulty', css_class='form-group col-md-6 mb-0'),
             ),

@@ -32,7 +32,7 @@ class Region(models.Model):
     name_jp = models.CharField(max_length=255, unique=True)
 
     def __str__(self):
-        return self.name
+        return self.name + " (" + self.name_jp + ")"
 
 
 class Prefecture(models.Model):
@@ -42,10 +42,16 @@ class Prefecture(models.Model):
     slug = models.SlugField()
 
     def __str__(self):
-        return self.name
+        return self.name + " (" + self.name_jp + ")"
 
     def get_absolute_url(self):
         return reverse('prefecture-detail', kwargs={'slug': self.slug})
+
+    def section_count(self):
+        return self.mapobject_set.instance_of(Section).count()
+
+    def spot_count(self):
+        return self.mapobject_set.instance_of(Spot).count()
 
 
 class River(models.Model):
@@ -55,7 +61,7 @@ class River(models.Model):
     name_jp = models.CharField(max_length=255, unique=True)
 
     def __str__(self):
-        return self.name
+        return self.name + " (" + self.name_jp + ")"
 
     def get_absolute_url(self):
         return reverse('river-detail', kwargs={'pk': self.pk})
@@ -72,7 +78,7 @@ class Observatory(models.Model):
     date = models.DateTimeField(max_length=255, null=True, blank=True)
 
     def __str__(self):
-        return self.name
+        return self.name + " (" + self.name_jp + ")"
 
 
 class Dam(models.Model):
@@ -86,7 +92,7 @@ class Dam(models.Model):
     date = models.DateTimeField(max_length=255, null=True, blank=True)
 
     def __str__(self):
-        return self.name
+        return self.name + " (" + self.name_jp + ")"
 
 
 class MapObject(PolymorphicModel):
@@ -94,16 +100,20 @@ class MapObject(PolymorphicModel):
     prefecture = models.ForeignKey(Prefecture, on_delete=models.PROTECT)
     name = models.CharField(max_length=255, default='')
     name_jp = models.CharField(max_length=255, default='')
+    content = models.TextField(blank=True, null=True)
     date_added = models.DateTimeField(default=timezone.now)
     author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     lat = models.FloatField(default=35.8)
     lng = models.FloatField(default=139.194)
 
     def __str__(self):
-        return self.name
+        return self.name + " (" + self.name_jp + ")"
 
     class Meta:
         ordering = ['name']
+
+    def description(self):
+        return self.__class__.__name__
 
 
 class RiverObject(MapObject):
