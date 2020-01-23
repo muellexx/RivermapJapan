@@ -4,6 +4,8 @@ from bs4 import BeautifulSoup as soup
 from django.core.management.base import BaseCommand, CommandError
 from urllib.request import urlopen as uReq
 
+from django.core.serializers.json import DjangoJSONEncoder
+from django.utils import timezone
 from django.utils.dateparse import parse_datetime
 from django.utils.timezone import is_aware, make_aware
 
@@ -24,10 +26,9 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         for observatory in Observatory.objects.all():
             # TODO multithread
-            if observatory.section_set.count():
+            if observatory.section_set.count() and timezone.now() - observatory.date > timezone.timedelta(seconds=3600):
                 url = observatory.url
-                print(observatory.id)
-                print(observatory.name)
+                print(f'scrape {observatory}, id {observatory.id}')
                 uClient = uReq(url)
                 page_html = uClient.read()
                 uClient.close()
@@ -55,9 +56,7 @@ class Command(BaseCommand):
                     try:
                         level = float(level)
                         current_level = level
-                        print(str(datetime.datetime.today().year) + '-' + date.replace('/', '-') + 'T' + time.replace('24', '00') + ':00')
                         current_date_time = str(datetime.datetime.today().year) + '-' + date.replace('/', '-') + 'T' + time.replace('24', '00') + ':00'
-                        print(current_date_time)
                     except ValueError:
                         pass
 
@@ -70,34 +69,45 @@ class Command(BaseCommand):
                 with open(filename, 'w') as outfile:
                     json.dump(data, outfile, indent=4)
 
-                print(current_date_time)
-                print('hi')
-                observatory.date = get_aware_datetime(current_date_time)
                 observatory.level = current_level
-                print(observatory.date)
                 try:
                     observatory.date = get_aware_datetime(current_date_time)
                     observatory.level = current_level
                     observatory.save()
+                    print('saved River ' + observatory)
                 except:
-                    print("Error during observatory save")
+                    print("Error during observatory save at observatory " + observatory)
 
         rivers = {'rivers': []}
         for section in Section.objects.all():
-            rivers['rivers'].append({
-                'id': section.id,
-                'river': section.river.name,
-                'name': section.name,
-                #'url': section.observatory.url,
-                #'level': section.observatory.level,
-                #'date': observatory.date,
-                'high_water': section.high_water,
-                'middle_water': section.middle_water,
-                'low_water': section.low_water,
-                'start_lat': section.lat,
-                'start_lng': section.lng,
-                'end_lat': section.end_lat,
-                'end_lng': section.end_lng,
-            })
+            if section.observatory:
+                rivers['rivers'].append({
+                    'id': section.id,
+                    'river': section.river.name,
+                    'name': section.name,
+                    'url': section.observatory.url,
+                    'level': section.observatory.level,
+                    'date': timezone.localtime(section.observatory.date).strftime('%Y/%m/%d %H:%M'),
+                    'high_water': section.high_water,
+                    'middle_water': section.middle_water,
+                    'low_water': section.low_water,
+                    'start_lat': section.lat,
+                    'start_lng': section.lng,
+                    'end_lat': section.end_lat,
+                    'end_lng': section.end_lng,
+                })
+            else:
+                rivers['rivers'].append({
+                    'id': section.id,
+                    'river': section.river.name,
+                    'name': section.name,
+                    'high_water': section.high_water,
+                    'middle_water': section.middle_water,
+                    'low_water': section.low_water,
+                    'start_lat': section.lat,
+                    'start_lng': section.lng,
+                    'end_lat': section.end_lat,
+                    'end_lng': section.end_lng,
+                })
         with open('static/js/data/river.json', 'w') as outfile:
             json.dump(rivers, outfile, indent=4)
