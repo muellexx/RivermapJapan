@@ -1,3 +1,7 @@
+function toggleSidebar () {
+    $('#sidebar').toggleClass('active');
+};
+
 function loadRivers(popup) {
     $.getJSON("static/js/data/river.json", function(json){
         rivers = json.rivers;
@@ -42,6 +46,10 @@ function loadRivers(popup) {
 
         river.addListener('mouseout', function() {
             popup.hide();
+        });
+
+        river.addListener('click', function() {
+            toggleSidebar();
         });
 
         river.setMap(map);

@@ -26,7 +26,8 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         for observatory in Observatory.objects.all():
             # TODO multithread
-            if observatory.section_set.count() and timezone.now() - observatory.date > timezone.timedelta(seconds=3600):
+            if observatory.section_set.count() and (
+                    observatory.date is None or timezone.now() - observatory.date > timezone.timedelta(seconds=3600)):
                 url = observatory.url
                 print(f'scrape {observatory}, id {observatory.id}')
                 uClient = uReq(url)
@@ -74,9 +75,9 @@ class Command(BaseCommand):
                     observatory.date = get_aware_datetime(current_date_time)
                     observatory.level = current_level
                     observatory.save()
-                    print('saved River ' + observatory)
+                    print('saved River ' + observatory.name)
                 except:
-                    print("Error during observatory save at observatory " + observatory)
+                    print("Error during observatory save at observatory " + observatory.name)
 
         rivers = {'rivers': []}
         for section in Section.objects.all():

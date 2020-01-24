@@ -120,6 +120,7 @@ function createPopupClass() {
    */
   function Popup(position, riverinfo) {
     this.position = position;
+    this.upperHalf = false;
 
     riverinfo.classList.add('popup-bubble');
 
@@ -155,9 +156,7 @@ function createPopupClass() {
   /** Called each frame when the popup needs to draw itself. */
   Popup.prototype.draw = function() {
     var divPosition = this.getProjection().fromLatLngToDivPixel(this.position);
-    //riverinfo.innerHTML = divPosition.y + ", ";
-    //riverinfo.innerHTML = this.containerDiv.children[0].className; //divPosition.y + ", ";
-    if(divPosition.y > 0){
+    if(this.upperHalf) {
         riverinfo.className = "popup-bubble";
         this.containerDiv.children[0].className = "popup-bubble-anchor";
         this.containerDiv.className = "popup-container";
@@ -199,7 +198,16 @@ function createPopupClass() {
     }
 
     Popup.prototype.setPosition = function(position) {
-        this.position = position;
+        divPosition = this.getProjection().fromLatLngToDivPixel(position);
+        if (this.getProjection().fromLatLngToDivPixel(position).y > 0) {
+            divPosition.y -= 15;
+            this.upperHalf = true;
+        }
+        else {
+            divPosition.y += 15;
+            this.upperHalf = false;
+        }
+        this.position = this.getProjection().fromDivPixelToLatLng(divPosition);
     }
 
     Popup.prototype.setContent = function(river) {
