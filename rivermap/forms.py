@@ -10,8 +10,10 @@ class SectionAddForm(forms.ModelForm):
         fields = ['name_jp', 'lat', 'lng', 'end_lat', 'end_lng']
         labels = {
             "name_jp": "Name of the section",
-            "lat": "Start Lat",
-            "lng": "Start Lng"
+            "lat": "Start Latitude",
+            "lng": "Start Longitude",
+            "end_lat": "End Latitude",
+            "end_lng": "End Longitude"
         }
 
     def __init__(self, *args, **kwargs):
@@ -19,6 +21,7 @@ class SectionAddForm(forms.ModelForm):
         self.helper = FormHelper()
         self.helper.layout = Layout(
             'name_jp',
+            Row(css_id='map-small'),
             Row(
                 Column('lat', css_class='form-group col-md-6 mb-0'),
                 Column('lng', css_class='form-group col-md-6 mb-0'),
@@ -27,6 +30,7 @@ class SectionAddForm(forms.ModelForm):
                 Column('end_lat', css_class='form-group col-md-6 mb-0'),
                 Column('end_lng', css_class='form-group col-md-6 mb-0'),
             ),
+
             Submit('submit', 'Add Section')
         )
 

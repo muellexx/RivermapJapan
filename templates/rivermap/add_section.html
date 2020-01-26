@@ -1,5 +1,9 @@
 {% extends "base_container.html" %}
+{% load static %}
 {% load crispy_forms_tags %}
+{% block style_sheets %}
+    <link rel="stylesheet" href="{% static 'css/map-small.css' %}">
+{% endblock style_sheets %}
 {% block container_content %}
     <div class="content-section">
         <form method="POST">
@@ -13,7 +17,14 @@
                     <h6>{{ prefecture.name }} ({{prefecture.region.name}})</h6>
                 </div>
                 {% crispy form %}
+
             </fieldset>
         </form>
+        <div id="map-small"></div>
     </div>
 {% endblock container_content %}
+
+{% block scripts %}
+<script src="{% static 'js/init-map-small.js' %}"></script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB4FzVGy5foAnrj5soy0wTrRF2Htq_ZZdI&callback=initMap"></script>
+{% endblock scripts %}

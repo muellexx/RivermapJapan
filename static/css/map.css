@@ -35,10 +35,10 @@ html, body {
 }
 
 #sidebar {
-    min-width: 250px;
-    max-width: 250px;
+    min-width: 300px;
+    max-width: 300px;
     height: 100%;
-    margin-left: -250px;
+    margin-left: -300px;
 }
 
 #sidebar.active {
@@ -47,7 +47,7 @@ html, body {
 
 @media (max-width: 768px) {
     #sidebar {
-        margin-left: -250px;
+        margin-left: -300px;
     }
     #sidebar.active {
         margin-left: 0;

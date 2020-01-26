@@ -1,5 +1,8 @@
 {% extends "base.html" %}
 {% load static %}
+{% block style_sheets %}
+    <link rel="stylesheet" href="{% static 'css/map.css' %}">
+{% endblock style_sheets %}
 {% block content %}
 
 <div class="window-container">
@@ -72,9 +75,9 @@
 <div id="riverinfo">
     If you see this message, something went wrong.
 </div>
-
+{% endblock content %}
+{% block scripts %}
 <script src="{% static 'js/map.js' %}"></script>
 <script src="{% static 'js/init-map.js' %}"></script>
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB4FzVGy5foAnrj5soy0wTrRF2Htq_ZZdI&callback=initMap"></script>
-
-{% endblock content %}
+{% endblock scripts %}

@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.urls import reverse
 from django.utils import timezone
@@ -103,8 +104,12 @@ class MapObject(PolymorphicModel):
     content = models.TextField(blank=True, null=True)
     date_added = models.DateTimeField(default=timezone.now)
     author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-    lat = models.FloatField(default=35.8)
-    lng = models.FloatField(default=139.194)
+    lat = models.FloatField(
+        validators=[MinValueValidator(21), MaxValueValidator(47)],
+    )
+    lng = models.FloatField(
+        validators=[MinValueValidator(119), MaxValueValidator(151)],
+    )
 
     def __str__(self):
         return self.name + " (" + self.name_jp + ")"
@@ -143,8 +148,12 @@ class School(MapObject):
 
 
 class Section(RiverObject):
-    end_lat = models.FloatField(default=35.8)
-    end_lng = models.FloatField(default=139.194)
+    end_lat = models.FloatField(
+        validators=[MinValueValidator(21), MaxValueValidator(47)],
+    )
+    end_lng = models.FloatField(
+        validators=[MinValueValidator(119), MaxValueValidator(151)],
+    )
 
     def get_absolute_url(self):
         return reverse('section-detail', kwargs={'pk': self.pk, 'prefecture': self.prefecture.slug})

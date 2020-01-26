@@ -18,10 +18,7 @@
     <meta name="msapplication-TileColor" content="#00a300">
     <meta name="theme-color" content="#ffffff">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    {% url 'rivermap' as map_url %}
-    {% if request.get_full_path == map_url %}
-    <link rel="stylesheet" href="{% static 'css/map.css' %}">
-    {% endif %}
+    {% block style_sheets %}{% endblock %}
     {% if title %}
         <title>Rivermap Japan - {{ title }}</title>
     {% else %}
@@ -65,10 +62,7 @@
 </header>
 
 {% block content %}{% endblock %}
-
-
-
-
+{% block scripts %}{% endblock %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 

@@ -107,6 +107,11 @@ def add_section(request):
                 message = mark_safe(message)
                 messages.success(request, message)
                 return redirect('section-update', pk=section.id)
+            else:
+                river = get_object_or_404(River, pk=request.POST.get('river'))
+                prefecture = get_object_or_404(Prefecture, slug=request.POST.get('prefecture'))
+                return render(request, 'rivermap/add_section.html',
+                              {'form': form, 'river': river, 'prefecture': prefecture})
     else:
         form = SectionAddForm
     return render(request, 'rivermap/add_section.html', {'form': form})
