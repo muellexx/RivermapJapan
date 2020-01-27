@@ -78,6 +78,20 @@ function initMap() {
                 stylers: [{
                     "color": "#000000"
                 }]
+            },
+            {
+                featureType: 'administrative.country',
+                elementType: 'geometry.stroke',
+                stylers: [{
+                    "weight": "3"
+                }]
+            },
+            {
+                featureType: 'administrative.country',
+                elementType: 'geometry.stroke',
+                stylers: [{
+                    "color": "#000000"
+                }]
             }
         ]
     });
