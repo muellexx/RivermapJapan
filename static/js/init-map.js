@@ -224,13 +224,13 @@ function createPopupClass() {
         this.position = this.getProjection().fromDivPixelToLatLng(divPosition);
     }
 
-    Popup.prototype.setContent = function(river) {
-        //console.log(river);
-        riverinfo.innerHTML = "<h3>" + river.name + "</h3>";
-        riverinfo.innerHTML += "<p><b>Current Level: " + river.level + " m</b></br>";
-        riverinfo.innerHTML += "Updated: " + river.date + "</p>";
-        riverinfo.innerHTML += "LW: " + river.low_water + " &nbsp; MW: " + river.middle_water + " &nbsp; HW: " + river.high_water;
-        riverinfo.innerHTML += '<p align="right"><a href="' + river.url + '" target="_blank">Source</a></p>';
+    Popup.prototype.setContent = function(section) {
+        //console.log(section);
+        riverinfo.innerHTML = "<h3>" + section.name + "</h3>";
+        riverinfo.innerHTML += "<p><b>Current Level: " + section.level + " m</b></br>";
+        riverinfo.innerHTML += "Updated: " + section.date + "</p>";
+        riverinfo.innerHTML += "LW: " + section.low_water + " &nbsp; MW: " + section.middle_water + " &nbsp; HW: " + section.high_water;
+        riverinfo.innerHTML += '<p align="right"><a href="' + section.url + '" target="_blank">Source</a></p>';
     }
   };
 
