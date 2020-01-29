@@ -102,6 +102,7 @@ function loadRivers(popup) {
             river.addListener('click', function() {
                 updateSidebar(rivers[i]);
                 activateSidebar();
+                loadChart(rivers[i]);
             });
 
             river.setMap(map);

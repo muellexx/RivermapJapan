@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 {% block style_sheets %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.css">
     <script src="https://kit.fontawesome.com/a62ff99483.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="{% static 'css/map.css' %}">
 {% endblock style_sheets %}
@@ -40,6 +41,9 @@
 
                         <div id="tab01" class="tab-contents">
                             <h2>Tab 1</h2>
+                            <div id="sb-chart-div">
+                                <canvas id="sb-chart"></canvas>
+                            </div>
                             <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eius quos aliquam consequuntur, esse provident impedit minima porro! Laudantium laboriosam culpa quis fugiat ea, architecto velit ab, deserunt rem quibusdam voluptatum.</p>
                         </div>
                         <div id="tab02" class="tab-contents">
@@ -89,6 +93,8 @@
 </div>
 {% endblock content %}
 {% block scripts %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.js"></script>
+<script src="{% static 'js/chart.js' %}"></script>
 <script src="{% static 'js/map.js' %}"></script>
 <script src="{% static 'js/init-map.js' %}"></script>
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB4FzVGy5foAnrj5soy0wTrRF2Htq_ZZdI&callback=initMap"></script>
