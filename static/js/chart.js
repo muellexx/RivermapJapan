@@ -9,13 +9,17 @@ window.chartColors = {
 	grey: 'rgb(201, 203, 207)'
 };
 
-function loadChart(section) {
+function loadChart(section, canvasId) {
 
-    $('#sb-chart').remove();
+    $('#' + canvasId).remove();
     if (section.observatory_id == undefined) {
         return;
     }
-    $('#sb-chart-div').append('<canvas id="sb-chart" height="300"></canvas>');
+    if (canvasId == 'pop-chart') {
+        $('#' + canvasId + '-div').append('<canvas id="' + canvasId + '" height="150"></canvas>');
+    } else {
+        $('#' + canvasId + '-div').append('<canvas id="' + canvasId + '" height="300"></canvas>');
+    }
 
     $.getJSON("static/js/data/river/" + section.observatory_id + ".json", function(json){
         data = json.level;
@@ -26,9 +30,18 @@ function loadChart(section) {
         mwData = [];
         hwData = [];
         graphData = [];
-        for (i = 0; i < data.length; i++) {
+        if (canvasId == 'pop-chart') {
+            var i = data.length / 2;
+        } else {
+            var i = 0;
+        }
+        for (i; i < data.length; i++) {
             point = data[i];
-            xData.push(point.date + ", " + point.time);
+            if (canvasId == 'pop-chart') {
+                xData.push(point.time);
+            } else {
+                xData.push(point.date + ", " + point.time);
+            }
             yData.push(point.level);
             if (section.low_water != null){
                 lwData.push(section.low_water);
@@ -40,6 +53,7 @@ function loadChart(section) {
                 hwData.push(section.high_water);
             }
         }
+
         minLevel = Math.min.apply(null, yData);
         maxLevel = Math.min.apply(null, yData);
         buffer = (maxLevel - minLevel)*0.3;
@@ -87,7 +101,7 @@ function loadChart(section) {
             }]
         };
 
-        var ctx = $('#sb-chart');
+        var ctx = $('#' + canvasId);
         window.myLine = Chart.Line(ctx, {
             data: lineChartData,
             options: {

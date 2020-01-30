@@ -91,6 +91,7 @@ function loadRivers(popup) {
             river.addListener('mouseover', function(event) {
                 popup.setContent(rivers[i]);
                 popup.show();
+                loadChart(rivers[i], 'pop-chart');
                 popup.setPosition(event.latLng);
                 popup.draw();
             });
@@ -102,7 +103,7 @@ function loadRivers(popup) {
             river.addListener('click', function() {
                 updateSidebar(rivers[i]);
                 activateSidebar();
-                loadChart(rivers[i]);
+                loadChart(rivers[i], 'sb-chart');
             });
 
             river.setMap(map);

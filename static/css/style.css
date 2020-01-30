@@ -8,14 +8,11 @@ body {
     flex:1 1 auto;
 }
 
-/* The popup bubble styling. */
 .popup-bubble {
-  /* Position the bubble centred-above its parent. */
   position: absolute;
   top: 0;
   left: 0;
   transform: translate(-50%, -100%);
-  /* Style the bubble. */
   background-color: white;
   padding: 5px;
   border-radius: 5px;
@@ -26,14 +23,12 @@ body {
   max-width: 300px;
   box-shadow: 5px 5px 10px 1px rgba(0,0,255,0.5);
 }
-/* The popup bubble styling. */
+
 .popdown-bubble {
-  /* Position the bubble centred-above its parent. */
   position: absolute;
   bottom: 0;
   left: 0;
   transform: translate(-50%, 100%);
-  /* Style the bubble. */
   background-color: white;
   padding: 5px;
   border-radius: 5px;
@@ -44,7 +39,15 @@ body {
   max-width: 300px;
   box-shadow: 5px 5px 10px 1px rgba(0,0,255,0.5);
 }
-/* The parent of the bubble. A zero-height div at the top of the tip. */
+
+.popdown-bubble h4, .popdown-bubble h6, .popup-bubble h4, .popup-bubble h6 {
+    margin: 0;
+}
+
+.popdown-bubble p, .popup-bubble p {
+    margin: 5px;
+}
+
 .popup-bubble-anchor {
   /* Position the div a fixed distance above the tip. */
   position: absolute;

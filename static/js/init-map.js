@@ -136,7 +136,7 @@ function createPopupClass() {
     this.position = position;
     this.upperHalf = false;
 
-    riverinfo.classList.add('popup-bubble');
+    //riverinfo.classList.add('popup-bubble');
 
     // This zero-height div is positioned at the bottom of the bubble.
     var bubbleAnchor = document.createElement('div');
@@ -172,10 +172,12 @@ function createPopupClass() {
     var divPosition = this.getProjection().fromLatLngToDivPixel(this.position);
     if(this.upperHalf) {
         riverinfo.className = "popup-bubble";
+        riverinfo.classList.add('content-section');
         this.containerDiv.children[0].className = "popup-bubble-anchor";
         this.containerDiv.className = "popup-container";
     }else{
         riverinfo.className = "popdown-bubble";
+        riverinfo.classList.add('content-section');
         this.containerDiv.children[0].className = "popdown-bubble-anchor";
         this.containerDiv.className = "popdown-container";
         //bubbleAnchor.className = "popdown-bubble-anchor";
@@ -225,12 +227,20 @@ function createPopupClass() {
     }
 
     Popup.prototype.setContent = function(section) {
-        //console.log(section);
-        riverinfo.innerHTML = "<h3>" + section.name + "</h3>";
-        riverinfo.innerHTML += "<p><b>Current Level: " + section.level + " m</b></br>";
-        riverinfo.innerHTML += "Updated: " + section.date + "</p>";
-        riverinfo.innerHTML += "LW: " + section.low_water + " &nbsp; MW: " + section.middle_water + " &nbsp; HW: " + section.high_water;
-        riverinfo.innerHTML += '<p align="right"><a href="' + section.url + '" target="_blank">Source</a></p>';
+        riverinfo.innerHTML = "<h4>" + section.river + "</h4>";
+        if (section.difficulty != null) {
+            riverinfo.innerHTML += "<h6>" + section.name + "(" + section.difficulty + ")</h6>";
+        } else {
+            riverinfo.innerHTML += "<h6>" + section.name + "</h6>";
+        }
+        riverinfo.innerHTML += '<div id="pop-chart-div"></div>'
+        if (section.observatory_id != undefined) {
+            riverinfo.innerHTML += "Updated: " + section.date + "</p>";
+            riverinfo.innerHTML += '<p style="float: right;"><a href="' + section.url + '" target="_blank">Source</a></p>';
+        }
+        if ((section.low_water != null)||(section.middle_water != null)||(section.high_water != null)) {
+            riverinfo.innerHTML += "LW: " + section.low_water + " &nbsp; MW: " + section.middle_water + " &nbsp; HW: " + section.high_water;
+        }
     }
   };
 
