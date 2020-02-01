@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load crispy_forms_tags %}
 {% block style_sheets %}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.css">
     <script src="https://kit.fontawesome.com/a62ff99483.js" crossorigin="anonymous"></script>
@@ -40,11 +41,22 @@
                         </div>
 
                         <div id="tab01" class="tab-contents">
-                            <h2>Tab 1</h2>
+                            <h3>Level</h3>
                             <div id="sb-chart-div">
                                 <canvas id="sb-chart"></canvas>
                             </div>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eius quos aliquam consequuntur, esse provident impedit minima porro! Laudantium laboriosam culpa quis fugiat ea, architecto velit ab, deserunt rem quibusdam voluptatum.</p>
+                            <p id="sb-level"></p>
+                            <p id="sb-observatory"></p>
+                            <p id="sb-updated"></p>
+                            <table class="table mb-0">
+                                <tbody>
+                                    <tr>
+                                        <td id="sb-lw" style="padding: 0;"></td>
+                                        <td id="sb-mw" style="padding: 0;"></td>
+                                        <td id="sb-hw" style="padding: 0;"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                         <div id="tab02" class="tab-contents">
                             <h2>Tab 2</h2>
@@ -53,19 +65,26 @@
                     </div>
 
                     <div class="content-section" style="margin: 0;">
-                        <a class="btn btn-primary btn-sm mt-1 mb-4" style="float: right;" href="#">Comment</a>
+                        <buton class="btn btn-primary btn-sm mt-1 mb-4" style="float: right;" onclick="newComment()">Comment</buton>
                         <h5 style="padding-top: 10px;">Comments:</h5>
-                        <article class="media content-section" style="margin: 0; width: 100%;">
-                            <div class="media-body">
-                                <div class="article-metadata">
-                                    <img class="rounded-circle article-img" src="/media/default.jpg">
-                                    <a class="mr-2" href="#">author</a>
-                                    <small class="text-muted">Date</small>
+                        <form id="sb-comment-form" method="POST" style="display: none;">
+                            {% csrf_token %}
+                            <input id="id_section" type="hidden" value="123" name="section">
+                            {% crispy form %}
+                        </form>
+                        <div id="sb-comments">
+                            <article class="media content-section" style="margin: 0; margin-top: 5px; width: 100%;">
+                                <div class="media-body">
+                                    <div class="article-metadata">
+                                        <img class="rounded-circle article-img" src="/media/default.jpg">
+                                        <a class="mr-2" href="#">author</a>
+                                        <small class="text-muted">Date</small>
+                                    </div>
+                                    <h2><a class="article-title" href="#">Title</a></h2>
+                                    <p class="article-content">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus, aspernatur cumque est exercitationem fugiat fugit ipsum itaque iusto labore molestias nulla, officia praesentium quidem recusandae soluta suscipit temporibus voluptate voluptatum.</p>
                                 </div>
-                                <h2><a class="article-title" href="#">Title</a></h2>
-                                <p class="article-content">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus, aspernatur cumque est exercitationem fugiat fugit ipsum itaque iusto labore molestias nulla, officia praesentium quidem recusandae soluta suscipit temporibus voluptate voluptatum.</p>
-                            </div>
-                        </article>
+                            </article>
+                        </div>
                     </div>
                 </div>
 

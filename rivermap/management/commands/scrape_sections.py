@@ -85,8 +85,11 @@ class Command(BaseCommand):
                 rivers['rivers'].append({
                     'id': section.id,
                     'river': section.river.name,
+                    'river_id': section.river.id,
                     'name': section.name,
+                    'prefecture': section.prefecture.name,
                     'difficulty': section.difficulty,
+                    'observatory_name': section.observatory.name,
                     'url': section.observatory.url,
                     'observatory_id': section.observatory.id,
                     'level': section.observatory.level,
@@ -103,7 +106,9 @@ class Command(BaseCommand):
                 rivers['rivers'].append({
                     'id': section.id,
                     'river': section.river.name,
+                    'river_id': section.river.id,
                     'name': section.name,
+                    'prefecture': section.prefecture.name,
                     'difficulty': section.difficulty,
                     'high_water': section.high_water,
                     'middle_water': section.middle_water,

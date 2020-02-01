@@ -64,6 +64,10 @@ html, body {
     background: #fafafa;
 }
 
+.sidebar-header a {
+    color: #000000;
+}
+
 .sidebar-content {
     padding: 10px;
     background: #fff;

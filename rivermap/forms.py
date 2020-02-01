@@ -1,7 +1,7 @@
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Row, Column, Submit
 from django import forms
-from .models import Section
+from .models import Section, MapObjectComment
 
 
 class SectionAddForm(forms.ModelForm):
@@ -81,3 +81,17 @@ class SectionEditForm(forms.ModelForm):
             Submit('submit', 'Save Section')
         )
 
+
+class CommentAddForm(forms.ModelForm):
+    class Meta:
+        model = MapObjectComment
+        fields = ['title', 'content']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            'title',
+            'content',
+            Submit('submit', 'Post')
+        )

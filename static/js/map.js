@@ -37,14 +37,61 @@ function showOrHide (id, preText, value, postText) {
 }
 
 function updateSidebar (section) {
-    $('#sb-river-name').html(section.river);
-    $('#sb-section-name').html(section.name);
+    $('#sb-river-name').html('<a href="map/' + section.prefecture + '/river/' + section.river_id + '/">' + section.river + '</a>');
+    $('#sb-section-name').html('<a href="map/' + section.prefecture + '/section/' + section.id + '/">' + section.name + '</a>');
     showOrHide ("sb-difficulty", "Difficulty: ", section.difficulty, "");
     $('#sb-distance').html("Air Distance: " + distance(section.start_lat,
             section.start_lng, section.end_lat, section.end_lng).toFixed(2) + " km");
     $('#sb-start').html("Start: " + mapLink(section.start_lat, section.start_lng));
     $('#sb-end').html("End: " + mapLink(section.end_lat, section.end_lng));
+    showOrHide ("sb-level", "Current Level: ", section.level, "");
+    showOrHide ("sb-observatory", ' Observatory: <a href="', section.url, '" target="_blank">' + section.observatory_name + '</a>');
+    showOrHide ("sb-updated", "Updated: ", section.date, "");
+    showOrHide ("sb-lw", "LW: ", section.low_water, "");
+    showOrHide ("sb-mw", "MW: ", section.middle_water, "");
+    showOrHide ("sb-hw", "HW: ", section.high_water, "");
+    $('#id_section').val(section.id);
 };
+
+function newComment () {
+    $('#sb-comment-form').show();
+}
+
+$(document).on('submit', '#sb-comment-form', function(e){
+    $.ajax({
+        type: 'POST',
+        url: '/',
+        data:{
+            section:$('#id_section').val(),
+            title:$('#id_title').val(),
+            content:$('#id_content').val(),
+            csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+            action: 'post'
+        },
+        success: function(json){
+            document.getElementById("sb-comment-form").reset();
+            document.getElementById("sb-comment-form").style.display = "none";
+            $("#sb-comments").prepend('<article class="media content-section" style="margin: 0; margin-top: 5px; width: 100%;">'+
+                '<div class="media-body">' +
+                    '<div class="article-metadata">' +
+                        '<img class="rounded-circle article-img" src="' + json.image_url + '">' +
+                        '<a class="mr-2" href="#">' + json.author + '</a>' +
+                        '<small class="text-muted">' + json.date_posted + '</small>' +
+                    '</div>' +
+                    '<h2><a class="article-title" href="#">' + json.title + '</a></h2>' +
+                    '<p class="article-content">' + json.content + '</p>' +
+                '</div>' +
+            '</article>'
+            )
+        },
+        error: function(xhr,errmsg,err) {
+            console.log(xhr.status + ": " + xhr.responseText);
+        }
+
+    });
+    console.log('hi')
+    e.preventDefault();
+});
 
 $('#dismiss, .overlay').on('click', function () {
     // hide sidebar

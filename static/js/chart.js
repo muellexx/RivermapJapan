@@ -70,12 +70,10 @@ function loadChart(section, canvasId) {
             hwData = [];
         }
 
-
-
         var lineChartData = {
             labels: xData,
             datasets: [{
-                label: 'My First dataset',
+                label: 'Water Level',
                 borderColor: window.chartColors.blue,
                 backgroundColor: window.chartColors.black,
                 fill: false,

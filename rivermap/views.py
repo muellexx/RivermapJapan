@@ -4,18 +4,39 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.db.models.functions import Lower
+from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
+from django.utils import timezone
 from django.utils.safestring import mark_safe
 from django.views.generic import CreateView, DetailView, UpdateView, ListView
 from googletrans import Translator
 
 from .models import River, Prefecture, Section
-from .forms import SectionAddForm, SectionEditForm
+from .forms import SectionAddForm, SectionEditForm, CommentAddForm
 
 
 def rivermap(request):
-    rivers = River.objects.all()
-    return render(request, 'rivermap/map.html', {'title': 'Map', 'rivers': rivers})
+    response_data = {}
+    if request.method == "POST":
+        section = get_object_or_404(Section, pk=request.POST.get('section'))
+        print(section)
+        form = CommentAddForm(request.POST)
+        comment = form.save(commit=False)
+        comment.author = request.user
+        comment.parent = section
+        print(comment.date_posted)
+
+        response_data['image_url'] = comment.author.profile.image.url
+        response_data['author'] = comment.author.username
+        response_data['date_posted'] = timezone.localtime(comment.date_posted).strftime('%B %d, %Y')
+        response_data['title'] = request.POST.get('title')
+        response_data['content'] = request.POST.get('content')
+        print(response_data)
+
+        return JsonResponse(response_data)
+    else:
+        form = CommentAddForm
+        return render(request, 'rivermap/map.html', {'title': 'Map', 'form': form})
 
 
 class RiverListView(ListView):
