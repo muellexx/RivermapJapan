@@ -27,7 +27,7 @@ function mapLink (lat, lng) {
 }
 
 function showOrHide (id, preText, value, postText) {
-    if (value == null) {
+    if (value == null || value == "") {
         $('#' + id).hide();
     }
     else {
@@ -65,6 +65,7 @@ function loadComments(sectionComments) {
 function updateSidebar (section) {
     $('#sb-river-name').html('<a href="map/' + section.prefecture + '/river/' + section.river_id + '/">' + section.river + '</a>');
     $('#sb-section-name').html('<a href="map/' + section.prefecture + '/section/' + section.id + '/">' + section.name + '</a>');
+    showOrHide ("sb-content", "", section.content, "");
     showOrHide ("sb-difficulty", "Difficulty: ", section.difficulty, "");
     $('#sb-distance').html("Air Distance: " + distance(section.start_lat,
             section.start_lng, section.end_lat, section.end_lng).toFixed(2) + " km");
@@ -87,6 +88,7 @@ function updateSidebar (section) {
 
 function newComment () {
     $('#sb-comment-form').show();
+    $('#sb-new-comment').hide();
 }
 
 $(document).on('submit', '#sb-comment-form', function(e){
@@ -102,6 +104,7 @@ $(document).on('submit', '#sb-comment-form', function(e){
         },
         success: function(json){
             document.getElementById("sb-comment-form").reset();
+            $('#sb-new-comment').show();
             document.getElementById("sb-comment-form").style.display = "none";
             $("#sb-comments").prepend('<article class="media content-section" style="margin: 0; margin-top: 5px; width: 100%;">'+
                 '<div class="media-body">' +

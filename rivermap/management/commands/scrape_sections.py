@@ -25,10 +25,12 @@ class Command(BaseCommand):
     help = 'Scrape water level of the rivers'
 
     def handle(self, *args, **options):
-        for observatory in Observatory.objects.all():
+        write_json = False
+        for observatory in Observatory.objects.all().filter(section__name__contains=''):
             # TODO multithread
             if observatory.section_set.count() and (
                     observatory.date is None or timezone.now() - observatory.date > timezone.timedelta(seconds=3600)):
+                write_json = True
                 url = observatory.url
                 print(f'scrape {observatory}, id {observatory.id}')
                 uClient = uReq(url)
@@ -80,4 +82,5 @@ class Command(BaseCommand):
                 except:
                     print("Error during observatory save at observatory " + observatory.name)
 
-        json_sections()
+        if write_json:
+            json_sections()

@@ -21,10 +21,11 @@
             </div>
             <div id="scroll-content">
                 <div class="sidebar-content">
-                    <p id="sb-difficulty">Difficulty:</p>
-                    <p id="sb-distance">Air Distance:</p>
-                    <p id="sb-start">Start:</p>
-                    <p id="sb-end">End:</p>
+                    <p id="sb-content" class="content-section" style="padding: 5px;"></p>
+                    <p id="sb-difficulty"></p>
+                    <p id="sb-distance"></p>
+                    <p id="sb-start"></p>
+                    <p id="sb-end"></p>
 
                     <div class="tabs">
                         <div class="tab-button-outer">
@@ -59,13 +60,13 @@
                             </table>
                         </div>
                         <div id="tab02" class="tab-contents">
-                            <h2>Tab 2</h2>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eius quos aliquam consequuntur, esse provident impedit minima porro! Laudantium laboriosam culpa quis fugiat ea, architecto velit ab, deserunt rem quibusdam voluptatum.</p>
+                            <h2>Weather</h2>
+                            <p>To be done</p>
                         </div>
                     </div>
 
                     <div class="content-section" style="margin: 0;">
-                        <buton class="btn btn-primary btn-sm mt-1 mb-4" style="float: right;" onclick="newComment()">Comment</buton>
+                        <buton id="sb-new-comment" class="btn btn-primary btn-sm mt-1 mb-4" style="float: right;" onclick="newComment()">Comment</buton>
                         <h5 style="padding-top: 10px;">Comments:</h5>
                         <form id="sb-comment-form" method="POST" style="display: none;">
                             {% csrf_token %}

@@ -45,7 +45,7 @@ class RiverListView(ListView):
     # template_name = 'rivermap/river_list.html'
     context_object_name = 'rivers'
     ordering = ['name']
-    paginate_by = 20
+    paginate_by = 50
 
     def get_queryset(self):
         return River.objects.filter(prefecture__slug=self.kwargs['prefecture']).order_by(Lower('name'))
@@ -55,7 +55,7 @@ class SectionListView(ListView):
     model = Section
     context_object_name = 'sections'
     ordering = ['name']
-    paginate_by = 20
+    paginate_by = 50
 
     def get_queryset(self):
         return Section.objects.filter(prefecture__slug=self.kwargs['prefecture']).order_by(Lower('name'))
@@ -151,7 +151,9 @@ class SectionUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
     def form_valid(self, form):
         form.instance.author = self.request.user
-        return super().form_valid(form)
+        redirect_url = super().form_valid(form)
+        json_sections()
+        return redirect_url
 
     def test_func(self):
         print(self.get_object())
