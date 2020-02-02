@@ -13,25 +13,26 @@ from googletrans import Translator
 
 from .models import River, Prefecture, Section
 from .forms import SectionAddForm, SectionEditForm, CommentAddForm
+from .utils import json_comments, json_sections
 
 
 def rivermap(request):
     response_data = {}
     if request.method == "POST":
         section = get_object_or_404(Section, pk=request.POST.get('section'))
-        print(section)
         form = CommentAddForm(request.POST)
         comment = form.save(commit=False)
         comment.author = request.user
         comment.parent = section
-        print(comment.date_posted)
+        comment.save()
 
         response_data['image_url'] = comment.author.profile.image.url
         response_data['author'] = comment.author.username
         response_data['date_posted'] = timezone.localtime(comment.date_posted).strftime('%B %d, %Y')
         response_data['title'] = request.POST.get('title')
         response_data['content'] = request.POST.get('content')
-        print(response_data)
+        json_comments()
+        json_sections()
 
         return JsonResponse(response_data)
     else:

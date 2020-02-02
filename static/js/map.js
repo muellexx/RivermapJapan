@@ -36,6 +36,32 @@ function showOrHide (id, preText, value, postText) {
     }
 }
 
+function loadComments(sectionComments) {
+    $.getJSON("static/js/data/mapObjectComments.json", function(json){
+        comments = json.comments
+        /*var result = comments.filter(function(){
+            return comments.id === sectionComment.id
+        });*/
+        for (let i = 0; i < sectionComments.length; i++){
+            sectionComment = sectionComments[i];
+            comment = comments.find(x => x.id === sectionComment)
+            console.log(comment.content);
+            $("#sb-comments").prepend('<article class="media content-section" style="margin: 0; margin-top: 5px; width: 100%;">'+
+                '<div class="media-body">' +
+                    '<div class="article-metadata">' +
+                        '<img class="rounded-circle article-img" src="' + comment.image_url + '">' +
+                        '<a class="mr-2" href="#">' + comment.author + '</a>' +
+                        '<small class="text-muted">' + comment.date_posted + '</small>' +
+                    '</div>' +
+                    '<h2><a class="article-title" href="#">' + comment.title + '</a></h2>' +
+                    '<p class="article-content">' + comment.content + '</p>' +
+                '</div>' +
+            '</article>'
+            )
+        }
+    });
+}
+
 function updateSidebar (section) {
     $('#sb-river-name').html('<a href="map/' + section.prefecture + '/river/' + section.river_id + '/">' + section.river + '</a>');
     $('#sb-section-name').html('<a href="map/' + section.prefecture + '/section/' + section.id + '/">' + section.name + '</a>');
@@ -51,6 +77,12 @@ function updateSidebar (section) {
     showOrHide ("sb-mw", "MW: ", section.middle_water, "");
     showOrHide ("sb-hw", "HW: ", section.high_water, "");
     $('#id_section').val(section.id);
+    $('#sb-comments').html("");
+    if (section.comments !== undefined && section.comments.length != 0){
+        loadComments(section.comments);
+    } else {
+        $('#sb-comments').html("No Comments yet");
+    }
 };
 
 function newComment () {
