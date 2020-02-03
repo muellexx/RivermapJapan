@@ -3,7 +3,7 @@
     <div class="content-section">
         {% with sections|first as section %}
         <div class="media-head">
-            <h2 class="article-title">Sections in {{ section.prefecture }}</h2>
+            <h3 class="article-title">Sections in {{ section.prefecture }}</h3>
             <h5 class="article-title">{{ section.region }}</h5>
         </div>
         {% endwith %}
@@ -14,9 +14,9 @@
             <article class="media content-section">
                 <div class="media-body">
                     <div class="article-metadata">
-                        <h4><a class="article-title" href="{% url 'section-detail' view.kwargs.prefecture section.id %}">{{ section }}</a></h4>
+                        <h5><a class="article-title" href="{% url 'section-detail' view.kwargs.prefecture section.id %}">{{ section }}</a></h5>
                         <p class="text-muted">
-                            <a href="{% url 'river-detail' section.river.id %}">{{ section.river }}</a>,
+                            <a href="{% url 'river-detail' view.kwargs.prefecture section.river.id %}">{{ section.river }}</a>,
                             Added by {{ section.author }} on {{ section.date_added|date:"F d, Y" }}
                         </p>
                         {% if section.content %}

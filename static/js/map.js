@@ -38,22 +38,18 @@ function showOrHide (id, preText, value, postText) {
 
 function loadComments(sectionComments) {
     $.getJSON("static/js/data/mapObjectComments.json", function(json){
-        comments = json.comments
-        /*var result = comments.filter(function(){
-            return comments.id === sectionComment.id
-        });*/
+        comments = json.comments;
         for (let i = 0; i < sectionComments.length; i++){
             sectionComment = sectionComments[i];
-            comment = comments.find(x => x.id === sectionComment)
-            console.log(comment.content);
+            comment = comments.find(x => x.id === sectionComment);
             $("#sb-comments").prepend('<article class="media content-section" style="margin: 0; margin-top: 5px; width: 100%;">'+
                 '<div class="media-body">' +
-                    '<div class="article-metadata">' +
-                        '<img class="rounded-circle article-img" src="' + comment.image_url + '">' +
-                        '<a class="mr-2" href="#">' + comment.author + '</a>' +
-                        '<small class="text-muted">' + comment.date_posted + '</small>' +
+                    '<div class="article-metadata row">' +
+                        '<div class="column-md-5"><img class="rounded-circle comment-img" src="' + comment.image_url + '"></div>' +
+                        '<div class="column-md-7"><a class="mr-2" href="user/' + comment.author + '">' + comment.author + '</a></br>' +
+                        '<small class="text-muted">' + comment.date_posted + '</small></div>' +
                     '</div>' +
-                    '<h2><a class="article-title" href="#">' + comment.title + '</a></h2>' +
+                    '<h5>' + comment.title + '</h5>' +
                     '<p class="article-content">' + comment.content + '</p>' +
                 '</div>' +
             '</article>'

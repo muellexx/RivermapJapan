@@ -14,9 +14,9 @@
                     <table class="table mb-0">
                         <tbody>
                             <tr>
-                                <td class="py-1"><a href="{% url 'river-list' prefecture.slug %}">{{ prefecture.river_set.count }} Rivers</a></td>
-                                <td class="py-1"><a href="{% url 'section-list' prefecture.slug %}">{{ prefecture.section_count }} Sections</a></td>
-                                <td class="py-1"><a href="#">{{ prefecture.spot_count }} Spots</a></td>
+                                <td class="py-1"><a href="{% url 'river-list' prefecture.slug %}">{{ prefecture.river_set.count }} River{{ prefecture.river_set.count|pluralize }}</a></td>
+                                <td class="py-1"><a href="{% url 'section-list' prefecture.slug %}">{{ prefecture.section_count }} Section{{ prefecture.section_count|pluralize }}</a></td>
+                                <td class="py-1"><a href="#">{{ prefecture.spot_count }} Spot{{ prefecture.spot_count|pluralize }}</a></td>
                             </tr>
                         </tbody>
                     </table>

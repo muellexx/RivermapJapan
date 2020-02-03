@@ -6,7 +6,7 @@
         {% for prefecture in prefectures %}
         {% if prefecture.slug == view.kwargs.prefecture %}
         <div class="media-head">
-            <h2 class="article-title">{{ prefecture }}</h2>
+            <h3 class="article-title">{{ prefecture }}</h3>
             <h5 class="article-title">{{ prefecture.region }}</h5>
         </div>
         {% endif %}
@@ -16,17 +16,17 @@
 
         {% include "pagination.html" %}
 
-        {% if user.is_authenticated %}
+        <!--{% if user.is_authenticated %}
             <a class="btn btn-primary btn-sm mt-1 mb-4" style="float: right;" href="{% url 'river-create' %}">New River</a>
-        {% endif %}
+        {% endif %}-->
         {% for river in rivers %}
             <article class="media content-section">
                 <div class="media-body">
                     <div class="article-metadata">
-                        <h3><a class="article-title" href="{% url 'river-detail' view.kwargs.prefecture river.id %}">{{ river }}</a></h3>
+                        <h5><a class="article-title" href="{% url 'river-detail' view.kwargs.prefecture river.id %}">{{ river }}</a></h5>
                         <small class="text-muted">{{ river.section }}</small>
                     </div>
-                    <p class="article-content">Current level: {{ river.level }} ({{ river.date }})</p>
+                    <p class="article-content">{{ river.section_set.count }} registered White Water section{{ river.section_set.count|pluralize }}</p>
                 </div>
             </article>
         {% endfor %}

@@ -2,12 +2,11 @@
 {% block container_content %}
     <div class="content-section">
         <div class="media-head">
-            {% if user.is_authenticated %}
-                <a class="btn btn-primary btn-sm mt-1 mb-4" style="float: right;" href="{% url 'section-update' object.id %}">Edit</a>
-            </form>
+            {% if object.author == user %}
+            <a class="btn btn-primary btn-sm mt-1 mb-4" style="float: right;" href="{% url 'section-update' object.id %}">Edit</a>
             {% endif %}
-            <h2 class="article-title">{{ object.name }} ({{ object.river.name }})</h2>
-            <h2 class="article-title">{{ object.prefecture }} ({{ object.region }})</h2>
+            <h3 class="article-title">{{ object.name }} ({{ object.river.name }})</h3>
+            <h5 class="article-title">{{ object.prefecture }} ({{ object.region }})</h5>
         </div>
         <div class="content-section">
             <div class="media-body">

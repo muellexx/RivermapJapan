@@ -12,19 +12,9 @@
             </form>
             {% endif %}
             {% endif %}
-            <h2 class="article-title">{{ object }}</h2>
-            <h2 class="article-title">{{ view.kwargs.prefecture.capitalize }}</h2>
+            <h3 class="article-title">{{ object }}</h3>
+            <h5 class="article-title">{{ view.kwargs.prefecture.capitalize }}</h5>
         </div>
-        {% if river.section_set.count > 0 %}
-        <div class="content-section">
-            <div class="media-body">
-                <h6>White Water sections ({{ river.section_set.count }}):</h6>
-                {% for section in object.section_set.all %}
-                    <small class="text-muted">{{ section.name }}</small>
-                {% endfor %}
-            </div>
-        </div>
-        {% endif %}
         <div class="content-section">
             <div class="media-body">
                 <h6>Prefecture{{ river.prefecture.count|pluralize }} ({{ river.prefecture.count }}):</h6>
@@ -36,5 +26,15 @@
                 {% endfor %}
             </div>
         </div>
+        {% if river.section_set.count > 0 %}
+        <div class="content-section">
+            <div class="media-body">
+                <h6>White Water section{{ river.section_set.count|pluralize }} ({{ river.section_set.count }}):</h6>
+                {% for section in object.section_set.all %}
+                    <small class="text-muted"><a href="{% url 'section-detail' view.kwargs.prefecture section.id %}">{{ section }}</a></br></small>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
     </div>
 {% endblock container_content %}
