@@ -13,7 +13,7 @@ from googletrans import Translator
 
 from .models import River, Prefecture, Section
 from .forms import SectionAddForm, SectionEditForm, CommentAddForm
-from .utils import json_comments, json_sections
+from .utils import json_comments, json_sections, scrape_sections
 
 
 def rivermap(request):
@@ -152,6 +152,7 @@ class SectionUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     def form_valid(self, form):
         form.instance.author = self.request.user
         redirect_url = super().form_valid(form)
+        scrape_sections()
         json_sections()
         return redirect_url
 

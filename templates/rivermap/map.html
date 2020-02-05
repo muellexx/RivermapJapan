@@ -67,14 +67,17 @@
 
                     <div class="content-section" style="margin: 0;">
                         {% if user.is_authenticated %}
-                            <buton id="sb-new-comment" class="btn btn-primary btn-sm mt-1 mb-4" style="float: right;" onclick="newComment()">Comment</buton>
-                        {% endif %}
+                        <buton id="sb-new-comment" class="btn btn-primary btn-sm mt-1 mb-4" style="float: right;" onclick="newComment()">Comment</buton>
                         <h5 style="padding-top: 10px;">Comments:</h5>
                         <form id="sb-comment-form" method="POST" style="display: none;">
                             {% csrf_token %}
                             <input id="id_section" type="hidden" value="123" name="section">
                             {% crispy form %}
                         </form>
+                        {% else %}
+                        <small style="float: right;"><a href="{% url 'login' %}">Log in</a></br>to comment</small>
+                        <h5 style="padding-top: 10px;">Comments:</h5>
+                        {% endif %}
                         <div id="sb-comments"></div>
                     </div>
                 </div>

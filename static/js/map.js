@@ -37,7 +37,7 @@ function showOrHide (id, preText, value, postText) {
 }
 
 function loadComments(sectionComments) {
-    $.getJSON("static/js/data/mapObjectComments.json", function(json){
+    $.getJSON("static/js/data/mapObjectComments.json", {_: new Date().getTime()}, function(json){
         comments = json.comments;
         for (let i = 0; i < sectionComments.length; i++){
             sectionComment = sectionComments[i];
@@ -46,14 +46,17 @@ function loadComments(sectionComments) {
                 '<div class="media-body">' +
                     '<div class="article-metadata row">' +
                         '<div class="column-md-5"><img class="rounded-circle comment-img" src="' + comment.image_url + '"></div>' +
-                        '<div class="column-md-7"><a class="mr-2" href="user/' + comment.author + '">' + comment.author + '</a></br>' +
+                        '<div id="sb-comment-author" class="column-md-7"><a class="mr-2" href="user/' + comment.author + '">' + comment.author + '</a></br>' +
                         '<small class="text-muted">' + comment.date_posted + '</small></div>' +
                     '</div>' +
                     '<h5>' + comment.title + '</h5>' +
                     '<p class="article-content">' + comment.content + '</p>' +
                 '</div>' +
             '</article>'
-            )
+            );
+            if (comment.author == "Deleted User") {
+                $("#sb-comment-author").html(comment.author);
+            }
         }
     });
 }
@@ -104,23 +107,21 @@ $(document).on('submit', '#sb-comment-form', function(e){
             document.getElementById("sb-comment-form").style.display = "none";
             $("#sb-comments").prepend('<article class="media content-section" style="margin: 0; margin-top: 5px; width: 100%;">'+
                 '<div class="media-body">' +
-                    '<div class="article-metadata">' +
-                        '<img class="rounded-circle article-img" src="' + json.image_url + '">' +
-                        '<a class="mr-2" href="#">' + json.author + '</a>' +
-                        '<small class="text-muted">' + json.date_posted + '</small>' +
+                    '<div class="article-metadata row">' +
+                        '<div class="column-md-5"><img class="rounded-circle comment-img" src="' + json.image_url + '"></div>' +
+                        '<div id="sb-comment-author" class="column-md-7"><a class="mr-2" href="user/' + json.author + '">' + json.author + '</a></br>' +
+                        '<small class="text-muted">' + json.date_posted + '</small></div>' +
                     '</div>' +
-                    '<h2><a class="article-title" href="#">' + json.title + '</a></h2>' +
+                    '<h5>' + json.title + '</h5>' +
                     '<p class="article-content">' + json.content + '</p>' +
                 '</div>' +
             '</article>'
-            )
+            );
         },
         error: function(xhr,errmsg,err) {
             console.log(xhr.status + ": " + xhr.responseText);
         }
-
     });
-    console.log('hi')
     e.preventDefault();
 });
 
@@ -146,15 +147,17 @@ function loadRivers(popup) {
                 }
             ];
 
-            var river_color;
-            if (iriver.level >= iriver.high_water){
-                river_color = '#FF0000';
-            } else if (iriver.level >= iriver.middle_water){
-                river_color = '#00FF00';
-            } else if (iriver.level >= iriver.low_water){
-                river_color = '#0000FF';
-            } else {
-                river_color = '#8a8a8a';
+            var river_color = '#336699';
+            if (iriver.high_water != null || iriver.middle_water != null || iriver.low_water != null) {
+                if (iriver.level >= iriver.high_water){
+                    river_color = '#FF0000';
+                } else if (iriver.level >= iriver.middle_water){
+                    river_color = '#00FF00';
+                } else if (iriver.level >= iriver.low_water){
+                    river_color = '#0000FF';
+                } else {
+                    river_color = '#8a8a8a';
+                }
             }
 
             var river = new google.maps.Polyline({

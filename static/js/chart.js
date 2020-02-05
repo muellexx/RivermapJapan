@@ -21,7 +21,7 @@ function loadChart(section, canvasId) {
         $('#' + canvasId + '-div').append('<canvas id="' + canvasId + '" height="300"></canvas>');
     }
 
-    $.getJSON("static/js/data/river/" + section.observatory_id + ".json", function(json){
+    $.getJSON("static/js/data/river/" + section.observatory_id + ".json", {_: new Date().getTime()}, function(json){
         data = json.level;
 
         xData = [];
@@ -55,10 +55,10 @@ function loadChart(section, canvasId) {
         }
 
         minLevel = Math.min.apply(null, yData);
-        maxLevel = Math.min.apply(null, yData);
-        buffer = (maxLevel - minLevel)*0.3;
+        maxLevel = Math.max.apply(null, yData);
+        buffer = (maxLevel - minLevel)*0.5;
         minLevel = minLevel - buffer;
-        maxLevel = minLevel + buffer;
+        maxLevel = maxLevel + buffer;
 
         if ((minLevel > section.low_water)||(maxLevel < section.low_water)){
             lwData = [];
