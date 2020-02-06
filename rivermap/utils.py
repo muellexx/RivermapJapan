@@ -3,10 +3,12 @@ import json
 
 from bs4 import BeautifulSoup as soup
 from urllib.request import urlopen as uReq
+
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime
 from django.utils.timezone import make_aware, is_aware
 
+from RivermapJapan import settings
 from rivermap.models import Section, MapObjectComment, Observatory
 
 
@@ -100,8 +102,12 @@ def json_comments():
                 'image_url': comment.author.profile.image.url,
                 'date_posted': timezone.localtime(comment.date_posted).strftime('%Y/%m/%d %H:%M'),
             })
-    with open('static/js/data/mapObjectComments.json', 'w') as outfile:
-        json.dump(comments, outfile, indent=4)
+    try:
+        with open('static/js/data/mapObjectComments.json', 'w') as outfile:
+            json.dump(comments, outfile, indent=4)
+    except FileNotFoundError:
+        with open(settings.BASE_DIR+'/static/js/data/mapObjectComments.json', 'w') as outfile:
+            json.dump(comments, outfile, indent=4)
 
 
 def json_sections():
@@ -151,5 +157,10 @@ def json_sections():
                 'end_lng': section.end_lng,
                 'comments': comments,
             })
-    with open('static/js/data/river.json', 'w') as outfile:
-        json.dump(rivers, outfile, indent=4)
+    try:
+        with open('static/js/data/river.json', 'w') as outfile:
+            json.dump(rivers, outfile, indent=4)
+    except FileNotFoundError:
+        with open(settings.BASE_DIR+'/static/js/data/river.json', 'w') as outfile:
+            json.dump(rivers, outfile, indent=4)
+
