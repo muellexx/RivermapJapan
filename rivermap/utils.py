@@ -66,8 +66,12 @@ def scrape_sections():
                     'level': level,
                 })
 
-            with open(filename, 'w') as outfile:
-                json.dump(data, outfile, indent=4)
+            try:
+                with open('static/js/data/river/' + str(observatory.id) + '.json', 'w') as outfile:
+                    json.dump(data, outfile, indent=4)
+            except FileNotFoundError:
+                with open(settings.BASE_DIR + '/static/js/data/river/' + str(observatory.id) + '.json', 'w') as outfile:
+                    json.dump(data, outfile, indent=4)
 
             observatory.level = current_level
             try:
