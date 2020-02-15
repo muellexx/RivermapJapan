@@ -50,6 +50,13 @@ class RiverListView(ListView):
     def get_queryset(self):
         return River.objects.filter(prefecture__slug=self.kwargs['prefecture']).order_by(Lower('name'))
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        print(self.kwargs['prefecture'])
+        print(Prefecture.objects.get(slug=self.kwargs['prefecture']))
+        context['prefecture'] = get_object_or_404(Prefecture, slug=self.kwargs['prefecture'])
+        return context
+
 
 class SectionListView(ListView):
     model = Section
@@ -59,6 +66,13 @@ class SectionListView(ListView):
 
     def get_queryset(self):
         return Section.objects.filter(prefecture__slug=self.kwargs['prefecture']).order_by(Lower('name'))
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        print(self.kwargs['prefecture'])
+        print(Prefecture.objects.get(slug=self.kwargs['prefecture']))
+        context['prefecture'] = get_object_or_404(Prefecture, slug=self.kwargs['prefecture'])
+        return context
 
 
 class PrefectureListView(ListView):

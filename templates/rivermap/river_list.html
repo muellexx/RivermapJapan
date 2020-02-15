@@ -1,18 +1,10 @@
 {% extends "base_container.html" %}
 {% block container_content %}
     <div class="content-section">
-        {% with rivers|first as river %}
-        {% with river.prefecture.all as prefectures %}
-        {% for prefecture in prefectures %}
-        {% if prefecture.slug == view.kwargs.prefecture %}
         <div class="media-head">
             <h3 class="article-title">{{ prefecture }}</h3>
             <h5 class="article-title">{{ prefecture.region }}</h5>
         </div>
-        {% endif %}
-        {% endfor %}
-        {% endwith %}
-        {% endwith %}
 
         {% include "pagination.html" %}
 

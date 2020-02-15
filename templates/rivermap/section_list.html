@@ -1,12 +1,10 @@
 {% extends "base_container.html" %}
 {% block container_content %}
     <div class="content-section">
-        {% with sections|first as section %}
         <div class="media-head">
-            <h3 class="article-title">Sections in {{ section.prefecture }}</h3>
-            <h5 class="article-title">{{ section.region }}</h5>
+            <h3 class="article-title">Sections in {{ prefecture }}</h3>
+            <h5 class="article-title">{{ prefecture.region }}</h5>
         </div>
-        {% endwith %}
 
         {% include "pagination.html" %}
 
@@ -32,6 +30,11 @@
                 </div>
             </article>
         {% endfor %}
+
+        {% if not sections %}
+        <br/>
+        <h6>There are no sections registered in {{ prefecture.name }} yet.</h6>
+        {% endif %}
 
         {% include "pagination.html" %}
 
