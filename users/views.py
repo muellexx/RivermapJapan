@@ -1,11 +1,10 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.translation import gettext as _
 from django.template.loader import render_to_string
-from django.conf import settings
 from django.contrib.auth import login
 from django.contrib.auth.models import User
 from django.contrib import messages
@@ -23,13 +22,10 @@ def register(request):
         if form.is_valid():
             user = form.save(commit=False)
             user.email = form.cleaned_data['email']
-            # user.set_password(form.cleaned_data['password'])
             user.is_active = False
             user.save()
             current_site = get_current_site(request)
-            subject = 'Activate your Account'
-            current_site = get_current_site(request)
-            subject = 'Activate your Account'
+            subject = _('Activate your Account')
             message = render_to_string('users/account_activation_email.txt', {
                 'user': user,
                 'domain': current_site.domain,
@@ -43,7 +39,7 @@ def register(request):
                 'token': account_activation_token.make_token(user),
             })
             user.email_user(subject=subject, message=message, html_message=html_message)
-            messages.success(request, f'An email with a registration link has been sent to your email address')
+            messages.success(request, _('An email with a registration link has been sent to your email address'))
             return redirect('blog-home')
     else:
         form = UserRegisterForm()
@@ -60,10 +56,10 @@ def activate(request, uidb64, token):
         user.is_active = True
         user.save()
         login(request, user)
-        messages.success(request, f'Your account has been activated!')
+        messages.success(request, _('Your account has been activated!'))
         return redirect('blog-home')
     else:
-        messages.warning(request, f'Invalid activation link')
+        messages.warning(request, _('Invalid activation link'))
         return redirect('blog-home')
 
 
@@ -87,7 +83,7 @@ def profile_edit(request):
         if u_form.is_valid() and p_form.is_valid():
             u_form.save()
             p_form.save()
-            messages.success(request, f'Your account has been updated!')
+            messages.success(request, _('Your account has been updated!'))
             return redirect('profile')
     else:
         u_form = UserUpdateForm(instance=request.user)
@@ -103,12 +99,12 @@ def profile_edit(request):
 
 @login_required
 def profile_delete(request):
-    messages.warning(request, f'Warning: Deleting your account cannot be undone!')
+    messages.warning(request, _('Warning: Deleting your account cannot be undone!'))
     return render(request, 'users/profile_delete.html')
 
 
 @login_required
 def profile_delete_done(request):
     request.user.delete()
-    messages.success(request, f'Your account has successfully been deleted!')
+    messages.success(request, _('Your account has successfully been deleted!'))
     return redirect('blog-home')

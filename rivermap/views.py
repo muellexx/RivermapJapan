@@ -10,6 +10,7 @@ from django.utils import timezone
 from django.utils.safestring import mark_safe
 from django.views.generic import CreateView, DetailView, UpdateView, ListView
 from googletrans import Translator
+from django.utils.translation import gettext as _
 
 from .models import River, Prefecture, Section
 from .forms import SectionAddForm, SectionEditForm, CommentAddForm
@@ -114,7 +115,8 @@ def add_section(request):
             prefecture = get_object_or_404(Prefecture, slug=request.POST.get('prefecture'))
             print(prefecture.name)
             form = SectionAddForm
-            return render(request, 'rivermap/add_section.html', {'form': form, 'river': river, 'prefecture': prefecture})
+            return render(request, 'rivermap/add_section.html',
+                          {'form': form, 'river': river, 'prefecture': prefecture})
         else:
             form = SectionAddForm(request.POST)
             if form.is_valid():
@@ -137,9 +139,12 @@ def add_section(request):
                     except ValueError:
                         pass
                 section.save()
-                message = f'The new section has successfully been saved!</br>' \
-                          f'Please add some more details about the river</br>' \
-                          f'The river will appear on the map after it has been reviewed by an admin'
+                # message = f'The new section has successfully been saved!</br>' \
+                #           f'Please add some more details about the river</br>' \
+                #           f'The river will appear on the map after it has been reviewed by an admin'
+                message = _('The new section has successfully been saved!') + '</br>' + \
+                          _('Please add some more details about the river') + '</br>' + \
+                          _('The river will appear on the map soon')
                 message = mark_safe(message)
                 messages.success(request, message)
                 return redirect('section-update', pk=section.id)

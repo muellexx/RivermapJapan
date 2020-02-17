@@ -1,6 +1,7 @@
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Row, Column, Submit
 from django import forms
+from django.utils.translation import gettext_lazy as _
 from .models import Section, MapObjectComment
 
 
@@ -9,11 +10,11 @@ class SectionAddForm(forms.ModelForm):
         model = Section
         fields = ['name_jp', 'lat', 'lng', 'end_lat', 'end_lng']
         labels = {
-            "name_jp": "Name of the section",
-            "lat": "Start Latitude",
-            "lng": "Start Longitude",
-            "end_lat": "End Latitude",
-            "end_lng": "End Longitude"
+            "name_jp": _('Name of the section'),
+            "lat": _('Start Latitude'),
+            "lng": _('Start Longitude'),
+            "end_lat": _('End Latitude'),
+            "end_lng": _('End Longitude')
         }
 
     def __init__(self, *args, **kwargs):
@@ -41,12 +42,19 @@ class SectionEditForm(forms.ModelForm):
         fields = ['name_jp', 'name', 'observatory', 'dam', 'content', 'difficulty', 'high_water', 'middle_water',
                   'low_water', 'lat', 'lng', 'end_lat', 'end_lng']
         labels = {
-            "name_jp": "Name (Japanese)",
-            "name": "Name (English)",
-            "lat": "Start Lat",
-            "lng": "Start Lng",
-            "content": "Useful Information:",
-            "difficulty": "Difficulty (from I to VI e.g. II, III+, II(III+), IV-V)"
+            "name_jp": _('Name (Japanese)'),
+            "name": _('Name (English)'),
+            "observatory": _('Observatory'),
+            "dam": _('Dam'),
+            "lat": _('Start Latitude'),
+            "lng": _('Start Longitude'),
+            "end_lat": _('End Latitude'),
+            "end_lng": _('End Longitude'),
+            "content": _('Useful Information:'),
+            "difficulty": _('Difficulty (from I to VI e.g. II, III+, II(III+), IV-V)'),
+            "low_water": _('Low Water'),
+            "middle_water": _('Middle Water'),
+            "high_water": _('High Water')
         }
 
     def __init__(self, *args, **kwargs):

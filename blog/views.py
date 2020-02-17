@@ -1,8 +1,20 @@
 from django.shortcuts import render, get_object_or_404
+from django.template.defaultfilters import register
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from .models import Post
+from django.utils.translation import get_language
+import re
+
+
+@register.filter
+def strip_lang(path):
+    pattern = '^(/%s)/' % get_language()
+    match = re.search(pattern, path)
+    if match is None:
+        return path
+    return path[match.end(1):]
 
 
 class PostListView(ListView):

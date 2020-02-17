@@ -37,7 +37,7 @@ function showOrHide (id, preText, value, postText) {
 }
 
 function loadComments(sectionComments) {
-    $.getJSON("static/js/data/mapObjectComments.json", {_: new Date().getTime()}, function(json){
+    $.getJSON("/static/js/data/mapObjectComments.json", {_: new Date().getTime()}, function(json){
         comments = json.comments;
         for (let i = 0; i < sectionComments.length; i++){
             sectionComment = sectionComments[i];
@@ -133,7 +133,7 @@ $('#dismiss, .overlay').on('click', function () {
 });
 
 function loadRivers(popup) {
-    $.getJSON("static/js/data/river.json", function(json){
+    $.getJSON("/static/js/data/river.json", function(json){
         rivers = json.rivers;
         for (let i = 0; i < rivers.length; i++) {
             var iriver = rivers[i];

@@ -21,7 +21,7 @@ function loadChart(section, canvasId) {
         $('#' + canvasId + '-div').append('<canvas id="' + canvasId + '" height="300"></canvas>');
     }
 
-    $.getJSON("static/js/data/river/" + section.observatory_id + ".json", {_: new Date().getTime()}, function(json){
+    $.getJSON("/static/js/data/river/" + section.observatory_id + ".json", {_: new Date().getTime()}, function(json){
         data = json.level;
 
         xData = [];
