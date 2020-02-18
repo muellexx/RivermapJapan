@@ -176,9 +176,6 @@ class SectionUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         return redirect_url
 
     def test_func(self):
-        print(self.get_object())
-        print(self.request.user)
-        print(self.get_object().author)
         post = self.get_object()
         if self.request.user == post.author:
             return True
