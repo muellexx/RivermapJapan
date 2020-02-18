@@ -1,4 +1,6 @@
 {% extends "base_container.html" %}
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
 {% block container_content %}
 <div class="content-section">
     <div class="media">
@@ -7,14 +9,18 @@
             <h2 class="account-heading">{{ view.kwargs.username }}</h2>
         </div>
     </div>
-    <h4 class="mb-3">Posts ({{ page_obj.paginator.count }}):</h4>
+    <h4 class="mb-3">{% trans "Posts" %} ({{ page_obj.paginator.count }}):</h4>
     {% for post in posts %}
         <article class="media content-section">
             <img class="rounded-circle article-img" src="{{ post.author.profile.image.url }}">
             <div class="media-body">
                 <div class="article-metadata">
                     <a class="mr-2" href="{% url 'user-posts' post.author.username %}">{{ post.author }}</a>
-                    <small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small>
+                    {% if LANGUAGE_CODE == "ja" %}
+                        <small class="text-muted">{{ post.date_posted|date:"Y年F d日" }}</small>
+                    {% else %}
+                        <small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small>
+                    {% endif %}
                 </div>
                 <h2><a class="article-title" href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h2>
                 <p class="article-content">{{ post.content }}</p>

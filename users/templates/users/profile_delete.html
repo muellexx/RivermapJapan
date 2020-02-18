@@ -8,13 +8,13 @@
                 <p class="text-secondary">{{ user.email }}</p>
             </div>
         </div>
-        <legend class="border-bottom mb-4">Delete your Account?</legend>
+        <legend class="border-bottom mb-4">{% trans "Delete your Account?" %}</legend>
         <p>
-            Deleting your account cannot be reversed. All your posts and information will be deleted.
-            Are you sure you want to delete your account?
+            {% trans "Deleting your account cannot be reversed. All your posts and information will be deleted." %}
+            {% trans "Are you sure you want to delete your account?" %}
         </p>
-        <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'profile' %}">No</a>
-         <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'profile-delete-done' %}">Delete</a>
+        <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'profile' %}">{% trans "No" %}</a>
+         <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'profile-delete-done' %}">{% trans "Delete" %}</a>
     </div>
 {% endblock container_content %}
 

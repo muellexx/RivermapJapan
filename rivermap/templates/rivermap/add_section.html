@@ -1,4 +1,5 @@
 {% extends "base_container.html" %}
+{% load i18n %}
 {% load static %}
 {% load crispy_forms_tags %}
 {% block style_sheets %}
@@ -13,8 +14,8 @@
             <input type="hidden" value="{{ prefecture.slug }}" name="prefecture">
             <fieldset class="form-group">
                 <div class="border-bottom mb-4">
-                    <legend>New Section in {{ river.name }}</legend>
-                    <h6>{{ prefecture.name }} ({{prefecture.region.name}})</h6>
+                    <legend>{% blocktrans with rivername=river %}New Section in {{ rivername }}{% endblocktrans %}</legend>
+                    <h6>{{ prefecture }} ({{prefecture.region}})</h6>
                 </div>
                 {% crispy form %}
 

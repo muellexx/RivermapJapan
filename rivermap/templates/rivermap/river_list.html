@@ -1,4 +1,5 @@
 {% extends "base_container.html" %}
+{% load i18n %}
 {% block container_content %}
     <div class="content-section">
         <div class="media-head">
@@ -16,9 +17,8 @@
                 <div class="media-body">
                     <div class="article-metadata">
                         <h5><a class="article-title" href="{% url 'river-detail' view.kwargs.prefecture river.id %}">{{ river }}</a></h5>
-                        <small class="text-muted">{{ river.section }}</small>
                     </div>
-                    <p class="article-content">{{ river.section_set.count }} registered White Water section{{ river.section_set.count|pluralize }}</p>
+                    <p class="article-content">{{ river.section_set.count }} {% blocktrans count counter=river.section_set.count %}registered White Water section{% plural %}registered White Water sections{% endblocktrans %}</p>
                 </div>
             </article>
         {% endfor %}

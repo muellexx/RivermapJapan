@@ -43,7 +43,6 @@ def rivermap(request):
 
 class RiverListView(ListView):
     model = River
-    # template_name = 'rivermap/river_list.html'
     context_object_name = 'rivers'
     ordering = ['name']
     paginate_by = 50
@@ -53,8 +52,6 @@ class RiverListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        print(self.kwargs['prefecture'])
-        print(Prefecture.objects.get(slug=self.kwargs['prefecture']))
         context['prefecture'] = get_object_or_404(Prefecture, slug=self.kwargs['prefecture'])
         return context
 
@@ -70,8 +67,6 @@ class SectionListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        print(self.kwargs['prefecture'])
-        print(Prefecture.objects.get(slug=self.kwargs['prefecture']))
         context['prefecture'] = get_object_or_404(Prefecture, slug=self.kwargs['prefecture'])
         return context
 
@@ -84,6 +79,11 @@ class PrefectureListView(ListView):
 
 class RiverDetailView(DetailView):
     model = River
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['prefecture'] = get_object_or_404(Prefecture, slug=self.kwargs['prefecture'])
+        return context
 
 
 class SectionDetailView(DetailView):
@@ -113,7 +113,6 @@ def add_section(request):
         if 'prepair_comment' in request.POST:
             river = get_object_or_404(River, pk=request.POST.get('river'))
             prefecture = get_object_or_404(Prefecture, slug=request.POST.get('prefecture'))
-            print(prefecture.name)
             form = SectionAddForm
             return render(request, 'rivermap/add_section.html',
                           {'form': form, 'river': river, 'prefecture': prefecture})

@@ -1,4 +1,5 @@
 {% extends "base_container.html" %}
+{% load i18n %}
 {% load crispy_forms_tags %}
 {% block container_content %}
     <div class="content-section">
@@ -12,19 +13,19 @@
         <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             <fieldset class="form-group">
-                <legend class="border-bottom mb-4">Profile Info</legend>
+                <legend class="border-bottom mb-4">{% trans "Profile Info" %}</legend>
                 {{ u_form|crispy }}
-                <p>email: {{ user.email }} </br>The email address can currently not be changed for security reasons.
+                <p>{% trans "email:" %} {{ user.email }} </br>{% blocktrans trimmed %}The email address can currently not be changed for security reasons.
                     If you wish to change it, please send an email
-                    to <a href="mailto:rivermapjapan@gmail.com?subject=Change email">rivermapjapan@gmail.com</a></p>
+                    to{% endblocktrans %} <a href="mailto:rivermapjapan@gmail.com?subject=Change email">rivermapjapan@gmail.com</a></p>
                 {{ p_form|crispy }}
             </fieldset>
             <div class="form-group">
-                <button class="btn btn-outline-info" type="submit">Update</button>
+                <button class="btn btn-outline-info" type="submit">{% trans "Update" %}</button>
             </div>
         </form>
         <div class="media">
-            <a href="{% url 'profile-delete' %}">Delete Account</a>
+            <a href="{% url 'profile-delete' %}">{% trans "Delete Account" %}</a>
         </div>
     </div>
 {% endblock container_content %}

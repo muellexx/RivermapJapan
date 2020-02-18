@@ -1,7 +1,8 @@
+{% load i18n %}
 {% autoescape off %}
-Hi {{ user.username }},
+{% blocktrans with name=user.username %}Hi {{ name }},{% endblocktrans %}
 
-Your account has successfully been created. Please click below link to activate your account.
+{% trans "Your account has successfully created. Please click below link to activate your account." %}
 
 http://{{ domain }}{% url 'activate' uidb64=uid token=token %}
 {% endautoescape %}

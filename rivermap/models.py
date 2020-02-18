@@ -4,6 +4,7 @@ from django.db import models
 from django.urls import reverse
 from django.utils import timezone
 from polymorphic.models import PolymorphicModel
+from django.utils.translation import get_language
 
 """
 Models:
@@ -33,7 +34,10 @@ class Region(models.Model):
     name_jp = models.CharField(max_length=255, unique=True)
 
     def __str__(self):
-        return self.name + " (" + self.name_jp + ")"
+        if get_language() == "ja":
+            return self.name_jp
+        else:
+            return self.name + " (" + self.name_jp + ")"
 
 
 class Prefecture(models.Model):
@@ -43,7 +47,10 @@ class Prefecture(models.Model):
     slug = models.SlugField()
 
     def __str__(self):
-        return self.name + " (" + self.name_jp + ")"
+        if get_language() == "ja":
+            return self.name_jp
+        else:
+            return self.name + " (" + self.name_jp + ")"
 
     def get_absolute_url(self):
         return reverse('prefecture-detail', kwargs={'slug': self.slug})
@@ -62,7 +69,10 @@ class River(models.Model):
     name_jp = models.CharField(max_length=255, unique=True)
 
     def __str__(self):
-        return self.name + " (" + self.name_jp + ")"
+        if get_language() == "ja":
+            return self.name_jp
+        else:
+            return self.name + " (" + self.name_jp + ")"
 
     def get_absolute_url(self):
         return reverse('river-detail', kwargs={'pk': self.pk})
@@ -79,7 +89,10 @@ class Observatory(models.Model):
     date = models.DateTimeField(max_length=255, null=True, blank=True)
 
     def __str__(self):
-        return self.name + " (" + self.name_jp + ")"
+        if get_language() == "ja":
+            return self.name_jp
+        else:
+            return self.name + " (" + self.name_jp + ")"
 
 
 class Dam(models.Model):
@@ -93,7 +106,10 @@ class Dam(models.Model):
     date = models.DateTimeField(max_length=255, null=True, blank=True)
 
     def __str__(self):
-        return self.name + " (" + self.name_jp + ")"
+        if get_language() == "ja":
+            return self.name_jp
+        else:
+            return self.name + " (" + self.name_jp + ")"
 
 
 class MapObject(PolymorphicModel):
@@ -112,7 +128,10 @@ class MapObject(PolymorphicModel):
     )
 
     def __str__(self):
-        return self.name + " (" + self.name_jp + ")"
+        if get_language() == "ja":
+            return self.name_jp
+        else:
+            return self.name + " (" + self.name_jp + ")"
 
     class Meta:
         ordering = ['name']

@@ -1,23 +1,30 @@
 {% extends "base_container.html" %}
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
 {% block container_content %}
     <div class="content-section">
         <div class="media-head">
             {% if object.author == user %}
             <a class="btn btn-primary btn-sm mt-1 mb-4" style="float: right;" href="{% url 'section-update' object.id %}">Edit</a>
             {% endif %}
-            <h3 class="article-title">{{ object.name }} ({{ object.river.name }})</h3>
+            {% if LANGUAGE_CODE == "ja" %}
+            <h3 class="article-title">{{ object.name_jp }} ({{ object.river.name_jp }})</h3>
             <h5 class="article-title">{{ object.prefecture }} ({{ object.region }})</h5>
+            {% else %}
+            <h3 class="article-title">{{ object.name }} ({{ object.river.name }})</h3>
+            <h5 class="article-title"><b>{{ object.prefecture }}</b> ({{ object.region }})</h5>
+            {% endif %}
         </div>
         <div class="content-section">
             <div class="media-body">
                 {% if object.difficulty %}
-                <p>Difficulty: {{ object.difficulty }}</p>
+                <p>{% trans "Difficulty:" %} {{ object.difficulty }}</p>
                 {% endif %}
                 {% if object.observatory %}
-                <p>Observatory: {{ object.observatory }} (<a href="{{ object.observatory.url }}" target="blank">source</a>)</p>
+                <p>{% trans "Observatory:" %} {{ object.observatory }} (<a href="{{ object.observatory.url }}" target="blank">source</a>)</p>
                 {% endif %}
                 {% if object.dam %}
-                <p>Dam: {{ object.dam }} (<a href="{{ object.dam.url }}" target="blank">source</a>)</p>
+                <p>{% trans "Dam:" %} {{ object.dam }} (<a href="{{ object.dam.url }}" target="blank">source</a>)</p>
                 {% endif %}
             </div>
         </div>

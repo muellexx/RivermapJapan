@@ -8,8 +8,8 @@
             <input type="hidden" value="{{ prefecture.slug }}" name="prefecture">
             <fieldset class="form-group">
                 <div class="border-bottom mb-4">
-                    <legend>{{ object.name }} ({{ object.river.name }})</legend>
-                    <h6>{{ object.prefecture.name }} ({{object.region.name}})</h6>
+                    <legend>{{ object }} ({{ object.river }})</legend>
+                    <h6>{{ object.prefecture }} ({{object.region}})</h6>
                 </div>
                 {% crispy form %}
             </fieldset>
