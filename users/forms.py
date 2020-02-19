@@ -33,3 +33,7 @@ class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ['image']
+
+        labels = {
+            "image": _('Image')
+        }

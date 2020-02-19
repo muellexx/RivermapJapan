@@ -2,6 +2,7 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Row, Column, Submit
 from django import forms
 from django.utils.translation import gettext_lazy as _
+from django.utils.translation import pgettext_lazy
 from .models import Section, MapObjectComment
 
 
@@ -32,7 +33,7 @@ class SectionAddForm(forms.ModelForm):
                 Column('end_lng', css_class='form-group col-md-6 mb-0'),
             ),
 
-            Submit('submit', 'Add Section')
+            Submit('submit', _('Add Section'))
         )
 
 
@@ -45,7 +46,7 @@ class SectionEditForm(forms.ModelForm):
             "name_jp": _('Name (Japanese)'),
             "name": _('Name (English)'),
             "observatory": _('Observatory'),
-            "dam": _('Dam'),
+            "dam": pgettext_lazy('form', 'Dam'),
             "lat": _('Start Latitude'),
             "lng": _('Start Longitude'),
             "end_lat": _('End Latitude'),
@@ -86,7 +87,7 @@ class SectionEditForm(forms.ModelForm):
                 Column('end_lat', css_class='form-group col-md-6 mb-0'),
                 Column('end_lng', css_class='form-group col-md-6 mb-0'),
             ),
-            Submit('submit', 'Save Section')
+            Submit('submit', _('Save Section'))
         )
 
 
