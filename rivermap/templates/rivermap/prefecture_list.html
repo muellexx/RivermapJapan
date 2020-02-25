@@ -2,30 +2,48 @@
 {% load i18n %}
 {% block container_content %}
 
-    {% include "pagination.html" %}
-
-    {% for prefecture in prefectures %}
-        <article class="media content-section">
-            <div class="media-body">
-                <h6 class="mb-0"><a class="article-title" href="{% url 'prefecture-detail' prefecture.slug %}">{{ prefecture }}</a></h6>
-                <small class="text-muted">
-                    {{ prefecture.region }}
-                </small>
-                <small>
-                    <table class="table mb-0">
-                        <tbody>
-                            <tr>
-                                <td class="py-1"><a href="{% url 'river-list' prefecture.slug %}">{{ prefecture.river_set.count }} {% blocktrans count counter=prefecture.river_set.count %}River{% plural %}Rivers{% endblocktrans %}</a></td>
-                                <td class="py-1"><a href="{% url 'section-list' prefecture.slug %}">{{ prefecture.section_count }} {% blocktrans count counter=prefecture.section_count %}Section{% plural %}Sections{% endblocktrans %}</a></td>
-                                <td class="py-1"><a href="#">{{ prefecture.spot_count }} {% blocktrans count counter=prefecture.spot_count %}Spot{% plural %}Spots{% endblocktrans %}</a></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </small>
+<div class="row">
+    <div class="col-12 col-sm-8 col-md-9">
+        {% for region in regions %}
+        <a class="anchor-point" id="{{ region.name }}"></a>
+        <div class="content-section">
+            <div class="media-head">
+                <h3 class="article-title">{{ region }}</h3>
             </div>
-        </article>
-    {% endfor %}
 
-    {% include "pagination.html" %}
+        {% for prefecture in prefectures %}
+            {% if prefecture.region == region %}
+            <article class="media content-section">
+                <div class="media-body">
+                    <h6 class="mb-0"><a class="article-title" href="{% url 'prefecture-detail' prefecture.slug %}">{{ prefecture }}</a></h6>
+                    <!--<small class="text-muted">
+                        {{ prefecture.region }}
+                    </small>-->
+                    <small>
+                        <table class="table mb-0">
+                            <tbody>
+                                <tr>
+                                    <td class="py-1"><a href="{% url 'river-list' prefecture.slug %}">{{ prefecture.river_set.count }} {% blocktrans count counter=prefecture.river_set.count %}River{% plural %}Rivers{% endblocktrans %}</a></td>
+                                    <td class="py-1"><a href="{% url 'section-list' prefecture.slug %}">{{ prefecture.section_count }} {% blocktrans count counter=prefecture.section_count %}Section{% plural %}Sections{% endblocktrans %}</a></td>
+                                    <td class="py-1"><a href="#">{{ prefecture.spot_count }} {% blocktrans count counter=prefecture.spot_count %}Spot{% plural %}Spots{% endblocktrans %}</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </small>
+                </div>
+            </article>
+            {% endif%}
+        {% endfor %}
+        </div>
+        {% endfor %}
+    </div>
+    <div class="col-sm-4 col-md-3">
+        <div class="content-section" style="position: fixed; z-index: 1;">
+            {% for region in regions %}
+            <p><a href="#{{ region.name }}">{{ region }}</a></p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
 
 {% endblock container_content %}

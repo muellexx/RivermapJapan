@@ -1,5 +1,6 @@
 {% extends "base_container.html" %}
 {% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
 {% load crispy_forms_tags %}
 {% block container_content %}
     <div class="content-section">
@@ -18,7 +19,7 @@
         </form>
         <div class="border-top pt-3">
             <small class="text-muted">
-                {% trans "Need An Account?" %} <a class="ml-2" href="{% url 'register' %}">{% trans "Sign Up Now" %}</a>
+                {% if LANGUAGE_CODE != "ja" %}{% trans "Need An Account?" %} {% endif %}<a class="ml-2" href="{% url 'register' %}">{% trans "Sign Up Now" %}</a>
             </small>
         </div>
     </div>

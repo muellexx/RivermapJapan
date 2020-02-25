@@ -12,7 +12,7 @@ from django.views.generic import CreateView, DetailView, UpdateView, ListView
 from googletrans import Translator
 from django.utils.translation import gettext as _
 
-from .models import River, Prefecture, Section
+from .models import River, Prefecture, Section, Region
 from .forms import SectionAddForm, SectionEditForm, CommentAddForm
 from .utils import json_comments, json_sections, scrape_sections
 
@@ -75,6 +75,11 @@ class PrefectureListView(ListView):
     model = Prefecture
     context_object_name = 'prefectures'
     ordering = ['pk']
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['regions'] = Region.objects.all  # get_object_or_404(Prefecture, slug=self.kwargs['prefecture'])
+        return context
 
 
 class RiverDetailView(DetailView):
