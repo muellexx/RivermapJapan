@@ -1,16 +1,22 @@
-var map, popup, Popup;
+var map, popup, Popup, latt, lngg, zooom;
 
 function addSection(event) {
     console.log(event.latLng);
 }
 
+function setCoords(latt, lngg, zooom) {
+    this.latt = latt;
+    this.lngg = lngg;
+    this.zooom = zooom;
+}
+
 function initMap() {
     map = new google.maps.Map(document.getElementById('map-small'), {
-        zoom: 8,
+        zoom: zooom,
         minZoom: 5,
         center: {
-            lat: 35.802514,
-            lng: 139.194369
+            lat: latt, //35.802514,
+            lng: lngg //139.194369
         },
         scaleControl: true,
         mapTypeId: 'terrain',
@@ -85,19 +91,6 @@ function initMap() {
             }
         ]
     });
-
-    // Get Location of User.
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function(position) {
-            var pos = {
-                lat: position.coords.latitude,
-                lng: position.coords.longitude
-            };
-            if (pos.lat > 21 && pos.lat < 47 && pos.lng > 119 && pos.lng < 151) {
-                map.setCenter(pos);
-            }
-        });
-    }
 
     Section = createSectionClass();
     section = new Section();

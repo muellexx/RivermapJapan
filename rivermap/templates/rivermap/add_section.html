@@ -26,5 +26,6 @@
 
 {% block scripts %}
 <script src="{% static 'js/init-map-small.js' %}"></script>
+<script>setCoords({{ prefecture.lat }}, {{ prefecture.lng }}, {{ prefecture.zoom }})</script>
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB4FzVGy5foAnrj5soy0wTrRF2Htq_ZZdI&callback=initMap"></script>
 {% endblock scripts %}

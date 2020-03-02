@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
+from django.db.models import Case, When, Value, IntegerField
 from django.urls import reverse
 from django.utils import timezone
 from polymorphic.models import PolymorphicModel
@@ -45,6 +46,9 @@ class Prefecture(models.Model):
     name = models.CharField(max_length=255, unique=True)
     name_jp = models.CharField(max_length=255, unique=True)
     slug = models.SlugField()
+    lat = models.FloatField(default=35.80251)
+    lng = models.FloatField(default=139.19437)
+    zoom = models.IntegerField(default=8)
 
     def __str__(self):
         if get_language() == "ja":
@@ -62,7 +66,7 @@ class Prefecture(models.Model):
         return self.mapobject_set.instance_of(Spot).count()
 
 
-class River(models.Model):
+class RiverSystem(models.Model):
     region = models.ManyToManyField(Region)
     prefecture = models.ManyToManyField(Prefecture)
     name = models.CharField(max_length=255)
@@ -78,8 +82,40 @@ class River(models.Model):
         return reverse('river-detail', kwargs={'pk': self.pk})
 
 
+class River(models.Model):
+    region = models.ManyToManyField(Region)
+    prefecture = models.ManyToManyField(Prefecture)
+    riversystem = models.ManyToManyField(RiverSystem)
+    name = models.CharField(max_length=255)
+    name_jp = models.CharField(max_length=255, unique=True)
+
+    def __str__(self):
+        if get_language() == "ja":
+            return self.name_jp
+        else:
+            return self.name + " (" + self.name_jp + ")"
+
+    def get_absolute_url(self):
+        return reverse('river-detail', kwargs={'pk': self.pk})
+
+    def system_observatories_set(self):
+        result = self.observatory_set.all().annotate(custom_order=Case(When(river=self, then=Value(1)), default=2,
+                                    output_field=IntegerField(), )).order_by('custom_order', 'name')
+        for riversystem in self.riversystem.all():
+            result = result | riversystem.observatory_set.all()
+        return result
+
+    def system_dams_set(self):
+        result = self.dam_set.all().annotate(custom_order=Case(When(river=self, then=Value(1)), default=2,
+                                    output_field=IntegerField(), )).order_by('custom_order', 'name')
+        for riversystem in self.riversystem.all():
+            result = result | riversystem.dam_set.all()
+        return result
+
+
 class Observatory(models.Model):
-    river = models.ManyToManyField(River)
+    river = models.ForeignKey(River, on_delete=models.PROTECT)
+    riversystem = models.ForeignKey(RiverSystem, on_delete=models.PROTECT, null=True)
     region = models.ForeignKey(Region, on_delete=models.PROTECT)
     prefecture = models.ForeignKey(Prefecture, on_delete=models.PROTECT)
     name = models.CharField(max_length=255)
@@ -96,7 +132,8 @@ class Observatory(models.Model):
 
 
 class Dam(models.Model):
-    river = models.ManyToManyField(River)
+    river = models.ForeignKey(River, on_delete=models.PROTECT)
+    riversystem = models.ForeignKey(RiverSystem, on_delete=models.PROTECT, null=True)
     region = models.ForeignKey(Region, on_delete=models.PROTECT)
     prefecture = models.ForeignKey(Prefecture, on_delete=models.PROTECT)
     name = models.CharField(max_length=255)

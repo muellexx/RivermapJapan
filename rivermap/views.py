@@ -12,7 +12,7 @@ from django.views.generic import CreateView, DetailView, UpdateView, ListView
 from googletrans import Translator
 from django.utils.translation import gettext as _
 
-from .models import River, Prefecture, Section, Region
+from .models import River, Prefecture, Section, Region, RiverSystem
 from .forms import SectionAddForm, SectionEditForm, CommentAddForm
 from .utils import json_comments, json_sections, scrape_sections
 
@@ -168,8 +168,8 @@ class SectionUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
     def get_form(self, form_class=None):
         form = super(SectionUpdateView, self).get_form(form_class)
-        form.fields["observatory"].queryset = self.object.river.observatory_set.all()
-        form.fields["dam"].queryset = self.object.river.dam_set.all()
+        form.fields["observatory"].queryset = self.object.river.system_observatories_set()
+        form.fields["dam"].queryset = self.object.river.system_dams_set()
         return form
 
     def form_valid(self, form):
