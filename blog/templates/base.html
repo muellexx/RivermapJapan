@@ -57,7 +57,18 @@
                         <a class="nav-item nav-link" href="{% url 'login' %}">{% trans "Login" %}</a>
                         <a class="nav-item nav-link" href="{% url 'register' %}">{% trans "Register" %}</a>
                     {% endif %}
-                    <div class="btn-group">
+                        {% get_language_info_list for LANGUAGES as languages %}
+                        {% for language in languages %}
+                            {% if not language.code == LANGUAGE_CODE %}
+                            <form action="{% url 'set_language' %}" method="post">
+                                {% csrf_token %}
+                                <input name="next" type="hidden" value="{{ request.path|strip_lang }}" />
+                                <input name="language" type="hidden" value="{{ language.code }}" />
+                                <button class="btn btn-link nav-link {% if language.code == LANGUAGE_CODE %}active{% endif %}" type="submit">{{ language.name_local }}</button>
+                            </form>
+                            {% endif %}
+                        {% endfor %}
+                    <!--<div class="btn-group">
                         <text class="nav-item nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             {{ LANGUAGE_CODE }}
                         </text>
@@ -74,7 +85,7 @@
                                 {% endfor %}
                             </ul>
                         </div>
-                    </div>
+                    </div>-->
                 </div>
             </div>
         </div>
