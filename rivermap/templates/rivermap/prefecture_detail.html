@@ -25,15 +25,25 @@
         <div class="media content-section">
             <div class="media-body">
                 <h5 class="text-muted">
-                    <a href="{% url 'section-list' prefecture.slug %}">{% blocktrans count counter=object.section_count %}Section:{% plural %}Sections:{% endblocktrans %} {{ object.section_count }}</a>
+                    <a href="{% url 'section-list' prefecture.slug %}">{% blocktrans count counter=object.section_count %}White Water Section{% plural %}White Water Sections{% endblocktrans %} ({{ object.section_count }}):</a>
                 </h5>
+                {% if object.section_count > 0 %}
+                {% for section in object.get_sections %}
+                    <small class="text-muted"><a href="{% url 'section-detail' object.pk section.id %}">{{ section }}</a></br></small>
+                {% endfor %}
+                {% endif %}
             </div>
         </div>
         <div class="media content-section">
             <div class="media-body">
                 <h5 class="text-muted">
-                    <a href="#">{% blocktrans count counter=object.spot_count %}Spot:{% plural %}Spots:{% endblocktrans %} {{ object.spot_count }}</a>
+                    <a href="{% url 'spot-list' prefecture.slug %}">{% blocktrans count counter=object.spot_count %}White Water Spot{% plural %}White Water Spots{% endblocktrans %} ({{ object.spot_count }}):</a>
                 </h5>
+                {% if object.spot_count > 0 %}
+                {% for spot in object.get_spots %}
+                    <small class="text-muted"><a href="{% url 'spot-detail' object.pk spot.id %}">{{ spot }}</a></br></small>
+                {% endfor %}
+                {% endif %}
             </div>
         </div>
     </div>

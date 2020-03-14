@@ -8,17 +8,17 @@
         </div>
 
         {% include "pagination.html" %}
-
-        <!--{% if user.is_authenticated %}
-            <a class="btn btn-primary btn-sm mt-1 mb-4" style="float: right;" href="{% url 'river-create' %}">New River</a>
-        {% endif %}-->
         {% for river in rivers %}
             <article class="media content-section">
                 <div class="media-body">
                     <div class="article-metadata">
                         <h5><a class="article-title" href="{% url 'river-detail' view.kwargs.prefecture river.id %}">{{ river }}</a></h5>
                     </div>
-                    <p class="article-content">{{ river.section_set.count }} {% blocktrans count counter=river.section_set.count %}registered White Water section{% plural %}registered White Water sections{% endblocktrans %}</p>
+                    {% if river.section_set.count > 0 %}
+                    <p class="article-content" style="margin: 0;">{{ river.section_set.count }} {% blocktrans count counter=river.section_set.count %}registered White Water Section{% plural %}registered White Water Sections{% endblocktrans %}</p>
+                    {% endif %}{% if river.spot_set.count > 0 %}
+                    <p class="article-content" style="margin: 0;">{{ river.spot_set.count }} {% blocktrans count counter=river.spot_set.count %}registered White Water Spot{% plural %}registered White Water Spots{% endblocktrans %}</p>
+                    {% endif %}
                 </div>
             </article>
         {% endfor %}

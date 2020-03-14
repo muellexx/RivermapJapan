@@ -13,6 +13,13 @@
                 <input type="hidden" value="1" name="object_type">
                 <button class="btn btn-primary btn-sm mt-1 mb-4" style="float: right;" name="add_object" type="submit">{% trans "Add Section" %}</button>
             </form>
+            <form method="POST" action="{% url 'add-object' %}">
+                {% csrf_token %}
+                <input type="hidden" value="{{ object.id }}" name="river">
+                <input type="hidden" value="{{ prefecture.slug }}" name="prefecture">
+                <input type="hidden" value="2" name="object_type">
+                <button class="btn btn-primary btn-sm mt-1 mb-4" style="margin-right: 5px; float: right;" name="add_object" type="submit">{% trans "Add Spot" %}</button>
+            </form>
             {% endif %}
             {% endif %}
             <h3 class="article-title">{{ object }}</h3>
@@ -42,6 +49,16 @@
                 <h6>{% blocktrans count counter=river.section_set.count %}White Water section{% plural %}White Water sections{% endblocktrans %} ({{ river.section_set.count }}):</h6>
                 {% for section in object.section_set.all %}
                     <small class="text-muted"><a href="{% url 'section-detail' view.kwargs.prefecture section.id %}">{{ section }}</a></br></small>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        {% if river.spot_set.count > 0 %}
+        <div class="content-section">
+            <div class="media-body">
+                <h6>{% blocktrans count counter=river.spot_set.count %}White Water Spot{% plural %}White Water Spots{% endblocktrans %} ({{ river.spot_set.count }}):</h6>
+                {% for spot in object.spot_set.all %}
+                    <small class="text-muted"><a href="{% url 'spot-detail' view.kwargs.prefecture spot.id %}">{{ spot }}</a></br></small>
                 {% endfor %}
             </div>
         </div>

@@ -25,7 +25,7 @@
                                 <tr>
                                     <td class="py-1"><a href="{% url 'river-list' prefecture.slug %}">{{ prefecture.river_set.count }} {% blocktrans count counter=prefecture.river_set.count %}River{% plural %}Rivers{% endblocktrans %}</a></td>
                                     <td class="py-1"><a href="{% url 'section-list' prefecture.slug %}">{{ prefecture.section_count }} {% blocktrans count counter=prefecture.section_count %}Section{% plural %}Sections{% endblocktrans %}</a></td>
-                                    <td class="py-1"><a href="#">{{ prefecture.spot_count }} {% blocktrans count counter=prefecture.spot_count %}Spot{% plural %}Spots{% endblocktrans %}</a></td>
+                                    <td class="py-1"><a href="{% url 'spot-list' prefecture.slug %}">{{ prefecture.spot_count }} {% blocktrans count counter=prefecture.spot_count %}Spot{% plural %}Spots{% endblocktrans %}</a></td>
                                 </tr>
                             </tbody>
                         </table>

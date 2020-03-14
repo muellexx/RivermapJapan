@@ -56,6 +56,12 @@ class Prefecture(models.Model):
         else:
             return self.name + " (" + self.name_jp + ")"
 
+    def get_sections(self):
+        return self.mapobject_set.instance_of(Section)
+
+    def get_spots(self):
+        return self.mapobject_set.instance_of(Spot)
+
     def get_absolute_url(self):
         return reverse('prefecture-detail', kwargs={'slug': self.slug})
 

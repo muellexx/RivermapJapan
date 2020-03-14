@@ -3,6 +3,7 @@ import re
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.db.models import Count
 from django.db.models.functions import Lower
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
@@ -49,7 +50,8 @@ class RiverListView(ListView):
     paginate_by = 50
 
     def get_queryset(self):
-        return River.objects.filter(prefecture__slug=self.kwargs['prefecture']).order_by(Lower('name'))
+        return River.objects.filter(prefecture__slug=self.kwargs['prefecture']).annotate(count=Count('section')+Count('spot')).order_by('-count', 'name')
+        # return River.objects.filter(prefecture__slug=self.kwargs['prefecture']).order_by(Lower('name'))
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -59,6 +61,7 @@ class RiverListView(ListView):
 
 class SectionListView(ListView):
     model = Section
+    template_name = 'rivermap/riverobject_list.html'
     context_object_name = 'sections'
     ordering = ['name']
     paginate_by = 50
@@ -69,6 +72,26 @@ class SectionListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['prefecture'] = get_object_or_404(Prefecture, slug=self.kwargs['prefecture'])
+        context['object_type'] = 0
+        context['detail_url'] = 'section-detail'
+        return context
+
+
+class SpotListView(ListView):
+    model = Spot
+    template_name = 'rivermap/riverobject_list.html'
+    context_object_name = 'sections'
+    ordering = ['name']
+    paginate_by = 50
+
+    def get_queryset(self):
+        return Spot.objects.filter(prefecture__slug=self.kwargs['prefecture']).order_by(Lower('name'))
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['prefecture'] = get_object_or_404(Prefecture, slug=self.kwargs['prefecture'])
+        context['object_type'] = 1
+        context['detail_url'] = 'spot-detail'
         return context
 
 
@@ -114,18 +137,6 @@ class SpotDetailView(DetailView):
 
 class PrefectureDetailView(DetailView):
     model = Prefecture
-
-
-class RiverCreateView(LoginRequiredMixin, CreateView):
-    model = River
-    fields = ['name', 'url', 'high_water', 'middle_water', 'low_water', 'start_lat', 'start_lng',
-              'end_lat', 'end_lng', 'difficulty', 'section']
-
-
-class RiverUpdateView(LoginRequiredMixin, UpdateView):
-    model = River
-    fields = ['name', 'url', 'high_water', 'middle_water', 'low_water', 'start_lat', 'start_lng',
-              'end_lat', 'end_lng', 'difficulty', 'section']
 
 
 @login_required
