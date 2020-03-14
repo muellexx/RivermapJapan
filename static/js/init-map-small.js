@@ -1,4 +1,5 @@
-var map, popup, Popup, latt, lngg, zooom;
+var map, popup, Popup, latt, lngg, zooom, objectType;
+var currStartLat, currStartLng, currEndLat, currEndLng;
 
 function addSection(event) {
     console.log(event.latLng);
@@ -10,13 +11,26 @@ function setCoords(latt, lngg, zooom) {
     this.zooom = zooom;
 }
 
+function setSectionCoords(currStartLat, currStartLng, currEndLat, currEndLng) {
+    this.currStartLat = currStartLat;
+    this.currStartLng = currStartLng;
+    this.currEndLat = currEndLat;
+    this.currEndLng = currEndLng;
+    this.latt = (currStartLat + currEndLat)/2;
+    this.lngg = (currStartLng + currEndLng)/2;
+}
+
+function setType(objectType) {
+    this.objectType = objectType;
+}
+
 function initMap() {
     map = new google.maps.Map(document.getElementById('map-small'), {
         zoom: zooom,
         minZoom: 5,
         center: {
-            lat: latt, //35.802514,
-            lng: lngg //139.194369
+            lat: latt,
+            lng: lngg
         },
         scaleControl: true,
         mapTypeId: 'terrain',
@@ -92,14 +106,99 @@ function initMap() {
         ]
     });
 
-    Section = createSectionClass();
-    section = new Section();
-    section.setMap(map);
+    if(this.objectType == 0 || this.objectType == 2) {
+        Section = createSectionClass();
+        section = new Section();
+        section.setMap(map);
+        map.addListener('click', function(event) {
+            section.addSection(event);
+        });
+    } else if(this.objectType == 1 || this.objectType == 3) {
+    console.log('hi')
+        Spot = createSpotClass();
+        spot = new Spot();
+        map.addListener('click', function(event) {
+            spot.addSpot(event);
+        });
+    }
+    if (this.objectType == 2){
+        var riverCoordinates = [{
+            lat: this.currStartLat,
+            lng: this.currStartLng
+        },
+        {
+            lat: this.currEndLat,
+            lng: this.currEndLng
+        }
+        ];
+        this.currRiver = new google.maps.Polyline({
+            path: riverCoordinates,
+            geodesic: true,
+            strokeColor: '#00D200',
+            strokeOpacity: 1.0,
+            strokeWeight: 7,
+            map: this.map
+        });
+    } else if (this.objectType == 3){
+        var coordinates = new google.maps.LatLng(this.latt, lngg);
+        var image = {
+            url: "/media/icons/Spot/MarkerSpot3.png",
+            size: new google.maps.Size(32,40),
+            anchor: new google.maps.Point(16,40)
+        };
+        var currSpot = new google.maps.Marker({
+            position: coordinates,
+            icon: image,
+            map: this.map
+        });
+    }
 
-    map.addListener('click', function(event) {
-        section.addSection(event);
-    });
+}
 
+function createSpotClass() {
+    function Spot() {
+        this.lat = null;
+        this.lng = null;
+        this.spot = null;
+    }
+
+    Spot.prototype = Object.create(google.maps.Marker.prototype);
+
+    Spot.prototype.addSpot = function(event) {
+        this.setPoint(event);
+        this.drawSpot();
+    };
+
+    Spot.prototype.setPoint = function(event) {
+        this.lat = event.latLng.lat();
+        this.lng = event.latLng.lng();
+        num = this.lat.toFixed(2)
+        console.log(num);
+        document.getElementById("id_lat").value = this.lat.toFixed(5);
+        document.getElementById("id_lng").value = this.lng.toFixed(5);
+    }
+
+    Spot.prototype.drawSpot = function() {
+        var coordinates = new google.maps.LatLng(this.lat, this.lng);
+        var image = {
+            url: "/media/icons/Spot/MarkerSpot0.png",
+            size: new google.maps.Size(32,40),
+            anchor: new google.maps.Point(16,40)
+        };
+        if (this.spot == null) {
+            this.spot = new google.maps.Marker({
+                position: coordinates,
+                icon: image,
+                map: map
+            });
+        } else {
+            this.spot.setOptions({
+                position: coordinates,
+            });
+        }
+    }
+
+    return Spot;
 }
 
 function createSectionClass() {
@@ -171,13 +270,12 @@ function createSectionClass() {
             this.river = new google.maps.Polyline({
                 path: riverCoordinates,
                 geodesic: true,
-                strokeColor: '#00FF00',
+                strokeColor: '#64DBFF',
                 strokeOpacity: 1.0,
                 strokeWeight: weight,
                 id: 1
             });
         } else {
-            //this.river.setPath(riverCoordinates);
             this.river.setOptions({
                 path: riverCoordinates,
                 strokeWeight: weight,

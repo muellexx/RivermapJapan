@@ -54,8 +54,15 @@ function loadChart(section, canvasId) {
             }
         }
 
-        minLevel = Math.min.apply(null, yData);
-        maxLevel = Math.max.apply(null, yData);
+        var index = -1, resIndex = -1, values = [];
+        while(++index < yData.length){
+            var value = yData[index];
+            if (!(isNaN(value))) {
+                values[++resIndex] = value;
+            }
+        }
+        minLevel = Math.min.apply(null, values);
+        maxLevel = Math.max.apply(null, values);
         buffer = (maxLevel - minLevel)*0.5;
         minLevel = minLevel - buffer;
         maxLevel = maxLevel + buffer;

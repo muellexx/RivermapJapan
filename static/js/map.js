@@ -27,7 +27,7 @@ function mapLink (lat, lng) {
 }
 
 function showOrHide (id, preText, value, postText) {
-    if (value == null || value == "") {
+    if (value == null || value === "") {
         $('#' + id).hide();
     }
     else {
@@ -61,15 +61,31 @@ function loadComments(sectionComments) {
     });
 }
 
-function updateSidebar (section) {
+function updateSidebar (section, isSpot) {
     $('#sb-river-name').html('<a href="map/' + section.prefecture + '/river/' + section.river_id + '/">' + section.river + '</a>');
-    $('#sb-section-name').html('<a href="map/' + section.prefecture + '/section/' + section.id + '/">' + section.name + '</a>');
+    if (isSpot)
+        $('#sb-section-name').html('<a href="map/' + section.prefecture + '/spot/' + section.id + '/">' + section.name + '</a>');
+    else
+        $('#sb-section-name').html('<a href="map/' + section.prefecture + '/section/' + section.id + '/">' + section.name + '</a>');
     showOrHide ("sb-content", "", section.content, "");
     showOrHide ("sb-difficulty", "Difficulty: ", section.difficulty, "");
-    $('#sb-distance').html("Air Distance: " + distance(section.start_lat,
-            section.start_lng, section.end_lat, section.end_lng).toFixed(2) + " km");
-    $('#sb-start').html("Start: " + mapLink(section.start_lat, section.start_lng));
-    $('#sb-end').html("End: " + mapLink(section.end_lat, section.end_lng));
+    if (isSpot)
+        $('#sb-distance').hide();
+    else{
+        $('#sb-distance').show();
+        $('#sb-distance').html("Air Distance: " + distance(section.start_lat,
+                section.start_lng, section.end_lat, section.end_lng).toFixed(2) + " km");
+    }
+    if (isSpot)
+        $('#sb-start').html("Location: " + mapLink(section.lat, section.lng));
+    else
+        $('#sb-start').html("Start: " + mapLink(section.start_lat, section.start_lng));
+    if (isSpot)
+        $('#sb-end').hide();
+    else{
+        $('#sb-end').show();
+        $('#sb-end').html("End: " + mapLink(section.end_lat, section.end_lng));
+    }
     showOrHide ("sb-level", "Current Level: ", section.level, "");
     showOrHide ("sb-observatory", ' Observatory: <a href="', section.url, '" target="_blank">' + section.observatory_name + '</a>');
     showOrHide ("sb-updated", "Updated: ", section.date, "");
@@ -135,6 +151,7 @@ $('#dismiss, .overlay').on('click', function () {
 function loadRivers(popup) {
     $.getJSON("/static/js/data/river.json", function(json){
         rivers = json.rivers;
+        colors = ['#64DBFF', '#8A8A8A', '#2828FF', '#00D200', '#FFB300', '#FF0000'];
         for (let i = 0; i < rivers.length; i++) {
             var iriver = rivers[i];
             var riverCoordinates = [{
@@ -147,14 +164,14 @@ function loadRivers(popup) {
                 }
             ];
 
-            var river_color = '#336699';
+            var river_color = '#64DBFF';
             if (iriver.high_water != null || iriver.middle_water != null || iriver.low_water != null) {
                 if (iriver.level >= iriver.high_water){
                     river_color = '#FF0000';
                 } else if (iriver.level >= iriver.middle_water){
-                    river_color = '#00FF00';
+                    river_color = '#00D200';
                 } else if (iriver.level >= iriver.low_water){
-                    river_color = '#0000FF';
+                    river_color = '#2828FF';
                 } else {
                     river_color = '#8a8a8a';
                 }
@@ -163,7 +180,7 @@ function loadRivers(popup) {
             var river = new google.maps.Polyline({
                 path: riverCoordinates,
                 geodesic: true,
-                strokeColor: river_color,
+                strokeColor: colors[iriver.color],
                 strokeOpacity: 1.0,
                 strokeWeight: 7,
                 id: i
@@ -173,7 +190,7 @@ function loadRivers(popup) {
                 popup.setContent(rivers[i]);
                 popup.show();
                 loadChart(rivers[i], 'pop-chart');
-                popup.setPosition(event.latLng);
+                popup.setPosition(event.latLng, false);
                 popup.draw();
             });
 
@@ -182,12 +199,56 @@ function loadRivers(popup) {
             });
 
             river.addListener('click', function() {
-                updateSidebar(rivers[i]);
+                popup.hide();
+                updateSidebar(rivers[i], false);
                 activateSidebar();
                 loadChart(rivers[i], 'sb-chart');
             });
 
             river.setMap(map);
+        }
+    });
+}
+
+function loadSpots(popup) {
+    $.getJSON("/static/js/data/spot.json", function(json){
+        spots = json.spots;
+        for (let i = 0; i < spots.length; i++) {
+            var ispot = spots[i];
+            var coordinates = new google.maps.LatLng(spots[i].lat, spots[i].lng);
+            var url = "/media/icons/Spot/MarkerSpot" + spots[i].color + ".png";
+
+            var image = {
+                url: url,
+                size: new google.maps.Size(32,40),
+                anchor: new google.maps.Point(16,40)
+            };
+
+            var spot = new google.maps.Marker({
+                position: coordinates,
+                icon: image,
+                map: map
+            });
+
+            spot.addListener('mouseover', function(event) {
+                popup.setContent(spots[i]);
+                popup.show();
+                loadChart(spots[i], 'pop-chart');
+                popup.setPosition(event.latLng, true);
+                popup.draw();
+            });
+
+            spot.addListener('mouseout', function() {
+                popup.hide();
+            });
+
+            spot.addListener('click', function() {
+                updateSidebar(spots[i], true);
+                activateSidebar();
+                loadChart(spots[i], 'sb-chart');
+            });
+
+            spot.setMap(map);
         }
     });
 }

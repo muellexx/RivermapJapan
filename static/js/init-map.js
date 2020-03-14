@@ -115,15 +115,9 @@ function initMap() {
         document.getElementById('riverinfo'));
     popup.setMap(map);
     loadRivers(popup);
+    loadSpots(popup);
 }
 
-/**
- * Returns the Popup class.
- *
- * Unfortunately, the Popup class can only be defined after
- * google.maps.OverlayView is defined, when the Maps API is loaded.
- * This function should be called by initMap.
- */
 function createPopupClass() {
   /**
    * A customized popup on the map.
@@ -135,8 +129,6 @@ function createPopupClass() {
   function Popup(position, riverinfo) {
     this.position = position;
     this.upperHalf = false;
-
-    //riverinfo.classList.add('popup-bubble');
 
     // This zero-height div is positioned at the bottom of the bubble.
     var bubbleAnchor = document.createElement('div');
@@ -180,8 +172,6 @@ function createPopupClass() {
         riverinfo.classList.add('content-section');
         this.containerDiv.children[0].className = "popdown-bubble-anchor";
         this.containerDiv.className = "popdown-container";
-        //bubbleAnchor.className = "popdown-bubble-anchor";
-        //this.containerDiv.children[0].style.border-left = 12px;
     }
 
     // Hide the popup when it is far out of view.
@@ -213,14 +203,22 @@ function createPopupClass() {
       this.containerDiv.style.display = display;
     }
 
-    Popup.prototype.setPosition = function(position) {
+    Popup.prototype.setPosition = function(position, isSpot) {
         divPosition = this.getProjection().fromLatLngToDivPixel(position);
         if (this.getProjection().fromLatLngToDivPixel(position).y > 0) {
-            divPosition.y -= 15;
+            if (isSpot){
+                divPosition.y -= 48;
+            } else {
+                divPosition.y -= 15;
+            }
             this.upperHalf = true;
         }
         else {
-            divPosition.y += 15;
+            if (isSpot){
+                divPosition.y += 0;
+            } else {
+                divPosition.y += 15;
+            }
             this.upperHalf = false;
         }
         this.position = this.getProjection().fromDivPixelToLatLng(divPosition);

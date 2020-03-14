@@ -1,5 +1,4 @@
 {% extends "base_container.html" %}
-{% load i18n %}
 {% load static %}
 {% load crispy_forms_tags %}
 {% block style_sheets %}
@@ -9,16 +8,14 @@
     <div class="content-section">
         <form method="POST">
             {% csrf_token %}
-
             <input type="hidden" value="{{ river.id }}" name="river">
             <input type="hidden" value="{{ prefecture.slug }}" name="prefecture">
             <fieldset class="form-group">
                 <div class="border-bottom mb-4">
-                    <legend>{% blocktrans with pref=prefecture %}New Section in {{ pref }}{% endblocktrans %}</legend>
-                    <h6>{{ prefecture.region }}</h6>
+                    <legend>{{ object }} ({{ object.river }})</legend>
+                    <h6>{{ object.prefecture }} ({{object.region}})</h6>
                 </div>
                 {% crispy form %}
-
             </fieldset>
         </form>
     </div>
@@ -26,6 +23,7 @@
 
 {% block scripts %}
 <script src="{% static 'js/init-map-small.js' %}"></script>
-<script>setCoords({{ prefecture.lat }}, {{ prefecture.lng }}, {{ prefecture.zoom }}); setType(0);</script>
+<script>setCoords({{ object.lat }}, {{ object.lng }}, {{ 11 }}); setType({{ object_type }});</script>
+{% if object_type == 2 %}<script>setSectionCoords({{ object.lat }}, {{ object.lng }}, {{ object.end_lat }}, {{ object.end_lng }});</script>{% endif %}
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB4FzVGy5foAnrj5soy0wTrRF2Htq_ZZdI&callback=initMap"></script>
 {% endblock scripts %}

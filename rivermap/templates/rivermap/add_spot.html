@@ -14,7 +14,7 @@
             <input type="hidden" value="{{ prefecture.slug }}" name="prefecture">
             <fieldset class="form-group">
                 <div class="border-bottom mb-4">
-                    <legend>{% blocktrans with pref=prefecture %}New Section in {{ pref }}{% endblocktrans %}</legend>
+                    <legend>{% blocktrans with pref=prefecture %}New Spot in {{ pref }}{% endblocktrans %}</legend>
                     <h6>{{ prefecture.region }}</h6>
                 </div>
                 {% crispy form %}
@@ -26,6 +26,6 @@
 
 {% block scripts %}
 <script src="{% static 'js/init-map-small.js' %}"></script>
-<script>setCoords({{ prefecture.lat }}, {{ prefecture.lng }}, {{ prefecture.zoom }}); setType(0);</script>
+<script>setCoords({{ prefecture.lat }}, {{ prefecture.lng }}, {{ prefecture.zoom }}); setType(1)</script>
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB4FzVGy5foAnrj5soy0wTrRF2Htq_ZZdI&callback=initMap"></script>
 {% endblock scripts %}

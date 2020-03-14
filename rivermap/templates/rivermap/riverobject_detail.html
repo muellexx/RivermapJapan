@@ -5,7 +5,7 @@
     <div class="content-section">
         <div class="media-head">
             {% if object.author == user %}
-            <a class="btn btn-primary btn-sm mt-1 mb-4" style="float: right;" href="{% url 'section-update' object.id %}">{% trans "Edit" %}</a>
+            <a class="btn btn-primary btn-sm mt-1 mb-4" style="float: right;" href="{% url edit_url object.id %}">{% trans "Edit" %}</a>
             {% endif %}
             {% if LANGUAGE_CODE == "ja" %}
             <h3 class="article-title">{{ object.name_jp }} ({{ object.river.name_jp }})</h3>

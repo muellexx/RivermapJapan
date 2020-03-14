@@ -6,11 +6,12 @@
         <div class="media-head">
             {% if user.is_authenticated %}
             {% if view.kwargs.prefecture %}
-            <form method="POST" action="{% url 'add-section' %}">
+            <form method="POST" action="{% url 'add-object' %}">
                 {% csrf_token %}
                 <input type="hidden" value="{{ object.id }}" name="river">
-                <input type="hidden" value="{{ view.kwargs.prefecture }}" name="prefecture">
-                <button class="btn btn-primary btn-sm mt-1 mb-4" style="float: right;" name="prepair_comment" type="submit">{% trans "Add Section" %}</button>
+                <input type="hidden" value="{{ prefecture.slug }}" name="prefecture">
+                <input type="hidden" value="1" name="object_type">
+                <button class="btn btn-primary btn-sm mt-1 mb-4" style="float: right;" name="add_object" type="submit">{% trans "Add Section" %}</button>
             </form>
             {% endif %}
             {% endif %}
