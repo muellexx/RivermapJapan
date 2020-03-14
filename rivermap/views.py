@@ -16,7 +16,7 @@ from django.utils.translation import gettext as _
 from .models import River, Prefecture, Section, Region, Spot
 from .forms import SectionAddForm, SectionEditForm, CommentAddForm, ObjectAddForm, SpotAddForm, \
     SpotEditForm
-from .utils import json_comments, json_sections, scrape_sections, json_spots
+from .utils import json_comments, json_sections, scrape_sections, json_spots, calculate_distance
 
 
 def rivermap(request):
@@ -122,6 +122,8 @@ class SectionDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['edit_url'] = 'section-update'
+        context['object_type'] = 0
+        context['distance'] = calculate_distance(self.object.lat, self.object.lng, self.object.end_lat, self.object.end_lng)
         return context
 
 
@@ -132,6 +134,7 @@ class SpotDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['edit_url'] = 'spot-update'
+        context['object_type'] = 1
         return context
 
 

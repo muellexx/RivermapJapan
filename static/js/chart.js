@@ -17,8 +17,13 @@ function loadChart(section, canvasId) {
     }
     if (canvasId == 'pop-chart') {
         $('#' + canvasId + '-div').append('<canvas id="' + canvasId + '" height="150"></canvas>');
+        aspectRatio = true;
+    } else if (canvasId == 'chart') {
+        $('#' + canvasId + '-div').append('<canvas id="' + canvasId + '" height="300"></canvas>');
+        aspectRatio = false;
     } else {
         $('#' + canvasId + '-div').append('<canvas id="' + canvasId + '" height="300"></canvas>');
+        aspectRatio = true;
     }
 
     $.getJSON("/static/js/data/river/" + section.observatory_id + ".json", {_: new Date().getTime()}, function(json){
@@ -111,6 +116,7 @@ function loadChart(section, canvasId) {
             data: lineChartData,
             options: {
                 responsive: true,
+                maintainAspectRatio: aspectRatio,
                 hoverMode: 'index',
                 stacked: false,
                 title: {

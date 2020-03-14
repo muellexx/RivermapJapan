@@ -1,5 +1,6 @@
 {% extends "base_container.html" %}
 {% load i18n %}
+{% load static %}
 {% get_current_language as LANGUAGE_CODE %}
 {% block container_content %}
     <div class="content-section">
@@ -8,36 +9,84 @@
             <a class="btn btn-primary btn-sm mt-1 mb-4" style="float: right;" href="{% url edit_url object.id %}">{% trans "Edit" %}</a>
             {% endif %}
             {% if LANGUAGE_CODE == "ja" %}
-            <h3 class="article-title">{{ object.name_jp }} ({{ object.river.name_jp }})</h3>
-            <h5 class="article-title">{{ object.prefecture }} ({{ object.region }})</h5>
+            <h3 class="article-title">{{ object.name_jp }}&emsp;(<a href="{% url 'river-detail' object.prefecture.slug object.river.pk %}">{{ object.river.name_jp }}</a>)</h3>
+            <h5 class="article-title">{{ object.prefecture }}&emsp;({{ object.region }})</h5>
             {% else %}
-            <h3 class="article-title">{{ object.name }} ({{ object.river.name }})</h3>
-            <h5 class="article-title"><b>{{ object.prefecture }}</b> ({{ object.region }})</h5>
-            {% endif %}
+            <h3 class="article-title">{{ object.name }}&emsp;(<a href="{% url 'river-detail' object.prefecture.slug object.river.pk %}">{{ object.river.name }}</a>)</h3>
+            <h5 class="article-title"><b><a href="{% url 'prefecture-detail' object.prefecture.slug %}">{{ object.prefecture }}</a></b>&emsp;({{ object.region }})</h5>
+            {% endif %}<br/>
+            <p>{{ object.content }}</p>
         </div>
         <div class="content-section">
-            <div class="media-body">
+            <div class="media-body compact-p">
                 {% if object.difficulty %}
                 <p>{% trans "Difficulty:" %} {{ object.difficulty }}</p>
                 {% endif %}
-                {% if object.observatory %}
-                <p>{% trans "Observatory:" %} {{ object.observatory }} (<a href="{{ object.observatory.url }}" target="blank">source</a>)</p>
+                {% if object_type == 0 %}
+                <p>{% trans "Distance:" %} {{ distance|floatformat:5 }} km</p>
+                <p>{% trans "Start:" %} <a href="https://www.google.com/maps/search/?api=1&query={{object.lat}},{{object.lng}}" target="_blank">{{ object.lat }}, {{ object.lng }}</a>&emsp;
+                {% trans "End:" %} <a href="https://www.google.com/maps/search/?api=1&query={{object.end_lat}},{{object.end_lng}}" target="_blank">{{ object.end_lat }}, {{ object.end_lng }}</a></p>
+                {% elif object_type == 1 %}
+                <p>{% trans "Location:" %} <a href="https://www.google.com/maps/search/?api=1&query={{object.lat}},{{object.lng}}" target="_blank">{{ object.lat }}, {{ object.lng }}</a></p>
                 {% endif %}
                 {% if object.dam %}
                 <p>{% trans "Dam:" %} {{ object.dam }} (<a href="{{ object.dam.url }}" target="blank">source</a>)</p>
                 {% endif %}
             </div>
         </div>
-        <!--<div class="content-section">
-            <div class="media-body">
-                <h6>Prefecture{{ river.prefecture.count|pluralize }} ({{ river.prefecture.count }}):</h6>
-                {% for prefecture in object.prefecture.all %}
-                    <small class="text-muted">
-                        <a href="{% url 'river-list' prefecture.slug %}">{{ prefecture.name }}</a>
-                        ({{ prefecture.region.name }})
-                    </small>
-                {% endfor %}
+        {% if object.observatory %}
+        <div class="content-section compact-p">
+            <h3>Level</h3>
+            <div id="chart-div" style="height: 300px;">
+                <canvas id="chart"></canvas>
             </div>
-        </div>-->
+            <p id="sb-level">Current Level: {{ object.observatory.level }}</p>
+            <p id="sb-observatory">Observatory: <a href="{{ object.observatory.url }}" target="_blank">{{ object.observatory }}</a></p>
+            <p id="sb-updated">Updated: {{ object.observatory.date }}</p>
+            <table class="table mb-0">
+                <tbody>
+                    <tr>
+                        <td id="sb-lw" style="padding: 0;">LW: {{ object.low_water }}</td>
+                        <td id="sb-mw" style="padding: 0;">MW: {{ object.middle_water }}</td>
+                        <td id="sb-hw" style="padding: 0;">HW: {{ object.hight_water }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
+        {% if object.mapobjectcomment_set.all %}
+        <h5>Comments:</h5>
+        {% for comment in object.mapobjectcomment_set.all %}
+        <article class="media content-section">
+            <img class="rounded-circle article-img" src="{{ comment.author.profile.image.url }}">
+            <div class="media-body">
+                <div class="article-metadata">
+                    <a class="mr-2" href="{% url 'user-posts' comment.author.username %}">{{ comment.author }}</a>
+                    {% if LANGUAGE_CODE == "ja" %}
+                        <small class="text-muted">{{ comment.date_posted|date:"Y年F d日" }}</small>
+                    {% else %}
+                        <small class="text-muted">{{ comment.date_posted|date:"F d, Y" }}</small>
+                    {% endif %}
+                   </div>
+                <h2><a class="article-title" href="#">{{ comment.title }}</a></h2>
+                <p class="article-content">{{ comment.content }}</p>
+            </div>
+        </article>
+        {% endfor %}
+        {% endif %}
     </div>
 {% endblock container_content %}
+
+{% block scripts %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.js"></script>
+<script src="{% static 'js/chart.js' %}"></script>
+<script>
+    var section = {
+            "high_water": {{ object.high_water }},
+            "middle_water": {{ object.middle_water }},
+            "low_water": {{ object.low_water }},
+            "observatory_id": {{ object.observatory.id }}
+        }
+    loadChart(section, 'chart');
+</script>
+{% endblock scripts %}

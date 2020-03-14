@@ -1,5 +1,6 @@
 import datetime
 import json
+import math
 
 from bs4 import BeautifulSoup as soup
 from urllib.request import urlopen as uReq
@@ -10,6 +11,23 @@ from django.utils.timezone import make_aware, is_aware
 
 from RivermapJapan import settings
 from rivermap.models import Section, MapObjectComment, Observatory, Spot
+
+
+def calculate_distance(lat1, lng1, lat2, lng2):
+    if lat1 == lat2 and lng1 == lng2:
+        return 0
+    radlat1 = math.pi * lat1 / 180
+    radlat2 = math.pi * lat2 / 180
+    theta = lng1 - lng2
+    radtheta = math.pi * theta / 180
+    dist = math.sin(radlat1) * math.sin(radlat2) + math.cos(radlat1) * math.cos(radlat2) * math.cos(radtheta);
+    if dist > 1:
+        dist = 1
+    dist = math.acos(dist)
+    dist = dist * 180 / math.pi
+    dist = dist * 60 * 1.1515
+    dist = dist * 1.609344
+    return dist
 
 
 def get_aware_datetime(date_str):
