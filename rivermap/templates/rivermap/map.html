@@ -72,6 +72,7 @@
                         <h5 style="padding-top: 10px;">{% trans "Comments:" %}</h5>
                         <form id="sb-comment-form" method="POST" style="display: none;">
                             {% csrf_token %}
+                            <input id="object_type" type="hidden" value="section" name="section">
                             <input id="id_section" type="hidden" value="123" name="section">
                             {% crispy form %}
                         </form>
@@ -106,6 +107,7 @@
 {% block scripts %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.js"></script>
 <script src="{% static 'js/chart.js' %}"></script>
+<script src="{% static 'js/comment.js' %}"></script>
 <script src="{% static 'js/map.js' %}"></script>
 <script src="{% static 'js/init-map.js' %}"></script>
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB4FzVGy5foAnrj5soy0wTrRF2Htq_ZZdI&callback=initMap"></script>

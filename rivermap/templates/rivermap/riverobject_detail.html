@@ -1,6 +1,7 @@
 {% extends "base_container.html" %}
 {% load i18n %}
 {% load static %}
+{% load crispy_forms_tags %}
 {% get_current_language as LANGUAGE_CODE %}
 {% block container_content %}
     <div class="content-section">
@@ -54,10 +55,27 @@
             </table>
         </div>
         {% endif %}
+        {% if user.is_authenticated %}
+        <buton id="sb-new-comment" class="btn btn-primary btn-sm mt-1 mb-4" style="float: right;" onclick="newComment()">{% trans "Comment" %}</buton>
+        <h5 style="padding-top: 10px;">{% trans "Comments:" %}</h5>
+        <form id="sb-comment-form" method="POST" style="display: none;">
+            {% csrf_token %}
+            {% if object_type == 0 %}
+            <input id="object_type" type="hidden" value="section" name="section">
+            {% elif object_type == 1 %}
+            <input id="object_type" type="hidden" value="spot" name="section">
+            {% endif %}
+            <input id="id_section" type="hidden" value="{{ object.id }}" name="section">
+            {% crispy form %}
+        </form>
+        {% else %}
+        <small style="float: right;"><a href="{% url 'login' %}">{%trans "Log in</a></br>to comment" %}</small>
+        <h5 style="padding-top: 10px;">{% trans "Comments:" %}</h5>
+        {% endif %}
+        <div id="sb-comments">
         {% if object.mapobjectcomment_set.all %}
-        <h5>Comments:</h5>
-        {% for comment in object.mapobjectcomment_set.all %}
-        <article class="media content-section">
+        {% for comment in object.mapobjectcomment_set.all reversed %}
+        <article class="media content-section" style="margin-top: 10px; width: 100%;">
             <img class="rounded-circle article-img" src="{{ comment.author.profile.image.url }}">
             <div class="media-body">
                 <div class="article-metadata">
@@ -74,6 +92,7 @@
         </article>
         {% endfor %}
         {% endif %}
+        </div>
     </div>
 {% endblock container_content %}
 
@@ -89,4 +108,6 @@
         }
     loadChart(section, 'chart');
 </script>
+<script src="{% static 'js/comment.js' %}"></script>
+<script>setUrl('{{ request.path }}');</script>
 {% endblock scripts %}
