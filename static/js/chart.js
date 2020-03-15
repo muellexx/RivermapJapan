@@ -1,3 +1,5 @@
+var current_section;
+
 window.chartColors = {
 	red: 'rgb(255, 0, 0)',
 	orange: 'rgb(255, 159, 64)',
@@ -9,7 +11,14 @@ window.chartColors = {
 	grey: 'rgb(201, 203, 207)'
 };
 
-function loadChart(section, canvasId) {
+function loadChart(section, canvasId, hours) {
+    if (canvasId != 'pop-chart') {
+        if (section == 0){
+            section = this.current_section;
+        } else {
+            this.current_section = section;
+        }
+    }
 
     $('#' + canvasId).remove();
     if (section.observatory_id == undefined) {
@@ -35,14 +44,11 @@ function loadChart(section, canvasId) {
         mwData = [];
         hwData = [];
         graphData = [];
-        if (canvasId == 'pop-chart') {
-            var i = data.length / 2;
-        } else {
-            var i = 0;
-        }
+        i = data.length - hours;
+        if (i < 0){i = 0;}
         for (i; i < data.length; i++) {
             point = data[i];
-            if (canvasId == 'pop-chart') {
+            if (hours <= 24) {
                 xData.push(point.time);
             } else {
                 xData.push(point.date + ", " + point.time);
@@ -68,7 +74,7 @@ function loadChart(section, canvasId) {
         }
         minLevel = Math.min.apply(null, values);
         maxLevel = Math.max.apply(null, values);
-        buffer = (maxLevel - minLevel)*0.5;
+        /*buffer = (maxLevel - minLevel)*0.5;
         minLevel = minLevel - buffer;
         maxLevel = maxLevel + buffer;
 
@@ -80,6 +86,14 @@ function loadChart(section, canvasId) {
         }
         if ((minLevel > section.high_water)||(maxLevel < section.high_water)){
             hwData = [];
+        }*/
+        if (maxLevel < section.middle_water) {
+            hwData = [];
+            if (maxLevel < section.low_water) mwData = [];
+        }
+        if (minLevel > section.middle_water) {
+            lwData = [];
+            if (minLevel > section.high_water) mwData = [];
         }
 
         var lineChartData = {
@@ -143,3 +157,4 @@ function loadChart(section, canvasId) {
         });
     });
 };
+

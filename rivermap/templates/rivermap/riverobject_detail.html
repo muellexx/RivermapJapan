@@ -37,7 +37,10 @@
         </div>
         {% if object.observatory %}
         <div class="content-section compact-p">
-            <h3>Level</h3>
+            <h3 style="margin: 0;">Level</h3>
+            <button class="btn btn-link nav-link" style="float: left;" onclick="loadChart(0, 'chart', 48)">2d</button>
+            <button class="btn btn-link nav-link" style="float: left;" onclick="loadChart(0, 'chart', 24)">1d</button>
+            <button class="btn btn-link nav-link" onclick="loadChart(0, 'chart', 12)">12h</button>
             <div id="chart-div" style="height: 300px;">
                 <canvas id="chart"></canvas>
             </div>
@@ -47,9 +50,9 @@
             <table class="table mb-0">
                 <tbody>
                     <tr>
-                        <td id="sb-lw" style="padding: 0;">LW: {{ object.low_water }}</td>
-                        <td id="sb-mw" style="padding: 0;">MW: {{ object.middle_water }}</td>
-                        <td id="sb-hw" style="padding: 0;">HW: {{ object.high_water }}</td>
+                        <td id="sb-lw" class="lw-color" style="padding: 0;"><b>LW: {{ object.low_water }}</b></td>
+                        <td id="sb-mw" class="mw-color" style="padding: 0;"><b>MW: {{ object.middle_water }}</b></td>
+                        <td id="sb-hw" class="hw-color" style="padding: 0;"><b>HW: {{ object.high_water }}</b></td>
                     </tr>
                 </tbody>
             </table>
@@ -106,7 +109,7 @@
             "low_water": {{ object.low_water }},
             "observatory_id": {{ object.observatory.id }}
         }
-    loadChart(section, 'chart');
+    loadChart(section, 'chart', 48);
 </script>
 <script src="{% static 'js/comment.js' %}"></script>
 <script>setUrl('{{ request.path }}');</script>

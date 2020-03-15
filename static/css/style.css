@@ -210,3 +210,15 @@ a.article-title:hover {
 .compact-p p {
     margin-bottom: 2px;
 }
+
+.lw-color {
+    color: #64DBFF;
+}
+
+.mw-color {
+    color: #00D200;
+}
+
+.hw-color {
+    color: #FF0000;
+}

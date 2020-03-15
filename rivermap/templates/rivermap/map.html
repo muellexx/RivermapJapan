@@ -44,6 +44,9 @@
 
                         <div id="tab01" class="tab-contents">
                             <h3>Level</h3>
+                            <button id="sb-chart-48" class="btn btn-link nav-link" style="float: left;" onclick="loadChart(0, 'sb-chart', 48)">2d</button>
+                            <button id="sb-chart-24" class="btn btn-link nav-link" style="float: left;" onclick="loadChart(0, 'sb-chart', 24)">1d</button>
+                            <button id="sb-chart-12" class="btn btn-link nav-link" onclick="loadChart(0, 'sb-chart', 12)">12h</button>
                             <div id="sb-chart-div">
                                 <canvas id="sb-chart"></canvas>
                             </div>
@@ -53,9 +56,9 @@
                             <table class="table mb-0">
                                 <tbody>
                                     <tr>
-                                        <td id="sb-lw" style="padding: 0;"></td>
-                                        <td id="sb-mw" style="padding: 0;"></td>
-                                        <td id="sb-hw" style="padding: 0;"></td>
+                                        <td id="sb-lw" class="lw-color" style="padding: 0;"></td>
+                                        <td id="sb-mw" class="mw-color" style="padding: 0;"></td>
+                                        <td id="sb-hw" class="hw-color" style="padding: 0;"></td>
                                     </tr>
                                 </tbody>
                             </table>

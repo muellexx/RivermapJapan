@@ -237,7 +237,7 @@ function createPopupClass() {
             riverinfo.innerHTML += '<p style="float: right;"><a href="' + section.url + '" target="_blank">Source</a></p>';
         }
         if ((section.low_water != null)||(section.middle_water != null)||(section.high_water != null)) {
-            riverinfo.innerHTML += "LW: " + section.low_water + " &nbsp; MW: " + section.middle_water + " &nbsp; HW: " + section.high_water;
+            riverinfo.innerHTML += '<span class="lw-color">LW: ' + section.low_water + '</span> &nbsp; <span class="mw-color">MW: ' + section.middle_water + '</span> &nbsp; <span class="hw-color">HW: ' + section.high_water + '</span>';
         }
     }
   };
