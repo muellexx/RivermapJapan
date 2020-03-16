@@ -135,9 +135,17 @@ class SpotAddForm(forms.ModelForm):
 
 
 class SectionEditForm(forms.ModelForm):
+    diff_choices = [('None', '----------'), ('I', 'I'), ('I+', 'I+'), ('I-II', 'I-II'), ('II-', 'II-'),
+                    ('II', 'II'), ('II+', 'II+'), ('II-III', 'II-III'), ('III-', 'III-'),
+                    ('III', 'III'), ('III+', 'III+'), ('III-IV', 'III-IV'), ('IV-', 'IV-'),
+                    ('IV', 'IV'), ('IV+', 'IV+'), ('IV-V', 'IV-V'), ('V-', 'V-'),
+                    ('V', 'V'), ('V+', 'V+'), ('V-VI', 'V-VI'), ('VI-', 'VI-'), ('VI', 'VI')]
+    average_difficulty = forms.ChoiceField(choices=diff_choices, required=False)
+    max_difficulty = forms.ChoiceField(choices=diff_choices, required=False)
+
     class Meta:
         model = Section
-        fields = ['name_jp', 'name', 'observatory', 'dam', 'content', 'difficulty', 'high_water', 'middle_water',
+        fields = ['name_jp', 'name', 'observatory', 'dam', 'content', 'high_water', 'middle_water',
                   'low_water', 'lat', 'lng', 'end_lat', 'end_lng']
         labels = {
             "name_jp": _('Name (Japanese)'),
@@ -149,11 +157,28 @@ class SectionEditForm(forms.ModelForm):
             "end_lat": _('End Latitude'),
             "end_lng": _('End Longitude'),
             "content": _('Useful Information:'),
-            "difficulty": _('Difficulty (from I to VI e.g. II, III+, II(III+), IV-V)'),
             "low_water": _('Low Water'),
             "middle_water": _('Middle Water'),
             "high_water": _('High Water')
         }
+
+    def is_valid(self):
+        valid = super(SectionEditForm, self).is_valid()
+        if not valid:
+            return valid
+        cleaned_average = self.cleaned_data['average_difficulty']
+        cleaned_max = self.cleaned_data['max_difficulty']
+        if cleaned_max == 'None':
+            return True
+        if cleaned_average == 'None':
+            self.add_error('average_difficulty', 'Average Difficulty has to be chosen if Max Difficulty is set')
+            return False
+        index_average = self.diff_choices.index((cleaned_average, cleaned_average))
+        index_max = self.diff_choices.index((cleaned_max, cleaned_max))
+        if not index_max >= index_average:
+            self.add_error('max_difficulty', 'Max Difficulty cannot be smaller than Average Difficulty')
+            return False
+        return True
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -169,7 +194,8 @@ class SectionEditForm(forms.ModelForm):
             ),
             'content',
             Row(
-                Column('difficulty', css_class='form-group col-md-6 mb-0'),
+                Column('average_difficulty', css_class='form-group col-md-6 mb-0'),
+                Column('max_difficulty', css_class='form-group col-md-6 mb-0'),
             ),
             Row(
                 Column('low_water', css_class='form-group col-md-4 mb-0'),
@@ -191,9 +217,16 @@ class SectionEditForm(forms.ModelForm):
 
 
 class SpotEditForm(forms.ModelForm):
+    diff_choices = [('None', '----------'), ('I', 'I'), ('I+', 'I+'), ('I-II', 'I-II'), ('II-', 'II-'),
+                    ('II', 'II'), ('II+', 'II+'), ('II-III', 'II-III'), ('III-', 'III-'),
+                    ('III', 'III'), ('III+', 'III+'), ('III-IV', 'III-IV'), ('IV-', 'IV-'),
+                    ('IV', 'IV'), ('IV+', 'IV+'), ('IV-V', 'IV-V'), ('V-', 'V-'),
+                    ('V', 'V'), ('V+', 'V+'), ('V-VI', 'V-VI'), ('VI-', 'VI-'), ('VI', 'VI')]
+    average_difficulty = forms.ChoiceField(choices=diff_choices, required=False)
+
     class Meta:
         model = Spot
-        fields = ['name_jp', 'name', 'observatory', 'dam', 'content', 'difficulty', 'high_water', 'middle_water',
+        fields = ['name_jp', 'name', 'observatory', 'dam', 'content', 'high_water', 'middle_water',
                   'low_water', 'lat', 'lng']
         labels = {
             "name_jp": _('Name (Japanese)'),
@@ -203,7 +236,6 @@ class SpotEditForm(forms.ModelForm):
             "lat": _('Latitude'),
             "lng": _('Longitude'),
             "content": _('Useful Information:'),
-            "difficulty": _('Difficulty (from I to VI e.g. II, III+, II(III+), IV-V)'),
             "low_water": _('Low Water'),
             "middle_water": _('Middle Water'),
             "high_water": _('High Water')
@@ -223,7 +255,7 @@ class SpotEditForm(forms.ModelForm):
             ),
             'content',
             Row(
-                Column('difficulty', css_class='form-group col-md-6 mb-0'),
+                Column('average_difficulty', css_class='form-group col-md-6 mb-0'),
             ),
             Row(
                 Column('low_water', css_class='form-group col-md-4 mb-0'),

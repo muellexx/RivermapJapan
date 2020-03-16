@@ -265,10 +265,23 @@ class SectionUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         form = super(SectionUpdateView, self).get_form(form_class)
         form.fields["observatory"].queryset = self.object.river.system_observatories_set()
         form.fields["dam"].queryset = self.object.river.system_dams_set()
+        if self.object.difficulty:
+            diff_split = self.object.difficulty.split(' ')
+            form.fields["average_difficulty"].initial = diff_split[0]
+            if len(diff_split) > 1:
+                form.fields["max_difficulty"].initial = diff_split[1].replace('(', '').replace(')', '')
         return form
 
     def form_valid(self, form):
         form.instance.author = self.request.user
+        cleaned_average = form.cleaned_data['average_difficulty']
+        cleaned_max = form.cleaned_data['max_difficulty']
+        if cleaned_average == 'None':
+            form.instance.difficulty = ''
+        elif cleaned_max == 'None' or cleaned_average == cleaned_max:
+            form.instance.difficulty = cleaned_average
+        else:
+            form.instance.difficulty = cleaned_average + ' (' + cleaned_max + ')'
         redirect_url = super().form_valid(form)
         scrape_sections()
         json_sections()
@@ -295,10 +308,17 @@ class SpotUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         form = super(SpotUpdateView, self).get_form(form_class)
         form.fields["observatory"].queryset = self.object.river.system_observatories_set()
         form.fields["dam"].queryset = self.object.river.system_dams_set()
+        if self.object.difficulty:
+            form.fields["average_difficulty"].initial = self.object.difficulty
         return form
 
     def form_valid(self, form):
         form.instance.author = self.request.user
+        cleaned_average = form.cleaned_data['average_difficulty']
+        if cleaned_average == 'None':
+            form.instance.difficulty = ''
+        else:
+            form.instance.difficulty = cleaned_average
         redirect_url = super().form_valid(form)
         scrape_sections()
         json_spots()

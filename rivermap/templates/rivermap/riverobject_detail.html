@@ -16,7 +16,7 @@
             <h3 class="article-title">{{ object.name }}&emsp;(<a href="{% url 'river-detail' object.prefecture.slug object.river.pk %}">{{ object.river.name }}</a>)</h3>
             <h5 class="article-title"><b><a href="{% url 'prefecture-detail' object.prefecture.slug %}">{{ object.prefecture }}</a></b>&emsp;({{ object.region }})</h5>
             {% endif %}<br/>
-            <p>{{ object.content }}</p>
+            <p>{{ object.content|safe }}</p>
         </div>
         <div class="content-section">
             <div class="media-body compact-p">
