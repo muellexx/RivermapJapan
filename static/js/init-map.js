@@ -225,19 +225,28 @@ function createPopupClass() {
     }
 
     Popup.prototype.setContent = function(section) {
-        riverinfo.innerHTML = "<h4>" + section.river + "</h4>";
-        if (section.difficulty != null) {
-            riverinfo.innerHTML += "<h6>" + section.name + "(" + section.difficulty + ")</h6>";
+        if(document.documentElement.lang == 'ja'){
+            river = section.river_jp;
+            name = section.name_jp;
+            date = section.date_jp;
         } else {
-            riverinfo.innerHTML += "<h6>" + section.name + "</h6>";
+            river = section.river;
+            name = section.name;
+            date = section.date;
+        }
+        riverinfo.innerHTML = "<h4>" + river + "</h4>";
+        if (section.difficulty != null) {
+            riverinfo.innerHTML += "<h6>" + name + "(" + section.difficulty + ")</h6>";
+        } else {
+            riverinfo.innerHTML += "<h6>" + name + "</h6>";
         }
         riverinfo.innerHTML += '<div id="pop-chart-div"></div>'
         if (section.observatory_id != undefined) {
-            riverinfo.innerHTML += "Updated: " + section.date + "</p>";
-            riverinfo.innerHTML += '<p style="float: right;"><a href="' + section.url + '" target="_blank">Source</a></p>';
+            riverinfo.innerHTML += gettext('Updated: ') + date + "</p>";
+            //riverinfo.innerHTML += '<p style="float: right;"><a href="' + section.url + '" target="_blank">Source</a></p>';
         }
         if ((section.low_water != null)||(section.middle_water != null)||(section.high_water != null)) {
-            riverinfo.innerHTML += '<span class="lw-color">LW: ' + section.low_water + '</span> &nbsp; <span class="mw-color">MW: ' + section.middle_water + '</span> &nbsp; <span class="hw-color">HW: ' + section.high_water + '</span>';
+            riverinfo.innerHTML += '<span class="lw-color">' + gettext('LW: ') + section.low_water + '</span> &nbsp; <span class="mw-color">' + gettext('MW: ') + section.middle_water + '</span> &nbsp; <span class="hw-color">' + gettext('HW: ') + section.high_water + '</span>';
         }
     }
   };

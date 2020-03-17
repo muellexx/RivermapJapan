@@ -99,7 +99,7 @@ function loadChart(section, canvasId, hours) {
         var lineChartData = {
             labels: xData,
             datasets: [{
-                label: 'Water Level',
+                label: gettext('Water Level'),
                 borderColor: window.chartColors.blue,
                 backgroundColor: window.chartColors.black,
                 fill: false,

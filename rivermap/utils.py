@@ -158,7 +158,8 @@ def json_comments():
                 'content': comment.content,
                 'author': comment.author.username,
                 'image_url': comment.author.profile.image.url,
-                'date_posted': timezone.localtime(comment.date_posted).strftime('%Y/%m/%d %H:%M'),
+                'date_posted': timezone.localtime(comment.date_posted).strftime('%Y/%m/%d'),
+                'date_posted_jp': timezone.localtime(comment.date_posted).strftime('%Y年%m月%d日'),
             })
     try:
         with open('static/js/data/mapObjectComments.json', 'w') as outfile:
@@ -178,8 +179,10 @@ def json_sections():
         rivers['rivers'].append({
             'id': section.id,
             'river': section.river.name,
+            'river_jp': section.river.name_jp,
             'river_id': section.river.id,
             'name': section.name,
+            'name_jp': section.name_jp,
             'prefecture': section.prefecture.name,
             'color': color,
             'content': section.content,
@@ -197,10 +200,12 @@ def json_sections():
             color = get_color(section.observatory.level, section.low_water, section.middle_water, section.high_water)
             rivers['rivers'][-1]['color'] = color
             rivers['rivers'][-1]['observatory_name'] = section.observatory.name
+            rivers['rivers'][-1]['observatory_name_jp'] = section.observatory.name_jp
             rivers['rivers'][-1]['url'] = section.observatory.url
             rivers['rivers'][-1]['observatory_id'] = section.observatory.id
             rivers['rivers'][-1]['level'] = section.observatory.level
             rivers['rivers'][-1]['date'] = timezone.localtime(section.observatory.date).strftime('%Y/%m/%d %H:%M')
+            rivers['rivers'][-1]['date_jp'] = timezone.localtime(section.observatory.date).strftime('%Y年%m月%d日 %H:%M')
     try:
         with open('static/js/data/river.json', 'w') as outfile:
             json.dump(rivers, outfile, indent=4)
@@ -219,8 +224,10 @@ def json_spots():
         spots['spots'].append({
             'id': spot.id,
             'river': spot.river.name,
+            'river_jp': spot.river.name_jp,
             'river_id': spot.river.id,
             'name': spot.name,
+            'name_jp': spot.name_jp,
             'prefecture': spot.prefecture.name,
             'color': color,
             'content': spot.content,
@@ -236,10 +243,12 @@ def json_spots():
             color = get_color(spot.observatory.level, spot.low_water, spot.middle_water, spot.high_water)
             spots['spots'][-1]['color'] = color
             spots['spots'][-1]['observatory_name'] = spot.observatory.name
+            spots['spots'][-1]['observatory_name_jp'] = spot.observatory.name_jp
             spots['spots'][-1]['url'] = spot.observatory.url
             spots['spots'][-1]['observatory_id'] = spot.observatory.id
             spots['spots'][-1]['level'] = spot.observatory.level
             spots['spots'][-1]['date'] = timezone.localtime(spot.observatory.date).strftime('%Y/%m/%d %H:%M')
+            spots['spots'][-1]['date_jp'] = timezone.localtime(spot.observatory.date).strftime('%Y年%m月%d日 %H:%M')
     try:
         with open('static/js/data/spot.json', 'w') as outfile:
             json.dump(spots, outfile, indent=4)

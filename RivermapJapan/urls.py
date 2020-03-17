@@ -18,7 +18,11 @@ from django.contrib import admin
 from django.urls import include, path
 from django.conf import settings
 from django.conf.urls.static import static
+from django.utils import timezone
+from django.views.decorators.http import last_modified
+from django.views.i18n import JavaScriptCatalog
 
+last_modified_date = timezone.now()
 
 urlpatterns = [
     path('i18n/', include('django.conf.urls.i18n')),
@@ -29,6 +33,8 @@ urlpatterns += i18n_patterns(
     path('', include('rivermap.urls')),
     path('', include('blog.urls')),
     path('', include('users.urls')),
+    path('jsi18n/', last_modified(lambda req, **kw: last_modified_date)(JavaScriptCatalog.as_view()),
+         name='javascript-catalog'),
     prefix_default_language=True
 )
 

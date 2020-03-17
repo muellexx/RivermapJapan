@@ -6,12 +6,19 @@ function loadComments(sectionComments) {
         for (let i = 0; i < sectionComments.length; i++){
             sectionComment = sectionComments[i];
             comment = comments.find(x => x.id === sectionComment);
+
+            if(document.documentElement.lang == 'ja'){
+                date_posted =comment.date_posted_jp;
+            } else {
+                date_posted =comment.date_posted;
+            }
+
             $("#sb-comments").prepend('<article class="media content-section" style="margin: 0; margin-top: 5px; width: 100%;">'+
                 '<div class="media-body">' +
                     '<div class="article-metadata row">' +
                         '<div class="column-md-5"><img class="rounded-circle comment-img" src="' + comment.image_url + '"></div>' +
                         '<div id="sb-comment-author" class="column-md-7"><a class="mr-2" href="user/' + comment.author + '">' + comment.author + '</a></br>' +
-                        '<small class="text-muted">' + comment.date_posted + '</small></div>' +
+                        '<small class="text-muted">' + date_posted + '</small></div>' +
                     '</div>' +
                     '<h5>' + comment.title + '</h5>' +
                     '<p class="article-content">' + comment.content + '</p>' +

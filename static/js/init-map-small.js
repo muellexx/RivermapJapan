@@ -114,7 +114,6 @@ function initMap() {
             section.addSection(event);
         });
     } else if(this.objectType == 1 || this.objectType == 3) {
-    console.log('hi')
         Spot = createSpotClass();
         spot = new Spot();
         map.addListener('click', function(event) {

@@ -37,36 +37,47 @@ function showOrHide (id, preText, value, postText) {
 }
 
 function updateSidebar (section, isSpot) {
-    $('#sb-river-name').html('<a href="map/' + section.prefecture + '/river/' + section.river_id + '/">' + section.river + '</a>');
+    if(document.documentElement.lang == 'ja'){
+            river = section.river_jp;
+            name = section.name_jp;
+            date = section.date_jp;
+            observatory = section.observatory_name_jp;
+        } else {
+            river = section.river;
+            name = section.name;
+            date = section.date;
+            observatory = section.observatory_name;
+        }
+    $('#sb-river-name').html('<a href="map/' + section.prefecture + '/river/' + section.river_id + '/">' + river + '</a>');
     if (isSpot)
-        $('#sb-section-name').html('<a href="map/' + section.prefecture + '/spot/' + section.id + '/">' + section.name + '</a>');
+        $('#sb-section-name').html('<a href="map/' + section.prefecture + '/spot/' + section.id + '/">' + name + '</a>');
     else
-        $('#sb-section-name').html('<a href="map/' + section.prefecture + '/section/' + section.id + '/">' + section.name + '</a>');
+        $('#sb-section-name').html('<a href="map/' + section.prefecture + '/section/' + section.id + '/">' + name + '</a>');
     showOrHide ("sb-content", "", section.content, "");
-    showOrHide ("sb-difficulty", "Difficulty: ", section.difficulty, "");
+    showOrHide ("sb-difficulty", gettext('Difficulty: '), section.difficulty, "");
     if (isSpot)
         $('#sb-distance').hide();
     else{
         $('#sb-distance').show();
-        $('#sb-distance').html("Air Distance: " + distance(section.start_lat,
-                section.start_lng, section.end_lat, section.end_lng).toFixed(2) + " km");
+        $('#sb-distance').html(gettext('Air Distance: ') + distance(section.start_lat,
+                section.start_lng, section.end_lat, section.end_lng).toFixed(2) + gettext(' km'));
     }
     if (isSpot)
-        $('#sb-start').html("Location: " + mapLink(section.lat, section.lng));
+        $('#sb-start').html(gettext('Location: ') + mapLink(section.lat, section.lng));
     else
-        $('#sb-start').html("Start: " + mapLink(section.start_lat, section.start_lng));
+        $('#sb-start').html(gettext('Start: ') + mapLink(section.start_lat, section.start_lng));
     if (isSpot)
         $('#sb-end').hide();
     else{
         $('#sb-end').show();
-        $('#sb-end').html("End: " + mapLink(section.end_lat, section.end_lng));
+        $('#sb-end').html(gettext('End: ') + mapLink(section.end_lat, section.end_lng));
     }
-    showOrHide ("sb-level", "Current Level: ", section.level, "");
-    showOrHide ("sb-observatory", ' Observatory: <a href="', section.url, '" target="_blank">' + section.observatory_name + '</a>');
-    showOrHide ("sb-updated", "Updated: ", section.date, "");
-    showOrHide ("sb-lw", "LW: ", section.low_water, "");
-    showOrHide ("sb-mw", "MW: ", section.middle_water, "");
-    showOrHide ("sb-hw", "HW: ", section.high_water, "");
+    showOrHide ("sb-level", gettext('Current Level: '), section.level, "");
+    showOrHide ("sb-observatory", gettext('Observatory: ') + '<a href="', section.url, '" target="_blank">' + observatory + '</a>');
+    showOrHide ("sb-updated", gettext('Updated: '), date, "");
+    showOrHide ("sb-lw", gettext('LW: '), section.low_water, "");
+    showOrHide ("sb-mw", gettext('MW: '), section.middle_water, "");
+    showOrHide ("sb-hw", gettext('HW: '), section.high_water, "");
     $('#id_section').val(section.id);
     if(isSpot) {
         $('#object_type').val('spot');
@@ -77,7 +88,7 @@ function updateSidebar (section, isSpot) {
     if (section.comments !== undefined && section.comments.length != 0){
         loadComments(section.comments);
     } else {
-        $('#sb-comments').html("No Comments yet");
+        $('#sb-comments').html(gettext('No Comments yet'));
     }
 };
 
