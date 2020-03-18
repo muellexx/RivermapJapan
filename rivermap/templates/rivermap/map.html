@@ -3,8 +3,8 @@
 {% load static %}
 {% load crispy_forms_tags %}
 {% block style_sheets %}
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.css">
-    <script src="https://kit.fontawesome.com/a62ff99483.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="{% static 'lib/css/chart-2.9.1.css' %}">
+    <script src="{% static 'lib/js/fontawesome.js' %}"></script>
     <link rel="stylesheet" href="{% static 'css/map.css' %}">
 {% endblock style_sheets %}
 {% block content %}
@@ -108,10 +108,10 @@
 <div id="riverinfo" style="margin: 0; padding: 5px;"></div>
 {% endblock content %}
 {% block scripts %}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.js"></script>
+<script src="{% static 'lib/js/chart-2.9.3.js' %}"></script>
 <script src="{% static 'js/chart.js' %}"></script>
 <script src="{% static 'js/comment.js' %}"></script>
 <script src="{% static 'js/map.js' %}"></script>
 <script src="{% static 'js/init-map.js' %}"></script>
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB4FzVGy5foAnrj5soy0wTrRF2Htq_ZZdI&callback=initMap"></script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB4FzVGy5foAnrj5soy0wTrRF2Htq_ZZdI&language={{ LANGUAGE_CODE|default:"en-us" }}&callback=initMap"></script>
 {% endblock scripts %}
