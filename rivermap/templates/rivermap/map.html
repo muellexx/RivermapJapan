@@ -31,22 +31,22 @@
                     <div class="tabs">
                         <div class="tab-button-outer">
                             <ul id="tab-button">
-                                <li><a href="#tab01">{% trans "Water" %}</a></li>
+                                <li><a href="#tab01">{% trans "Water Level" %}</a></li>
                                 <li><a href="#tab02">{% trans "Weather" %}</a></li>
                             </ul>
                         </div>
                         <div class="tab-select-outer">
                             <select id="tab-select">
-                                <option value="#tab01">Tab 1</option>
-                                <option value="#tab02">Tab 2</option>
+                                <option value="#tab01"></option>
+                                <option value="#tab02"></option>
                             </select>
                         </div>
 
                         <div id="tab01" class="tab-contents">
-                            <h3>{% trans "Level" %}</h3>
-                            <button id="sb-chart-48" class="btn btn-link nav-link" style="float: left;" onclick="loadChart(0, 'sb-chart', 48)">2d</button>
-                            <button id="sb-chart-24" class="btn btn-link nav-link" style="float: left;" onclick="loadChart(0, 'sb-chart', 24)">1d</button>
-                            <button id="sb-chart-12" class="btn btn-link nav-link" onclick="loadChart(0, 'sb-chart', 12)">12h</button>
+                            <h3>{% trans "Water Level" %}</h3>
+                            <button id="sb-chart-48" class="btn btn-link nav-link" style="float: left;" onclick="loadChart(0, 'sb-chart', 48)">{% trans "2d" %}</button>
+                            <button id="sb-chart-24" class="btn btn-link nav-link" style="float: left;" onclick="loadChart(0, 'sb-chart', 24)">{% trans "1d" %}</button>
+                            <button id="sb-chart-12" class="btn btn-link nav-link" onclick="loadChart(0, 'sb-chart', 12)">{% trans "12h" %}</button>
                             <div id="sb-chart-div">
                                 <canvas id="sb-chart"></canvas>
                             </div>

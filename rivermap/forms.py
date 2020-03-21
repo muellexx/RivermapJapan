@@ -37,13 +37,14 @@ class GroupedModelChoiceField(forms.models.ModelChoiceField):
 
 
 class ObjectAddForm(forms.ModelForm):
-    type_choices = [(1, 'Section'), (2, 'Spot')]
-    object_type = forms.ChoiceField(choices=type_choices)
+    type_choices = [(1, pgettext_lazy('form', 'Section')), (2, pgettext_lazy('form', 'Spot'))]
+    object_type = forms.ChoiceField(choices=type_choices, label=_('Object Type'))
     prefecture = GroupedModelChoiceField(
         queryset=Prefecture.objects.all(),
         choices_groupby='region',
         empty_label=None,
-        to_field_name="slug"
+        to_field_name="slug",
+        label=pgettext_lazy('form', 'Prefecture')
     )
 
     class Meta:
@@ -73,12 +74,12 @@ class SectionAddForm(forms.ModelForm):
             "lat": _('Start Latitude'),
             "lng": _('Start Longitude'),
             "end_lat": _('End Latitude'),
-            "end_lng": _('End Longitude')
+            "end_lng": _('End Longitude'),
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['river'] = forms.ModelChoiceField(River.objects.all(), empty_label=None)
+        self.fields['river'] = forms.ModelChoiceField(River.objects.all(), empty_label=None, label=pgettext_lazy('form', 'River'))
         self.helper = FormHelper()
         self.helper.layout = Layout(
             'prefecture',
@@ -115,7 +116,7 @@ class SpotAddForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['river'] = forms.ModelChoiceField(River.objects.all(), empty_label=None)
+        self.fields['river'] = forms.ModelChoiceField(River.objects.all(), empty_label=None, label=pgettext_lazy('form', 'River'))
         self.helper = FormHelper()
         self.helper.layout = Layout(
             'prefecture',
@@ -140,8 +141,8 @@ class SectionEditForm(forms.ModelForm):
                     ('III', 'III'), ('III+', 'III+'), ('III-IV', 'III-IV'), ('IV-', 'IV-'),
                     ('IV', 'IV'), ('IV+', 'IV+'), ('IV-V', 'IV-V'), ('V-', 'V-'),
                     ('V', 'V'), ('V+', 'V+'), ('V-VI', 'V-VI'), ('VI-', 'VI-'), ('VI', 'VI')]
-    average_difficulty = forms.ChoiceField(choices=diff_choices, required=False)
-    max_difficulty = forms.ChoiceField(choices=diff_choices, required=False)
+    average_difficulty = forms.ChoiceField(choices=diff_choices, required=False, label=_('Average Difficulty (Middle Water)'))
+    max_difficulty = forms.ChoiceField(choices=diff_choices, required=False, label=_('Max Difficulty (Middle Water)'))
 
     class Meta:
         model = Section
@@ -171,12 +172,12 @@ class SectionEditForm(forms.ModelForm):
         if cleaned_max == 'None':
             return True
         if cleaned_average == 'None':
-            self.add_error('average_difficulty', 'Average Difficulty has to be chosen if Max Difficulty is set')
+            self.add_error('average_difficulty', _('Average Difficulty has to be chosen to set Max Difficulty'))
             return False
         index_average = self.diff_choices.index((cleaned_average, cleaned_average))
         index_max = self.diff_choices.index((cleaned_max, cleaned_max))
         if not index_max >= index_average:
-            self.add_error('max_difficulty', 'Max Difficulty cannot be smaller than Average Difficulty')
+            self.add_error('max_difficulty', _('Max Difficulty cannot be smaller than Average Difficulty'))
             return False
         return True
 
@@ -194,8 +195,8 @@ class SectionEditForm(forms.ModelForm):
             ),
             'content',
             Row(
-                Column('average_difficulty', css_class='form-group col-md-6 mb-0'),
-                Column('max_difficulty', css_class='form-group col-md-6 mb-0'),
+                Column('average_difficulty', css_class='form-group col-md-6 col-12 mb-0'),
+                Column('max_difficulty', css_class='form-group col-md-6 col-12 mb-0'),
             ),
             Row(
                 Column('low_water', css_class='form-group col-md-4 mb-0'),
@@ -222,7 +223,7 @@ class SpotEditForm(forms.ModelForm):
                     ('III', 'III'), ('III+', 'III+'), ('III-IV', 'III-IV'), ('IV-', 'IV-'),
                     ('IV', 'IV'), ('IV+', 'IV+'), ('IV-V', 'IV-V'), ('V-', 'V-'),
                     ('V', 'V'), ('V+', 'V+'), ('V-VI', 'V-VI'), ('VI-', 'VI-'), ('VI', 'VI')]
-    average_difficulty = forms.ChoiceField(choices=diff_choices, required=False)
+    average_difficulty = forms.ChoiceField(choices=diff_choices, required=False, label=_('Difficulty (Middle Water)'))
 
     class Meta:
         model = Spot
@@ -276,6 +277,10 @@ class CommentAddForm(forms.ModelForm):
     class Meta:
         model = MapObjectComment
         fields = ['title', 'content']
+        labels = {
+            "title": _('Title'),
+            "content": _('Content')
+        }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -283,5 +288,5 @@ class CommentAddForm(forms.ModelForm):
         self.helper.layout = Layout(
             'title',
             'content',
-            Submit('submit', 'Post')
+            Submit('submit', _('Post'))
         )

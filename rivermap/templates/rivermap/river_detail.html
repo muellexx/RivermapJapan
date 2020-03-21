@@ -46,7 +46,7 @@
         {% if river.section_set.count > 0 %}
         <div class="content-section">
             <div class="media-body">
-                <h6>{% blocktrans count counter=river.section_set.count %}White Water section{% plural %}White Water sections{% endblocktrans %} ({{ river.section_set.count }}):</h6>
+                <h6>{% blocktrans count counter=river.section_set.count %}White Water Section{% plural %}White Water Sections{% endblocktrans %} ({{ river.section_set.count }}):</h6>
                 {% for section in object.section_set.all %}
                     <small class="text-muted"><a href="{% url 'section-detail' view.kwargs.prefecture section.id %}">{{ section }}</a></br></small>
                 {% endfor %}

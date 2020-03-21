@@ -25,5 +25,5 @@
 <script src="{% static 'js/init-map-small.js' %}"></script>
 <script>setCoords({{ object.lat }}, {{ object.lng }}, {{ 11 }}); setType({{ object_type }});</script>
 {% if object_type == 2 %}<script>setSectionCoords({{ object.lat }}, {{ object.lng }}, {{ object.end_lat }}, {{ object.end_lng }});</script>{% endif %}
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB4FzVGy5foAnrj5soy0wTrRF2Htq_ZZdI&callback=initMap"></script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB4FzVGy5foAnrj5soy0wTrRF2Htq_ZZdI&language={{ LANGUAGE_CODE|default:"en-us" }}&callback=initMap"></script>
 {% endblock scripts %}

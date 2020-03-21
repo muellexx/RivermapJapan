@@ -37,22 +37,22 @@
         </div>
         {% if object.observatory %}
         <div class="content-section compact-p">
-            <h3 style="margin: 0;">Level</h3>
-            <button class="btn btn-link nav-link" style="float: left;" onclick="loadChart(0, 'chart', 48)">2d</button>
-            <button class="btn btn-link nav-link" style="float: left;" onclick="loadChart(0, 'chart', 24)">1d</button>
-            <button class="btn btn-link nav-link" onclick="loadChart(0, 'chart', 12)">12h</button>
+            <h3 style="margin: 0;">{% trans "Water Level" %}</h3>
+            <button class="btn btn-link nav-link" style="float: left;" onclick="loadChart(0, 'chart', 48)">{% trans "2d" %}</button>
+            <button class="btn btn-link nav-link" style="float: left;" onclick="loadChart(0, 'chart', 24)">{% trans "1d" %}</button>
+            <button class="btn btn-link nav-link" onclick="loadChart(0, 'chart', 12)">{% trans "12h" %}</button>
             <div id="chart-div" style="height: 300px;">
                 <canvas id="chart"></canvas>
             </div>
-            <p id="sb-level">Current Level: {{ object.observatory.level }}</p>
-            <p id="sb-observatory">Observatory: <a href="{{ object.observatory.url }}" target="_blank">{{ object.observatory }}</a></p>
-            <p id="sb-updated">Updated: {{ object.observatory.date }}</p>
+            <p id="sb-level">{% trans "Current Level:" %} {{ object.observatory.level }}</p>
+            <p id="sb-observatory">{% trans "Observatory:" %} <a href="{{ object.observatory.url }}" target="_blank">{{ object.observatory }}</a></p>
+            <p id="sb-updated">{% trans "Updated:" %} {{ object.observatory.date }}</p>
             <table class="table mb-0">
                 <tbody>
                     <tr>
-                        <td id="sb-lw" class="lw-color" style="padding: 0;"><b>LW: {{ object.low_water }}</b></td>
-                        <td id="sb-mw" class="mw-color" style="padding: 0;"><b>MW: {{ object.middle_water }}</b></td>
-                        <td id="sb-hw" class="hw-color" style="padding: 0;"><b>HW: {{ object.high_water }}</b></td>
+                        <td id="sb-lw" class="lw-color" style="padding: 0;"><b>{% trans "LW" %}: {{ object.low_water }}</b></td>
+                        <td id="sb-mw" class="mw-color" style="padding: 0;"><b>{% trans "MW" %}: {{ object.middle_water }}</b></td>
+                        <td id="sb-hw" class="hw-color" style="padding: 0;"><b>{% trans "HW" %}: {{ object.high_water }}</b></td>
                     </tr>
                 </tbody>
             </table>
