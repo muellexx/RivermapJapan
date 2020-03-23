@@ -334,3 +334,7 @@ class SpotUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         context = super().get_context_data(**kwargs)
         context['object_type'] = 3
         return context
+
+
+def how_to_add(request):
+    return render(request, 'rivermap/how_to_add.html', {'title': 'Help'})

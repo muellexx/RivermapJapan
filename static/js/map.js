@@ -48,11 +48,11 @@ function updateSidebar (section, isSpot) {
             date = section.date;
             observatory = section.observatory_name;
         }
-    $('#sb-river-name').html('<a href="map/' + section.prefecture + '/river/' + section.river_id + '/">' + river + '</a>');
+    $('#sb-river-name').html('<a href="map/' + section.prefecture.toLowerCase() + '/river/' + section.river_id + '/">' + river + '</a>');
     if (isSpot)
-        $('#sb-section-name').html('<a href="map/' + section.prefecture + '/spot/' + section.id + '/">' + name + '</a>');
+        $('#sb-section-name').html('<a href="map/' + section.prefecture.toLowerCase() + '/spot/' + section.id + '/">' + name + '</a>');
     else
-        $('#sb-section-name').html('<a href="map/' + section.prefecture + '/section/' + section.id + '/">' + name + '</a>');
+        $('#sb-section-name').html('<a href="map/' + section.prefecture.toLowerCase() + '/section/' + section.id + '/">' + name + '</a>');
     showOrHide ("sb-content", "", section.content, "");
     showOrHide ("sb-difficulty", gettext('Difficulty: '), section.difficulty, "");
     if (isSpot)

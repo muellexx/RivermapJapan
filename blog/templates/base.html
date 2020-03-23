@@ -45,7 +45,7 @@
                 <div class="navbar-nav mr-auto">
                     <!--<a class="nav-item nav-link" href="{% url 'rivermap' %}">{% trans "Map" %}</a>-->
                     <a class="nav-item nav-link" href="{% url 'prefecture-list' %}">{% trans "Browse" %}</a>
-                    <a class="nav-item nav-link" href="{% url 'blog-home' %}">{% trans "News" %}</a>
+                    <!--<a class="nav-item nav-link" href="{% url 'blog-home' %}">{% trans "News" %}</a>-->
                     <a class="nav-item nav-link" href="{% url 'blog-about' %}">{% trans "About" %}</a>
                 </div>
                 <!-- Navbar Right Side -->
@@ -58,6 +58,7 @@
                             <a class="nav-item nav-link" href="{% url 'admin:index' %}">{% trans "Admin" %}</a>
                         {% endif %}
                     {% else %}
+                        <a class="nav-item nav-link" href="{% url 'how-to-add' %}">{% trans "Add" %}</a>
                         <a class="nav-item nav-link" href="{% url 'login' %}">{% trans "Login" %}</a>
                         <a class="nav-item nav-link" href="{% url 'register' %}">{% trans "Register" %}</a>
                     {% endif %}

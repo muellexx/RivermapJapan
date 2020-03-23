@@ -1,0 +1,72 @@
+{% extends "base_container.html" %}
+{% load i18n %}
+{% block container_content %}
+    <div class="content-section text-justify">
+        <h2>{% trans "How to Add an Object to the Map" %}</h2>
+        <p>This guide explains how everyone can add a new whitewater section or spot to the Rivermap and thereby
+        contribute to the Rivermap.</p><br/>
+        <div class="text-center">
+            <img class="border img-fluid" src="{{ MEDIA_URL }}how_to_add/HTA1.png" alt="Responsive image">
+        </div>
+        <p>
+            <b>{% trans "Step 1:" %}</b> {% blocktrans trimmed %}If you don't have an account yet, press the link
+            "Register" at the top right corner to create a new account. If you already have an account,
+            continue with step 3. The navigation bar at the top will look slightly different if you are using a smart phone, but the
+            steps remain the same.{% endblocktrans %}
+        </p><br/>
+        <div class="text-center">
+            <img class="border img-fluid" src="{{ MEDIA_URL }}how_to_add/HTA2.png" alt="Responsive image">
+        </div>
+        <p>
+            <b>{% trans "Step 2:" %}</b> {% blocktrans trimmed %}Enter the necessary information to create an account
+            and click the "Sign Up" button. An email with an activation link will be sent to you.
+            Activate the account by clicking the link.{% endblocktrans %}
+        </p><br/>
+        <div class="text-center">
+            <img class="border img-fluid" src="{{ MEDIA_URL }}how_to_add/HTA3.png" alt="Responsive image">
+        </div>
+        <p>
+            <b>{% trans "Step 3:" %}</b> {% blocktrans trimmed %}Click on the "Login" button in the top right corner and
+            log in with your username and password.{% endblocktrans %}
+        </p><br/>
+        <div class="text-center">
+            <img class="border img-fluid" src="{{ MEDIA_URL }}how_to_add/HTA4.png" alt="Responsive image">
+        </div>
+        <p>
+            <b>{% trans "Step 4:" %}</b> {% blocktrans trimmed %}Click on the "Add" button at the top, then choose
+            the type of object you want to add and the prefecture. The object type can either be a section or a spot.
+            A section goes from a starting point to an end point while a spot is only one point.
+            Click on the "Next" button.{% endblocktrans %}
+        </p><br/>
+        <div class="text-center">
+            <img class="border img-fluid" src="{{ MEDIA_URL }}how_to_add/HTA5.png" alt="Responsive image">
+        </div>
+        <p>
+            <b>{% trans "Step 5:" %}</b> {% blocktrans trimmed %}Select the river and enter the name of the section or
+            spot. The rivers to choose from are filtered according to the prefecture.
+            Then click on the map twice for a section or once for a spot to set the coordinates.
+            Click on "Add Section" to save the section.{% endblocktrans %}
+        </p><br/>
+        <div class="text-center">
+            <img class="border img-fluid" src="{{ MEDIA_URL }}how_to_add/HTA6.png" alt="Responsive image">
+        </div>
+        <p>
+            <b>{% trans "Step 6 (optional):" %}</b> {% blocktrans trimmed %}Add additional information about the river. The chosen
+            name is automatically translated to English/Japanese and can be adjusted as wished. Water level Observatories
+            and dams that are connected to the river are shown in a list to choose from. Choose an average and maximum
+            Whitewater Difficulty according to the
+            <a target="_blank" href="https://en.wikipedia.org/wiki/International_scale_of_river_difficulty">
+            International Scale of River Difficulty</a> from I to VI.
+            Set values for Low, Middle and High Water according to the chosen water level observatory.
+            Click on "Save Section/Spot".
+            {% endblocktrans %}
+        </p>
+        <p>
+            <b>{% trans "End:" %}</b> {% blocktrans trimmed %} Congratulations, you succesfully added a section/spot to the Rivermap. Thank you
+            very much for contributing to the Rivermap. The newly added section will appear on the map shortly and
+            the water level will automatically be downloaded if an observatory was chosen.
+            {% endblocktrans %}
+        </p>
+    </div>
+{% endblock container_content %}
+

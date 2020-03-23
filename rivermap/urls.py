@@ -18,4 +18,5 @@ urlpatterns = [
     path('map/object/add/', views.add_object, name='add-object'),
     path('map/section/<int:pk>/update/', SectionUpdateView.as_view(), name='section-update'),
     path('map/spot/<int:pk>/update/', SpotUpdateView.as_view(), name='spot-update'),
+    path('map/object/how-to-add/', views.how_to_add, name="how-to-add"),
 ]
