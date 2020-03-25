@@ -1,12 +1,13 @@
 {% extends "base_container.html" %}
 {% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
 {% block container_content %}
     <div class="content-section text-justify">
         <h2>{% trans "How to Add an Object to the Map" %}</h2>
-        <p>This guide explains how everyone can add a new whitewater section or spot to the Rivermap and thereby
-        contribute to the Rivermap.</p><br/>
+        <p>{% blocktrans trimmed %}This guide explains how everyone can add a new whitewater section or spot to the Rivermap and thereby
+        contribute to the Rivermap.{% endblocktrans %}</p><br/>
         <div class="text-center">
-            <img class="border img-fluid" src="{{ MEDIA_URL }}how_to_add/HTA1.png" alt="Responsive image">
+            <img class="border img-fluid" src="{{ MEDIA_URL }}how_to_add/HTA1_{{ LANGUAGE_CODE }}.png" alt="Responsive image">
         </div>
         <p>
             <b>{% trans "Step 1:" %}</b> {% blocktrans trimmed %}If you don't have an account yet, press the link
@@ -15,7 +16,7 @@
             steps remain the same.{% endblocktrans %}
         </p><br/>
         <div class="text-center">
-            <img class="border img-fluid" src="{{ MEDIA_URL }}how_to_add/HTA2.png" alt="Responsive image">
+            <img class="border img-fluid" src="{{ MEDIA_URL }}how_to_add/HTA2_{{ LANGUAGE_CODE }}.png" alt="Responsive image">
         </div>
         <p>
             <b>{% trans "Step 2:" %}</b> {% blocktrans trimmed %}Enter the necessary information to create an account
@@ -23,14 +24,14 @@
             Activate the account by clicking the link.{% endblocktrans %}
         </p><br/>
         <div class="text-center">
-            <img class="border img-fluid" src="{{ MEDIA_URL }}how_to_add/HTA3.png" alt="Responsive image">
+            <img class="border img-fluid" src="{{ MEDIA_URL }}how_to_add/HTA3_{{ LANGUAGE_CODE }}.png" alt="Responsive image">
         </div>
         <p>
             <b>{% trans "Step 3:" %}</b> {% blocktrans trimmed %}Click on the "Login" button in the top right corner and
             log in with your username and password.{% endblocktrans %}
         </p><br/>
         <div class="text-center">
-            <img class="border img-fluid" src="{{ MEDIA_URL }}how_to_add/HTA4.png" alt="Responsive image">
+            <img class="border img-fluid" src="{{ MEDIA_URL }}how_to_add/HTA4_{{ LANGUAGE_CODE }}.png" alt="Responsive image">
         </div>
         <p>
             <b>{% trans "Step 4:" %}</b> {% blocktrans trimmed %}Click on the "Add" button at the top, then choose
@@ -39,7 +40,7 @@
             Click on the "Next" button.{% endblocktrans %}
         </p><br/>
         <div class="text-center">
-            <img class="border img-fluid" src="{{ MEDIA_URL }}how_to_add/HTA5.png" alt="Responsive image">
+            <img class="border img-fluid" src="{{ MEDIA_URL }}how_to_add/HTA5_{{ LANGUAGE_CODE }}.png" alt="Responsive image">
         </div>
         <p>
             <b>{% trans "Step 5:" %}</b> {% blocktrans trimmed %}Select the river and enter the name of the section or
@@ -48,7 +49,7 @@
             Click on "Add Section" to save the section.{% endblocktrans %}
         </p><br/>
         <div class="text-center">
-            <img class="border img-fluid" src="{{ MEDIA_URL }}how_to_add/HTA6.png" alt="Responsive image">
+            <img class="border img-fluid" src="{{ MEDIA_URL }}how_to_add/HTA6_{{ LANGUAGE_CODE }}.png" alt="Responsive image">
         </div>
         <p>
             <b>{% trans "Step 6 (optional):" %}</b> {% blocktrans trimmed %}Add additional information about the river. The chosen
