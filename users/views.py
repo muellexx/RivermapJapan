@@ -58,7 +58,7 @@ def activate(request, uidb64, token):
         user.save()
         login(request, user)
         messages.success(request, _('Your account has been activated!'))
-        return redirect('blog-home')
+        return redirect('profile')
     else:
         messages.warning(request, _('Invalid activation link'))
         return redirect('blog-home')

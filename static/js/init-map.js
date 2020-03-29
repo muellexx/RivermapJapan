@@ -9,6 +9,7 @@ function initMap() {
             lng: 139.194369
         },
         scaleControl: true,
+        fullscreenControl: false,
         mapTypeId: 'terrain',
         styles: [{
                 elementType: 'all',
