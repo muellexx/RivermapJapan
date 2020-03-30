@@ -10,7 +10,7 @@ from django.utils.dateparse import parse_datetime
 from django.utils.timezone import make_aware, is_aware
 
 from RivermapJapan import settings
-from rivermap.models import Section, MapObjectComment, Observatory, Spot
+from rivermap.models import Section, MapObjectComment, Observatory, Spot, Dam
 
 
 def calculate_distance(lat1, lng1, lat2, lng2):
@@ -71,68 +71,103 @@ def get_color(cl, lw, mw, hw):
 
 def scrape_sections():
     write_json = False
-    observatories = Observatory.objects.all().filter(section__name__contains='') | \
-                    Observatory.objects.all().filter(spot__name__contains='')
-    for observatory in observatories:
-        # TODO multithread
-        if (observatory.section_set.count() or observatory.spot_set.count()) and (
-                observatory.date is None or timezone.now() - observatory.date > timezone.timedelta(seconds=3600)):
-            write_json = True
-            url = observatory.url
-            uClient = uReq(url)
-            page_html = uClient.read()
-            uClient.close()
+    objects_to_scrape = ['obs', 'dam']
+    for cycle in objects_to_scrape:
+        if cycle == 'obs':
+            observatories = Observatory.objects.all().filter(section__name__contains='') | \
+                            Observatory.objects.all().filter(spot__name__contains='')
+        elif cycle == 'dam':
+            observatories = Dam.objects.all().filter(section__name__contains='') | \
+                            Dam.objects.all().filter(spot__name__contains='')
+        for observatory in observatories:
+            # TODO multithread
+            if (observatory.section_set.count() or observatory.spot_set.count()) and (
+                    observatory.date is None or timezone.now() - observatory.date > timezone.timedelta(seconds=660)):
+                write_json = True
+                url = observatory.url
+                if '&timeType=60' in url:
+                    url = url.replace('&timeType=60', '&timeType=10')
+                else:
+                    url = url + "&timeType=10"
+                uClient = uReq(url)
+                page_html = uClient.read()
+                uClient.close()
 
-            # html parsing
-            page_soup = soup(page_html, "html.parser")
+                # html parsing
+                page_soup = soup(page_html, "html.parser")
 
-            # get the table and the rows
-            rows = page_soup.find("div", {"id": "hyou"}).table.find_all("tr")
+                # get the table and the rows
+                rows = page_soup.find("div", {"id": "hyou"}).table.find_all("tr")
 
-            # Create and initialize file for result
-            filename = 'static/js/data/river/' + str(observatory.id) + '.json'
+                # Create and initialize file for result
+                filename = 'static/js/data/river/' + cycle + '_' + str(observatory.id) + '.json'
 
-            data = {'level': []}
-
-            date = '0'
-            # loop through the rows of the table
-            for row in rows:
-                cells = row.find_all("td")
-                time = cells[0].text.strip()
-                if len(time.split(' ')) > 1:
-                    date = time.split(' ')[0]
-                    time = time.split(' ')[1]
-                level = cells[1].text.strip()
                 try:
-                    level = float(level)
-                    current_date_time = str(datetime.datetime.today().year) + '-' + date.replace('/', '-') + 'T' +\
-                                        time.replace('24', '00') + ':00'
-                    current_level = level
-                except ValueError:
-                    current_level = None
-                    pass
+                    with open(filename) as f:
+                        data = json.load(f)
+                    try:
+                        latest_date_time = get_aware_datetime(str(datetime.datetime.today().year) + '-' + data['level'][-1]['date'].replace('/', '-') + \
+                                       'T' + data['level'][-1]['time'] + ':00')
+                    except AttributeError:
+                        latest_date_time = observatory.date
+                except (FileNotFoundError, IndexError) as e:
+                    data = {'level': []}
+                    latest_date_time = None
 
-                data['level'].append({
-                    'date': date,
-                    'time': time,
-                    'level': level,
-                })
+                date = '0'
+                # loop through the rows of the table
+                for row in rows:
+                    cells = row.find_all("td")
+                    time = cells[0].text.strip()
+                    if len(time.split(' ')) > 1:
+                        date = time.split(' ')[0]
+                        time = time.split(' ')[1]
+                    if cycle == 'obs':
+                        level = cells[1].text.strip()
+                    elif cycle == 'dam':
+                        level = cells[3].text.strip()
+                    try:
+                        current_date_time = get_aware_datetime(str(datetime.datetime.today().year) + '-' + date.replace('/', '-') + 'T' +\
+                                            time.replace('24', '00') + ':00')
+                        if time == "24:00":
+                            current_date_time += timezone.timedelta(days=1)
+                            date = current_date_time.strftime('%m/%d')
+                            time = "00:00"
+                        level = float(level)
+                        current_level = level
+                    except ValueError:
+                        current_level = None
+                        pass
 
-            try:
-                with open('static/js/data/river/' + str(observatory.id) + '.json', 'w') as outfile:
-                    json.dump(data, outfile, indent=4)
-            except FileNotFoundError:
-                with open(settings.BASE_DIR + '/static/js/data/river/' + str(observatory.id) + '.json', 'w') as outfile:
-                    json.dump(data, outfile, indent=4)
+                    if latest_date_time and not latest_date_time < current_date_time:
+                        continue
 
-            observatory.level = current_level
+                    # print('written ' + str(current_date_time))
 
-            try:
-                observatory.date = get_aware_datetime(current_date_time)
+                    data['level'].append({
+                        'date': date,
+                        'time': time,
+                        'level': level,
+                    })
+
+                if len(data['level']) > 1008:
+                    data['level'] = data['level'][len(data['level'])-1008:]
+
+                try:
+                    with open(filename, 'w') as outfile:
+                        json.dump(data, outfile, indent=4)
+                except FileNotFoundError:
+                    with open(settings.BASE_DIR + '/' + filename, 'w') as outfile:
+                        json.dump(data, outfile, indent=4)
+
                 observatory.level = current_level
-                observatory.save()
-            except:
-                print("Error during observatory save at observatory " + observatory.name)
+
+                try:
+                    observatory.date = current_date_time
+                    observatory.level = current_level
+                    observatory.save()
+                except:
+                    print("Error during observatory save at observatory " + observatory.name)
 
     if write_json:
         json_sections()
@@ -196,16 +231,27 @@ def json_sections():
             'end_lng': section.end_lng,
             'comments': comments,
         })
+        if section.dam:
+            color = get_color(section.dam.level, section.low_water, section.middle_water, section.high_water)
+            rivers['rivers'][-1]['color'] = color
+            rivers['rivers'][-1]['dam_name'] = section.dam.name
+            rivers['rivers'][-1]['dam_name_jp'] = section.dam.name_jp
+            rivers['rivers'][-1]['url'] = section.dam.url
+            rivers['rivers'][-1]['dam_id'] = section.dam.id
+            rivers['rivers'][-1]['level'] = section.dam.level
+            rivers['rivers'][-1]['date'] = timezone.localtime(section.dam.date).strftime('%Y/%m/%d %H:%M')
+            rivers['rivers'][-1]['date_jp'] = timezone.localtime(section.dam.date).strftime('%Y年%m月%d日 %H:%M')
         if section.observatory:
             color = get_color(section.observatory.level, section.low_water, section.middle_water, section.high_water)
-            rivers['rivers'][-1]['color'] = color
             rivers['rivers'][-1]['observatory_name'] = section.observatory.name
             rivers['rivers'][-1]['observatory_name_jp'] = section.observatory.name_jp
-            rivers['rivers'][-1]['url'] = section.observatory.url
             rivers['rivers'][-1]['observatory_id'] = section.observatory.id
-            rivers['rivers'][-1]['level'] = section.observatory.level
-            rivers['rivers'][-1]['date'] = timezone.localtime(section.observatory.date).strftime('%Y/%m/%d %H:%M')
-            rivers['rivers'][-1]['date_jp'] = timezone.localtime(section.observatory.date).strftime('%Y年%m月%d日 %H:%M')
+            if not section.dam:
+                rivers['rivers'][-1]['url'] = section.observatory.url
+                rivers['rivers'][-1]['color'] = color
+                rivers['rivers'][-1]['level'] = section.observatory.level
+                rivers['rivers'][-1]['date'] = timezone.localtime(section.observatory.date).strftime('%Y/%m/%d %H:%M')
+                rivers['rivers'][-1]['date_jp'] = timezone.localtime(section.observatory.date).strftime('%Y年%m月%d日 %H:%M')
     try:
         with open('static/js/data/river.json', 'w') as outfile:
             json.dump(rivers, outfile, indent=4)
@@ -239,16 +285,27 @@ def json_spots():
             'lng': spot.lng,
             'comments': comments,
         })
+        if spot.dam:
+            color = get_color(spot.dam.level, spot.low_water, spot.middle_water, spot.high_water)
+            spots['spots'][-1]['color'] = color
+            spots['spots'][-1]['dam_name'] = spot.dam.name
+            spots['spots'][-1]['dam_name_jp'] = spot.dam.name_jp
+            spots['spots'][-1]['url'] = spot.dam.url
+            spots['spots'][-1]['dam_id'] = spot.dam.id
+            spots['spots'][-1]['level'] = spot.dam.level
+            spots['spots'][-1]['date'] = timezone.localtime(spot.dam.date).strftime('%Y/%m/%d %H:%M')
+            spots['spots'][-1]['date_jp'] = timezone.localtime(spot.dam.date).strftime('%Y年%m月%d日 %H:%M')
         if spot.observatory:
             color = get_color(spot.observatory.level, spot.low_water, spot.middle_water, spot.high_water)
-            spots['spots'][-1]['color'] = color
             spots['spots'][-1]['observatory_name'] = spot.observatory.name
             spots['spots'][-1]['observatory_name_jp'] = spot.observatory.name_jp
-            spots['spots'][-1]['url'] = spot.observatory.url
             spots['spots'][-1]['observatory_id'] = spot.observatory.id
-            spots['spots'][-1]['level'] = spot.observatory.level
-            spots['spots'][-1]['date'] = timezone.localtime(spot.observatory.date).strftime('%Y/%m/%d %H:%M')
-            spots['spots'][-1]['date_jp'] = timezone.localtime(spot.observatory.date).strftime('%Y年%m月%d日 %H:%M')
+            if not spot.dam:
+                spots['spots'][-1]['url'] = spot.observatory.url
+                spots['spots'][-1]['color'] = color
+                spots['spots'][-1]['level'] = spot.observatory.level
+                spots['spots'][-1]['date'] = timezone.localtime(spot.observatory.date).strftime('%Y/%m/%d %H:%M')
+                spots['spots'][-1]['date_jp'] = timezone.localtime(spot.observatory.date).strftime('%Y年%m月%d日 %H:%M')
     try:
         with open('static/js/data/spot.json', 'w') as outfile:
             json.dump(spots, outfile, indent=4)

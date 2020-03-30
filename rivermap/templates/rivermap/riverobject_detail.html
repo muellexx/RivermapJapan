@@ -35,7 +35,7 @@
                 {% endif %}
             </div>
         </div>
-        {% if object.observatory %}
+        {% if object.observatory or object.dam %}
         <div class="content-section compact-p">
             <h3 style="margin: 0;">{% trans "Water Level" %}</h3>
             <button class="btn btn-link nav-link" style="float: left;" onclick="loadChart(0, 'chart', 48)">{% trans "2d" %}</button>
@@ -44,15 +44,21 @@
             <div id="chart-div" style="height: 300px;">
                 <canvas id="chart"></canvas>
             </div>
-            <p id="sb-level">{% trans "Current Level:" %} {{ object.observatory.level }}</p>
+            {% if object.dam %}
+            <p id="sb-level">{% trans "Current Level:" %} {{ object.dam.level }} &#13221;/s</p>
+            <p id="sb-observatory">{% trans "Dam:" %} <a href="{{ object.observatory.url }}" target="_blank">{{ object.dam }}</a></p>
+            <p id="sb-updated">{% trans "Updated:" %} {{ object.dam.date }}</p>
+            {% else %}
+            <p id="sb-level">{% trans "Current Level:" %} {{ object.observatory.level }} m</p>
             <p id="sb-observatory">{% trans "Observatory:" %} <a href="{{ object.observatory.url }}" target="_blank">{{ object.observatory }}</a></p>
             <p id="sb-updated">{% trans "Updated:" %} {{ object.observatory.date }}</p>
+            {% endif %}
             <table class="table mb-0">
                 <tbody>
                     <tr>
-                        <td id="sb-lw" class="lw-color" style="padding: 0;"><b>{% trans "LW" %}: {{ object.low_water }}</b></td>
-                        <td id="sb-mw" class="mw-color" style="padding: 0;"><b>{% trans "MW" %}: {{ object.middle_water }}</b></td>
-                        <td id="sb-hw" class="hw-color" style="padding: 0;"><b>{% trans "HW" %}: {{ object.high_water }}</b></td>
+                        <td id="sb-lw" class="lw-color" style="padding: 0;"><b>{% trans "LW" %}: {{ object.low_water }}{% if object.dam %} &#13221;/s{% else %} m{% endif %}</b></td>
+                        <td id="sb-mw" class="mw-color" style="padding: 0;"><b>{% trans "MW" %}: {{ object.middle_water }}{% if object.dam %} &#13221;/s{% else %} m{% endif %}</b></td>
+                        <td id="sb-hw" class="hw-color" style="padding: 0;"><b>{% trans "HW" %}: {{ object.high_water }}{% if object.dam %} &#13221;/s{% else %} m{% endif %}</b></td>
                     </tr>
                 </tbody>
             </table>
@@ -102,15 +108,23 @@
 {% block scripts %}
 <script src="{% static 'lib/js/chart-2.9.3.js' %}"></script>
 <script src="{% static 'js/chart.js' %}"></script>
-<script>
+{% if object.dam %}<script>
     var section = {
-            "high_water": {{ object.high_water }},
-            "middle_water": {{ object.middle_water }},
-            "low_water": {{ object.low_water }},
+            "high_water": {{ object.high_water|default:'""' }},
+            "middle_water": {{ object.middle_water|default:'""' }},
+            "low_water": {{ object.low_water|default:'""' }},
+            "dam_id": {{ object.dam.id }}
+        }
+    loadChart(section, 'chart', 48);
+</script>{% elif object.observatory %}<script>
+    var section = {
+            "high_water": {{ object.high_water|default:'""' }},
+            "middle_water": {{ object.middle_water|default:'""' }},
+            "low_water": {{ object.low_water|default:'""' }},
             "observatory_id": {{ object.observatory.id }}
         }
     loadChart(section, 'chart', 48);
-</script>
+</script>{% endif %}
 <script src="{% static 'js/comment.js' %}"></script>
 <script>setUrl('{{ request.path }}');</script>
 {% endblock scripts %}

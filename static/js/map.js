@@ -42,12 +42,19 @@ function updateSidebar (section, isSpot) {
             name = section.name_jp;
             date = section.date_jp;
             observatory = section.observatory_name_jp;
+            dam = section.dam_name_jp;
         } else {
             river = section.river;
             name = section.name;
             date = section.date;
             observatory = section.observatory_name;
+            dam = section.dam_name;
         }
+    if (section.dam_id == undefined){
+        unit = " m"
+    } else {
+        unit = " &#13221;/s"
+    }
     $('#sb-river-name').html('<a href="map/' + section.prefecture.toLowerCase() + '/river/' + section.river_id + '/">' + river + '</a>');
     if (isSpot)
         $('#sb-section-name').html('<a href="map/' + section.prefecture.toLowerCase() + '/spot/' + section.id + '/">' + name + '</a>');
@@ -72,12 +79,15 @@ function updateSidebar (section, isSpot) {
         $('#sb-end').show();
         $('#sb-end').html(gettext('End: ') + mapLink(section.end_lat, section.end_lng));
     }
-    showOrHide ("sb-level", gettext('Current Level: '), section.level, "");
+    showOrHide ("sb-level", gettext('Current Level: '), section.level, unit);
     showOrHide ("sb-observatory", gettext('Observatory: ') + '<a href="', section.url, '" target="_blank">' + observatory + '</a>');
+    if (section.dam_id != undefined){
+        showOrHide ("sb-observatory", gettext('Dam: ') + '<a href="', section.url, '" target="_blank">' + dam + '</a>');
+    }
     showOrHide ("sb-updated", gettext('Updated: '), date, "");
-    showOrHide ("sb-lw", gettext('LW: '), section.low_water, "");
-    showOrHide ("sb-mw", gettext('MW: '), section.middle_water, "");
-    showOrHide ("sb-hw", gettext('HW: '), section.high_water, "");
+    showOrHide ("sb-lw", gettext('LW: '), section.low_water, unit);
+    showOrHide ("sb-mw", gettext('MW: '), section.middle_water, unit);
+    showOrHide ("sb-hw", gettext('HW: '), section.high_water, unit);
     $('#id_section').val(section.id);
     if(isSpot) {
         $('#object_type').val('spot');

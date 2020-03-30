@@ -21,8 +21,12 @@ function loadChart(section, canvasId, hours) {
     }
 
     $('#' + canvasId).remove();
-    if (section.observatory_id == undefined) {
-        return;
+    var obs_type = 'dam_'
+    if (section.dam_id == undefined) {
+        obs_type = 'obs_'
+        if (section.observatory_id == undefined) {
+            return;
+        }
     }
     if (canvasId == 'pop-chart') {
         $('#' + canvasId + '-div').append('<canvas id="' + canvasId + '" height="150"></canvas>');
@@ -35,7 +39,12 @@ function loadChart(section, canvasId, hours) {
         aspectRatio = true;
     }
 
-    $.getJSON("/static/js/data/river/" + section.observatory_id + ".json", {_: new Date().getTime()}, function(json){
+    if (obs_type == 'dam_') {
+        var filename = "/static/js/data/river/dam_" + section.dam_id + ".json";
+    } else if (obs_type == 'obs_') {
+        var filename = "/static/js/data/river/obs_" + section.observatory_id + ".json";
+    }
+    $.getJSON(filename, {_: new Date().getTime()}, function(json){
         data = json.level;
 
         xData = [];
@@ -44,7 +53,7 @@ function loadChart(section, canvasId, hours) {
         mwData = [];
         hwData = [];
         graphData = [];
-        i = data.length - hours;
+        i = data.length - hours * 6;
         if (i < 0){i = 0;}
         for (i; i < data.length; i++) {
             point = data[i];
@@ -62,6 +71,9 @@ function loadChart(section, canvasId, hours) {
             }
             if (section.high_water != null){
                 hwData.push(section.high_water);
+            }
+            if (hours > 24) {
+                i = i + 2;
             }
         }
 
