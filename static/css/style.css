@@ -213,12 +213,15 @@ a.article-title:hover {
 
 .lw-color {
     color: #64DBFF;
+    font-size: 14px;
 }
 
 .mw-color {
     color: #00D200;
+    font-size: 14px;
 }
 
 .hw-color {
     color: #FF0000;
+    font-size: 14px;
 }

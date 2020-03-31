@@ -46,6 +46,9 @@ function loadChart(section, canvasId, hours) {
     }
     $.getJSON(filename, {_: new Date().getTime()}, function(json){
         data = json.level;
+        if (data.length < hours * 6){
+            hours = data.length/6;
+        }
 
         xData = [];
         yData = [];
@@ -57,6 +60,11 @@ function loadChart(section, canvasId, hours) {
         if (i < 0){i = 0;}
         for (i; i < data.length; i++) {
             point = data[i];
+            if (hours > 24) {
+                if (!point.time.includes(":00")) continue;
+            } else if (hours > 12) {
+                if (!point.time.includes(":00")&&!point.time.includes(":30")) continue;
+            }
             if (hours <= 24) {
                 xData.push(point.time);
             } else {
@@ -71,9 +79,6 @@ function loadChart(section, canvasId, hours) {
             }
             if (section.high_water != null){
                 hwData.push(section.high_water);
-            }
-            if (hours > 24) {
-                i = i + 2;
             }
         }
 

@@ -110,7 +110,7 @@ $('#dismiss, .overlay').on('click', function () {
 });
 
 function loadRivers(popup) {
-    $.getJSON("/static/js/data/river.json", function(json){
+    $.getJSON("/static/js/data/river.json", {_: new Date().getTime()}, function(json){
         rivers = json.rivers;
         colors = ['#64DBFF', '#8A8A8A', '#2828FF', '#00D200', '#FFB300', '#FF0000'];
         for (let i = 0; i < rivers.length; i++) {
@@ -163,7 +163,7 @@ function loadRivers(popup) {
                 popup.hide();
                 updateSidebar(rivers[i], false);
                 activateSidebar();
-                loadChart(rivers[i], 'sb-chart', 48);
+                loadChart(rivers[i], 'sb-chart', 24);
             });
 
             river.setMap(map);
