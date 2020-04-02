@@ -2,11 +2,12 @@
 {% load i18n %}
 {% load static %}
 {% load crispy_forms_tags %}
+{% load auth_extras %}
 {% get_current_language as LANGUAGE_CODE %}
 {% block container_content %}
     <div class="content-section">
         <div class="media-head">
-            {% if object.author == user %}
+            {% if object.author == user or user|has_group:"Super Paddler"%}
             <a class="btn btn-primary btn-sm mt-1 mb-4" style="float: right;" href="{% url edit_url object.id %}">{% trans "Edit" %}</a>
             {% endif %}
             {% if LANGUAGE_CODE == "ja" %}
@@ -38,6 +39,7 @@
         {% if object.observatory or object.dam %}
         <div class="content-section compact-p">
             <h3 style="margin: 0;">{% trans "Water Level" %}</h3>
+            <button class="btn btn-link nav-link" style="float: left;" onclick="loadChart(0, 'chart', 168)">{% trans "1w" %}</button>
             <button class="btn btn-link nav-link" style="float: left;" onclick="loadChart(0, 'chart', 48)">{% trans "2d" %}</button>
             <button class="btn btn-link nav-link" style="float: left;" onclick="loadChart(0, 'chart', 24)">{% trans "1d" %}</button>
             <button class="btn btn-link nav-link" onclick="loadChart(0, 'chart', 12)">{% trans "12h" %}</button>
@@ -123,7 +125,7 @@
             "low_water": {{ object.low_water|default:'""' }},
             "observatory_id": {{ object.observatory.id }}
         }
-    loadChart(section, 'chart', 48);
+    loadChart(section, 'chart', 24);
 </script>{% endif %}
 <script src="{% static 'js/comment.js' %}"></script>
 <script>setUrl('{{ request.path }}');</script>

@@ -150,7 +150,7 @@ function loadRivers(popup) {
             river.addListener('mouseover', function(event) {
                 popup.setContent(rivers[i]);
                 popup.show();
-                loadChart(rivers[i], 'pop-chart', 24);
+                loadChart(rivers[i], 'pop-chart', 12);
                 popup.setPosition(event.latLng, false);
                 popup.draw();
             });
@@ -163,7 +163,7 @@ function loadRivers(popup) {
                 popup.hide();
                 updateSidebar(rivers[i], false);
                 activateSidebar();
-                loadChart(rivers[i], 'sb-chart', 24);
+                loadChart(rivers[i], 'sb-chart', 12);
             });
 
             river.setMap(map);
@@ -194,7 +194,7 @@ function loadSpots(popup) {
             spot.addListener('mouseover', function(event) {
                 popup.setContent(spots[i]);
                 popup.show();
-                loadChart(spots[i], 'pop-chart', 24);
+                loadChart(spots[i], 'pop-chart', 12);
                 popup.setPosition(event.latLng, true);
                 popup.draw();
             });
@@ -206,7 +206,7 @@ function loadSpots(popup) {
             spot.addListener('click', function() {
                 updateSidebar(spots[i], true);
                 activateSidebar();
-                loadChart(spots[i], 'sb-chart', 48);
+                loadChart(spots[i], 'sb-chart', 12);
             });
 
             spot.setMap(map);

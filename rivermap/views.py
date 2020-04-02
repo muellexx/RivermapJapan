@@ -273,7 +273,8 @@ class SectionUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         return form
 
     def form_valid(self, form):
-        form.instance.author = self.request.user
+        if not form.instance.author:
+            form.instance.author = self.request.user
         cleaned_average = form.cleaned_data['average_difficulty']
         cleaned_max = form.cleaned_data['max_difficulty']
         if cleaned_average == 'None':
@@ -283,13 +284,13 @@ class SectionUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         else:
             form.instance.difficulty = cleaned_average + ' (' + cleaned_max + ')'
         redirect_url = super().form_valid(form)
-        scrape_sections()
+        # scrape_sections()
         json_sections()
         return redirect_url
 
     def test_func(self):
         post = self.get_object()
-        if self.request.user == post.author:
+        if self.request.user == post.author or self.request.user.groups.filter(name='Super Paddler'):
             return True
         return False
 
