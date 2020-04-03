@@ -58,9 +58,9 @@
             <table class="table mb-0">
                 <tbody>
                     <tr>
-                        <td id="sb-lw" class="lw-color" style="padding: 0;"><b>{% trans "LW" %}: {{ object.low_water }}{% if object.dam %} &#13221;/s{% else %} m{% endif %}</b></td>
-                        <td id="sb-mw" class="mw-color" style="padding: 0;"><b>{% trans "MW" %}: {{ object.middle_water }}{% if object.dam %} &#13221;/s{% else %} m{% endif %}</b></td>
-                        <td id="sb-hw" class="hw-color" style="padding: 0;"><b>{% trans "HW" %}: {{ object.high_water }}{% if object.dam %} &#13221;/s{% else %} m{% endif %}</b></td>
+                        {% if object.low_water %}<td id="sb-lw" class="lw-color" style="padding: 0;"><b>{% trans "LW" %}: {{ object.low_water }}{% if object.dam %} &#13221;/s{% else %} m{% endif %}</b></td>{% endif %}
+                        {% if object.middle_water %}<td id="sb-mw" class="mw-color" style="padding: 0;"><b>{% trans "MW" %}: {{ object.middle_water }}{% if object.dam %} &#13221;/s{% else %} m{% endif %}</b></td>{% endif %}
+                        {% if object.high_water %}<td id="sb-hw" class="hw-color" style="padding: 0;"><b>{% trans "HW" %}: {{ object.high_water }}{% if object.dam %} &#13221;/s{% else %} m{% endif %}</b></td>{% endif %}
                     </tr>
                 </tbody>
             </table>

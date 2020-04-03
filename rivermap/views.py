@@ -314,20 +314,21 @@ class SpotUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         return form
 
     def form_valid(self, form):
-        form.instance.author = self.request.user
+        if not form.instance.author:
+            form.instance.author = self.request.user
         cleaned_average = form.cleaned_data['average_difficulty']
         if cleaned_average == 'None':
             form.instance.difficulty = ''
         else:
             form.instance.difficulty = cleaned_average
         redirect_url = super().form_valid(form)
-        scrape_sections()
+        # scrape_sections()
         json_spots()
         return redirect_url
 
     def test_func(self):
         post = self.get_object()
-        if self.request.user == post.author:
+        if self.request.user == post.author or self.request.user.groups.filter(name='Super Paddler'):
             return True
         return False
 

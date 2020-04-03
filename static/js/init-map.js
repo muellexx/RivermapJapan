@@ -246,9 +246,9 @@ function createPopupClass() {
             riverinfo.innerHTML += gettext('Updated: ') + date + "</p>";
             //riverinfo.innerHTML += '<p style="float: right;"><a href="' + section.url + '" target="_blank">Source</a></p>';
         }
-        if ((section.low_water != null)||(section.middle_water != null)||(section.high_water != null)) {
-            riverinfo.innerHTML += '<span class="lw-color">' + gettext('LW: ') + section.low_water + '</span> &nbsp; <span class="mw-color">' + gettext('MW: ') + section.middle_water + '</span> &nbsp; <span class="hw-color">' + gettext('HW: ') + section.high_water + '</span>';
-        }
+        if(section.low_water != null) riverinfo.innerHTML += '<span class="lw-color">' + gettext('LW: ') + section.low_water + '</span> &nbsp;';
+        if(section.middle_water != null) riverinfo.innerHTML += '<span class="mw-color">' + gettext('MW: ') + section.middle_water + '</span> &nbsp;';
+        if(section.high_water != null) riverinfo.innerHTML += '<span class="hw-color">' + gettext('HW: ') + section.high_water + '</span>';
     }
   };
 
