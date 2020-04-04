@@ -109,6 +109,9 @@ $('#dismiss, .overlay').on('click', function () {
     $('.overlay').removeClass('active');
 });
 
+// ----- River Sections on the map ----- //
+var riverArray = new Array();
+
 function loadRivers(popup) {
     $.getJSON("/static/js/data/river.json", {_: new Date().getTime()}, function(json){
         rivers = json.rivers;
@@ -167,9 +170,42 @@ function loadRivers(popup) {
             });
 
             river.setMap(map);
+            riverArray.push(river)
         }
     });
 }
+
+function SectionToggleControl(controlDiv) {
+    controlDiv.src = "/media/icons/river.png";
+    controlDiv.classList.add('rounded-circle')
+    controlDiv.classList.add('control-button')
+    controlDiv.classList.add('control-button-active')
+
+    controlDiv.addEventListener('click', function() {
+        if (controlDiv.classList.contains('control-button-active')) {
+            hideRivers();
+            controlDiv.classList.remove('control-button-active')
+        } else {
+            showRivers();
+            controlDiv.classList.add('control-button-active')
+        }
+    });
+}
+
+function hideRivers() {
+    for (let i = 0; i < riverArray.length; i++) {
+        riverArray[i].setVisible(false);
+    }
+}
+
+function showRivers() {
+    for (let i = 0; i < riverArray.length; i++) {
+        riverArray[i].setVisible(true);
+    }
+}
+
+// ----- River Spots on the map ----- //
+var spotArray = new Array();
 
 function loadSpots(popup) {
     $.getJSON("/static/js/data/spot.json", function(json){
@@ -210,8 +246,38 @@ function loadSpots(popup) {
             });
 
             spot.setMap(map);
+            spotArray.push(spot)
         }
     });
+}
+
+function SpotToggleControl(controlDiv, map) {
+    controlDiv.src = "/media/icons/wave.png";
+    controlDiv.classList.add('rounded-circle')
+    controlDiv.classList.add('control-button')
+    controlDiv.classList.add('control-button-active')
+
+    controlDiv.addEventListener('click', function() {
+        if (controlDiv.classList.contains('control-button-active')) {
+            hideSpots();
+            controlDiv.classList.remove('control-button-active')
+        } else {
+            showSpots();
+            controlDiv.classList.add('control-button-active')
+        }
+    });
+}
+
+function hideSpots() {
+    for (let i = 0; i < spotArray.length; i++) {
+        spotArray[i].setVisible(false);
+    }
+}
+
+function showSpots() {
+    for (let i = 0; i < spotArray.length; i++) {
+        spotArray[i].setVisible(true);
+    }
 }
 
 $(function() {

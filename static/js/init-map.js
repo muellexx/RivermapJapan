@@ -117,6 +117,16 @@ function initMap() {
     popup.setMap(map);
     loadRivers(popup);
     loadSpots(popup);
+
+    var SectionToggleControlDiv = document.createElement('IMG');
+    var sectionToggleControl = new SectionToggleControl(SectionToggleControlDiv);
+    SectionToggleControlDiv.index = 1;
+    map.controls[google.maps.ControlPosition.RIGHT_TOP].push(SectionToggleControlDiv);
+
+    var SpotToggleControlDiv = document.createElement('IMG');
+    var spotToggleControl = new SpotToggleControl(SpotToggleControlDiv, map);
+    SpotToggleControlDiv.index = 1;
+    map.controls[google.maps.ControlPosition.RIGHT_TOP].push(SpotToggleControlDiv);
 }
 
 function createPopupClass() {

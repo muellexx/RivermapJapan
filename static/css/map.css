@@ -159,3 +159,17 @@ html, body {
     top: -1px;
     margin-top: 0;
 }
+
+.control-button {
+    background-color: #fff;
+    border: 2px solid #fff;
+    box-shadow: 4px 4px 9px rgba(0,0,0,.5);
+    cursor: pointer;
+    margin: 10px;
+    margin-bottom: 0;
+    opacity: 0.5;
+}
+
+.control-button-active {
+    opacity: 1;
+}
