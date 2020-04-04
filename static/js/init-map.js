@@ -236,7 +236,7 @@ function createPopupClass() {
             date = section.date;
         }
         riverinfo.innerHTML = "<h4>" + river + "</h4>";
-        if (section.difficulty != null) {
+        if (section.difficulty != null && section.difficulty != "") {
             riverinfo.innerHTML += "<h6>" + name + "(" + section.difficulty + ")</h6>";
         } else {
             riverinfo.innerHTML += "<h6>" + name + "</h6>";

@@ -66,6 +66,11 @@
             </table>
         </div>
         {% endif %}
+        <div class="article-metadata">
+            {% trans "Added by" %} <a class="mr-2" href="{% url 'user-posts' object.author.username %}">{{ object.author }}</a>
+            {% if LANGUAGE_CODE == "ja" %}<small class="text-muted">{{ object.date_added|date:"Y年F d日" }}</small>
+            {% else %}<small class="text-muted">{{ object.date_added|date:"F d, Y" }}</small>{% endif %}
+        </div>
         {% if user.is_authenticated %}
         <buton id="sb-new-comment" class="btn btn-primary btn-sm mt-1 mb-4" style="float: right;" onclick="newComment()">{% trans "Comment" %}</buton>
         <h5 style="padding-top: 10px;">{% trans "Comments:" %}</h5>

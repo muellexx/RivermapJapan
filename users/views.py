@@ -12,7 +12,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.generic import ListView
 
 from blog.models import Post
-from rivermap.models import Comment
+from rivermap.models import Comment, MapObject
 from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
 from .tokens import account_activation_token
 
@@ -76,7 +76,8 @@ class ProfileView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super(ProfileView, self).get_context_data(**kwargs)
-        context['comments'] = Comment.objects.filter(author=self.request.user)
+        context['comments'] = Comment.objects.filter(author=self.request.user).order_by('-date_posted')
+        context['map_objects'] = MapObject.objects.filter(author=self.request.user).order_by('prefecture')
         return context
 
 

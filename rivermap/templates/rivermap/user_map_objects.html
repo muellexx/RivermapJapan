@@ -1,0 +1,12 @@
+{% load i18n %}
+<h4 class="mb-3">{% trans "Added Map Objects" %}:</h4>
+<article class="content-section media-body">
+    {% for map_object in map_objects %}
+    <a class="article-title" href="{{ map_object.get_absolute_url }}">{% if LANGUAGE_CODE == "ja" %}{{ map_object.name_jp }}{% else %}{{ map_object.name }}{% endif %}</a>
+    <small>(<a class="article-title" href="{% url 'river-detail' map_object.prefecture.slug map_object.river.pk %}">{% if LANGUAGE_CODE == "ja" %}{{ map_object.river.name_jp }}{% else %}{{ map_object.river.name }}{% endif %}</a>) -</small>
+    <small><a class="article-title" href="{{ map_object.prefecture.get_absolute_url }}">{% if LANGUAGE_CODE == "ja" %}{{ map_object.prefecture.name_jp }}{% else %}{{ map_object.prefecture.name }}{% endif %}</a></small>
+    <small class="text-muted">{% if LANGUAGE_CODE == "ja" %}{{ map_object.date_added|date:"Y年F d日" }}
+    {% else %}{{ map_object.date_added|date:"F d, Y" }}{% endif %}</small>
+    <br/>
+    {% endfor %}
+</article>

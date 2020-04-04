@@ -4,7 +4,7 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
-from rivermap.models import Comment
+from rivermap.models import Comment, MapObject
 from .models import Post
 from django.utils.translation import get_language
 import re
@@ -42,7 +42,8 @@ class UserPostListView(ListView):
         context = super(UserPostListView, self).get_context_data(**kwargs)
         user = get_object_or_404(User, username=self.kwargs.get('username'))
         context['imageurl'] = User.objects.filter(username=user)[0].profile.image.url
-        context['comments'] = Comment.objects.filter(author=user)
+        context['comments'] = Comment.objects.filter(author=user).order_by('-date_posted')
+        context['map_objects'] = MapObject.objects.filter(author=user).order_by('prefecture')
         return context
 
 

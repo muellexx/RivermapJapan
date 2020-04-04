@@ -172,6 +172,7 @@ def scrape_sections():
     if write_json:
         json_sections()
         json_spots()
+        json_comments()
 
 
 def json_comments():

@@ -1,0 +1,15 @@
+{% load i18n %}
+<h4 class="mb-3">{% trans "Comments" %}:</h4>
+{% for comment in comments %}
+    <article class="media content-section">
+        <div class="media-body">
+            <div class="article-metadata">
+                <a href="{{ comment.parent.get_absolute_url }}">{{ comment.parent }}</a>
+                <small class="text-muted">{% if LANGUAGE_CODE == "ja" %}{{ comment.date_posted|date:"Y年F d日" }}
+                {% else %}{{ comment.date_posted|date:"F d, Y" }}{% endif %}</small>
+            </div>
+            <h2><a class="article-title" href="">{{ comment.title }}</a></h2>
+            <p class="article-content">{{ comment.content }}</p>
+        </div>
+    </article>
+{% endfor %}

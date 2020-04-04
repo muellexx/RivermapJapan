@@ -1,0 +1,14 @@
+{% load i18n %}
+<h4 class="mb-3">{% trans "Posts" %}:</h4>
+{% for post in posts %}
+    <article class="media content-section">
+        <div class="media-body">
+            <div class="article-metadata">
+                <small class="text-muted">{% if LANGUAGE_CODE == "ja" %}{{ post.date_posted|date:"Y年F d日" }}
+                {% else %}{{ post.date_posted|date:"F d, Y" }}{% endif %}</small>
+            </div>
+            <h2><a class="article-title" href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h2>
+            <p class="article-content">{{ post.content }}</p>
+        </div>
+    </article>
+{% endfor %}
