@@ -176,7 +176,7 @@ function loadRivers(popup) {
 }
 
 function SectionToggleControl(controlDiv) {
-    controlDiv.src = "/media/icons/river.png";
+    controlDiv.src = "/media/icons/riverM.png";
     controlDiv.classList.add('rounded-circle')
     controlDiv.classList.add('control-button')
     controlDiv.classList.add('control-button-active')
@@ -252,7 +252,7 @@ function loadSpots(popup) {
 }
 
 function SpotToggleControl(controlDiv, map) {
-    controlDiv.src = "/media/icons/wave.png";
+    controlDiv.src = "/media/icons/waveM.png";
     controlDiv.classList.add('rounded-circle')
     controlDiv.classList.add('control-button')
     controlDiv.classList.add('control-button-active')

@@ -72,7 +72,7 @@ function loadChart(section, canvasId, hours) {
             point = data[i];
             if (dataRes >= 1) {if (!point.time.includes(":00")&&!point.time.includes(":30")) continue;}
             if (dataRes >= 2) {if (!point.time.includes(":00")) continue;}
-            if (dataRes >= 3) {if (point.time.includes("1")||point.time.includes("3")||point.time.includes("5")||point.time.includes("7")||point.time.includes("9")) continue;}
+            if (dataRes >= 3) {if (point.time.includes("1:")||point.time.includes("3")||point.time.includes("5")||point.time.includes("7")||point.time.includes("9")) continue;}
             if (hours <= 24) {
                 xData.push(point.time);
             } else {

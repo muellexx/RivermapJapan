@@ -19,7 +19,7 @@ class RegionAdmin(admin.ModelAdmin):
 
 class RiverObjectAdmin(admin.ModelAdmin):
     list_display = ('name', 'name_jp', 'prefecture')
-    ordering = ['pk']
+    ordering = ['id']
 
 
 admin.site.register(Region, RegionAdmin)

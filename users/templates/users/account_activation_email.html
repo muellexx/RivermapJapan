@@ -4,5 +4,5 @@
 
 {% trans "Your account has successfully created. Please click below link to activate your account." %}<br />
 
-http://{{ domain }}{% url 'activate' uidb64=uid token=token %}
+https://{{ domain }}{% url 'activate' uidb64=uid token=token %}
 {% endautoescape %}

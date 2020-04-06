@@ -127,6 +127,11 @@ function initMap() {
     var spotToggleControl = new SpotToggleControl(SpotToggleControlDiv, map);
     SpotToggleControlDiv.index = 1;
     map.controls[google.maps.ControlPosition.RIGHT_TOP].push(SpotToggleControlDiv);
+
+    var iconLinks = document.createElement('div');
+    iconLinks.style.marginBottom = "5px";
+    iconLinks.innerHTML = '<a target="_blank" href="https://icons8.com/icons/set/creek">Creek</a>, <a target="_blank" href="https://icons8.com/icons/set/water-wave">Water Wave</a> icons by <a target="_blank" href="https://icons8.com">Icons8</a>';
+    map.controls[google.maps.ControlPosition.BOTTOM_LEFT].push(iconLinks);
 }
 
 function createPopupClass() {
