@@ -288,5 +288,8 @@ class CommentAddForm(forms.ModelForm):
         self.helper.layout = Layout(
             'title',
             'content',
-            Submit('submit', _('Post'))
+            Row(
+                HTML('<buton id="sb-new-comment-cancel" type="hidden" class="btn btn-primary" style="margin-right: 10px" onclick="newCommentCancel()">Cancel</buton>'),
+                Submit('submit', _('Post'))
+            )
         )

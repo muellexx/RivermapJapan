@@ -74,7 +74,7 @@
                         {% if user.is_authenticated %}
                         <buton id="sb-new-comment" class="btn btn-primary btn-sm mt-1 mb-4" style="float: right;" onclick="newComment()">{% trans "Comment" %}</buton>
                         <h5 style="padding-top: 10px;">{% trans "Comments:" %}</h5>
-                        <form id="sb-comment-form" method="POST" style="display: none;">
+                        <form id="sb-comment-form" class="content-section" method="POST" style="display: none;">
                             {% csrf_token %}
                             <input id="object_type" type="hidden" value="section" name="section">
                             <input id="id_section" type="hidden" value="123" name="section">

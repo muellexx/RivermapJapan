@@ -41,6 +41,11 @@ function newComment () {
     $('#sb-new-comment').hide();
 }
 
+function newCommentCancel () {
+    $('#sb-comment-form').hide();
+    $('#sb-new-comment').show();
+}
+
 $(document).on('submit', '#sb-comment-form', function(e){
     $.ajax({
         type: 'POST',
