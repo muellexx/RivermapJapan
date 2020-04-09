@@ -1,5 +1,4 @@
 {% load i18n %}
-<h4 class="mb-3">{% trans "Posts" %}:</h4>
 {% for post in posts %}
     <article class="media content-section">
         <div class="media-body">
@@ -9,6 +8,9 @@
             </div>
             <h2><a class="article-title" href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h2>
             <p class="article-content">{{ post.content }}</p>
+            {% include "four_images.html" %}
         </div>
     </article>
 {% endfor %}
+
+{% include "image_modal.html" %}

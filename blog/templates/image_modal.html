@@ -1,0 +1,18 @@
+<!-- Creates the bootstrap modal where the image will appear -->
+<div class="modal fade"  onclick="closeModal()" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="enlargeImage" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-centered">
+    <div class="modal-content modal-body">
+        <img src="" id="imagepreview" class="img-fluid mx-auto d-block img-thumbnail">
+    </div>
+  </div>
+</div>
+
+<script>
+function enlargeImage (url) {
+    $('#imagepreview').attr('src', url);
+    $('#imageModal').modal('show');
+}
+function closeModal () {
+    $('#imageModal').modal('hide');
+}
+</script>

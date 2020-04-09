@@ -1,0 +1,22 @@
+<div class="row justify-content-center">
+    {% if post.image1 %}
+    <div class="col-lg-3 col-md-4 col-6">
+        <img class="m-1 img-fluid img-thumbnail" style="cursor: pointer;" onclick="enlargeImage('{{ post.image1.url }}')" src="{{ post.image1.url }}">
+    </div>
+    {% endif %}
+    {% if post.image2 %}
+    <div class="col-lg-3 col-md-4 col-6">
+        <img class="m-1 img-fluid img-thumbnail" style="cursor: pointer;" onclick="enlargeImage('{{ post.image2.url }}')" src="{{ post.image2.url }}">
+    </div>
+    {% endif %}
+    {% if post.image3 %}
+    <div class="col-lg-3 col-md-4 col-6">
+        <img class="m-1 img-fluid img-thumbnail" style="cursor: pointer;" onclick="enlargeImage('{{ post.image3.url }}')" src="{{ post.image3.url }}">
+    </div>
+    {% endif %}
+    {% if post.image4 %}
+    <div class="col-lg-3 col-md-4 col-6">
+        <img class="m-1 img-fluid img-thumbnail" style="cursor: pointer;" onclick="enlargeImage('{{ post.image4.url }}')" src="{{ post.image4.url }}">
+    </div>
+    {% endif %}
+</div>
