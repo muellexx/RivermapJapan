@@ -2,6 +2,9 @@
 {% load i18n %}
 {% block container_content %}
     <div class="content-section text-justify">
+        {% if user.is_staff %}
+            <a class="nav-item nav-link" style="float: right;" href="{% url 'statistics' %}">{% trans "Statistics" %}</a>
+        {% endif %}
         <h1>{% trans "About" %}</h1>
         <p>
             {% blocktrans trimmed %}This homepage is aimed as a help for kayaking in Japan. The map shows river sections that are used by for Kayaking,

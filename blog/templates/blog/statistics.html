@@ -18,8 +18,8 @@
                             <h3 style="display: inline-block;"><a class="mr-2" href="{% url 'user-posts' user.username %}">{{ user }}</a></h3>&emsp;
                             <small class="text-muted">({{ user.email }})</small>
                             &emsp;{% if user.is_active %}<i class="fas fa-check-circle"></i>{% endif %}<br/>
-                            Joined: {{ user.date_joined|date:"F d, Y (H:i)" }}, &emsp;
-                            Last login: {{ user.last_login|date:"F d, Y (H:i)" }}
+                            Joined: {{ user.date_joined|date:"F d, Y (H:i)" }}{% if user.profile.last_activity %}, &emsp;
+                            Last seen: {{ user.profile.last_activity|date:"F d, Y (H:i)" }}{% endif %}
                             <br/>
                         </div>
                     </div>
