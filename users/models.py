@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from PIL import Image
 
+from rivermap.models import Section, Spot
+
 
 def crop_center(pil_img, crop_width, crop_height):
     img_width, img_height = pil_img.size
@@ -29,3 +31,14 @@ class Profile(models.Model):
             img.thumbnail(output_size)
             img.save(self.image.path)
 
+    def get_posts(self):
+        return self.user.post_set.all().order_by('-date_posted')
+
+    def get_sections(self):
+        return self.user.mapobject_set.instance_of(Section).order_by('-date_added')
+
+    def get_spots(self):
+        return self.user.mapobject_set.instance_of(Spot).order_by('-date_added')
+
+    def get_comments(self):
+        return self.user.comment_set.all().order_by('-date_posted')

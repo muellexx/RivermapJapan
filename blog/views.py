@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.template.defaultfilters import register
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
 from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
@@ -95,3 +95,17 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
 def about(request):
     return render(request, 'blog/about.html', {'title': 'About'})
+
+
+class StatisticsView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
+    template_name = "blog/statistics.html"
+
+    def test_func(self):
+        if self.request.user.is_staff:
+            return True
+        return False
+
+    def get_context_data(self, **kwargs):
+        context = super(StatisticsView, self).get_context_data(**kwargs)
+        context['users'] = User.objects.all()
+        return context

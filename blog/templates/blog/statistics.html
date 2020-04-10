@@ -1,0 +1,54 @@
+{% extends "base_container.html" %}
+{% load i18n %}
+{% load static %}
+{% block style_sheets %}
+    <script src="{% static 'lib/js/fontawesome.js' %}"></script>
+{% endblock style_sheets %}
+{% block container_content %}
+    <div class="content-section text-justify">
+        <h1>Statistics</h1>
+        <div class="content-section text-justify">
+            <h4>Users: {{ users.count }}</h4>
+            {% for user in users %}
+            <div class="media content-section">
+                <div class="media-body">
+                    <div class="row">
+                        <img class="rounded-circle border article-img" src="{{ user.profile.image.url }}">
+                        <div class="article-metadata col">
+                            <h3 style="display: inline-block;"><a class="mr-2" href="{% url 'user-posts' user.username %}">{{ user }}</a></h3>&emsp;
+                            <small class="text-muted">({{ user.email }})</small>
+                            &emsp;{% if user.is_active %}<i class="fas fa-check-circle"></i>{% endif %}<br/>
+                            Joined: {{ user.date_joined|date:"F d, Y (H:i)" }}, &emsp;
+                            Last login: {{ user.last_login|date:"F d, Y (H:i)" }}
+                            <br/>
+                        </div>
+                    </div>
+
+                    {% if user.profile.get_posts %}<p><b>Posts</b>({{ user.profile.get_posts.count }}) :
+                    {% for post in user.profile.get_posts %}
+                        <a href="{% url 'post-detail' post.id %}">{{ post.title }}</a>{% if not forloop.last %},&emsp;{% endif %}
+                    {% endfor %}{% endif %}</p>
+
+                    {% if user.profile.get_sections %}<p><b>Sections</b>({{ user.profile.get_sections.count }}) :
+                    {% for section in user.profile.get_sections %}
+                        <a href="{% url 'section-detail' section.prefecture.slug section.id %}">{{ section.name }}</a>{% if not forloop.last %},&emsp;{% endif %}
+                    {% endfor %}{% endif %}</p>
+
+                    {% if user.profile.get_spots %}<p><b>Spots</b>({{ user.profile.get_spots.count }}) :
+                    {% for spot in user.profile.get_spots %}
+                        <a href="{% url 'spot-detail' spot.prefecture.slug spot.id %}">{{ spot.name }}</a>{% if not forloop.last %},&emsp;{% endif %}
+                    {% endfor %}{% endif %}</p>
+
+                    {% if user.profile.get_comments %}<p><b>Comments</b>({{ user.profile.get_comments.count }}) :
+                    {% for comment in user.profile.get_comments %}
+                        {{ comment.title }} (<a href="{{ comment.parent.get_absolute_url }}">{{ comment.parent }}</a>){% if not forloop.last %},&emsp;{% endif %}
+                    {% endfor %}{% endif %}</p>
+
+
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock container_content %}
+
