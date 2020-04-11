@@ -123,6 +123,9 @@ ul {
 
 .bg-steel {
   background-color: #5f788a;
+  border-bottom-style: solid;
+  border-width: 2px;
+  border-color: #41505f;
 }
 
 .site-header .navbar-nav .nav-link {
@@ -170,6 +173,28 @@ a.article-title:hover {
   margin-right: 10px;
   margin-left: 5px;
   margin-bottom: 5px;
+}
+
+.nav-img {
+  height: 40px;
+  width: 40px;
+  margin: 0;
+  margin-right: 5px;
+  margin-left: 5px;
+}
+
+.btn-image {
+  padding: 0;
+  border: 0;
+}
+
+.dropdown-divider {
+    border-color: #41505f;
+}
+
+.dropdown-menu {
+  padding-right: 8px;
+  padding-left: 8px;
 }
 
 .article-metadata {
