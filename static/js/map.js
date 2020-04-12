@@ -89,6 +89,7 @@ function updateSidebar (section, isSpot) {
     showOrHide ("sb-mw", gettext('MW: '), section.middle_water, unit);
     showOrHide ("sb-hw", gettext('HW: '), section.high_water, unit);
     $('#id_section').val(section.id);
+    $('#id_parent').val(section.id);
     if(isSpot) {
         $('#object_type').val('spot');
     } else {

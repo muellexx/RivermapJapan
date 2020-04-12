@@ -1,0 +1,23 @@
+{% load i18n %}
+<article class="media content-section">
+    <div class="media-body">
+        <div class="article-metadata row">
+            <img class="rounded-circle article-img" src="{{ comment.author.profile.image.url }}">
+            <div class="col">
+                {% if not skip_parent %}
+                <a href="{{ comment.parent.get_absolute_url }}">{{ comment.parent }}</a><br/>{% endif %}
+                <a class="mr-2" href="{% url 'user-posts' comment.author.username %}">{{ comment.author }}</a>
+                {% if LANGUAGE_CODE == "ja" %}
+                    <small class="text-muted">{{ comment.date_posted|date:"Y年F d日" }}</small>
+                {% else %}
+                    <small class="text-muted">{{ comment.date_posted|date:"F d, Y" }}</small>
+                {% endif %}
+                <h2>{{ comment.title }}</h2>
+            </div>
+        </div>
+        <p class="article-content">{{ comment.content }}</p>
+        {% with post=comment %}
+        {% include "four_images.html" %}
+        {% endwith %}
+    </div>
+</article>

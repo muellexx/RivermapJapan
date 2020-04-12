@@ -72,9 +72,9 @@
 
                     <div class="content-section" style="margin: 0;">
                         {% if user.is_authenticated %}
-                        <buton id="sb-new-comment" class="btn btn-primary btn-sm mt-1 mb-4" style="float: right;" onclick="newComment()">{% trans "Comment" %}</buton>
+                        <buton id="sb-new-comment" class="btn btn-primary btn-sm mt-1 mb-1" style="float: right;" onclick="newComment()">{% trans "Comment" %}</buton>
                         <h5 style="padding-top: 10px;">{% trans "Comments:" %}</h5>
-                        <form id="sb-comment-form" class="content-section" method="POST" style="display: none;">
+                        <form method="POST" enctype="multipart/form-data" id="sb-comment-form" class="content-section" style="display: none;">
                             {% csrf_token %}
                             <input id="object_type" type="hidden" value="section" name="section">
                             <input id="id_section" type="hidden" value="123" name="section">
@@ -107,8 +107,11 @@
 </div>
 
 <div id="riverinfo" style="margin: 0; padding: 5px;"></div>
+
+{% include "image_modal.html" %}
 {% endblock content %}
 {% block scripts %}
+{% include 'show_next_image_script.html' %}
 <script src="{% static 'lib/js/chart-2.9.3.js' %}"></script>
 <script src="{% static 'js/chart.js' %}"></script>
 <script src="{% static 'js/comment.js' %}"></script>

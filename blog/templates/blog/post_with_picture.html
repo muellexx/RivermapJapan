@@ -1,9 +1,9 @@
 {% load i18n %}
 <article class="media content-section">
     <div class="media-body">
-        <div class="row">
+        <div class="article-metadata row">
             <img class="rounded-circle article-img" src="{{ post.author.profile.image.url }}">
-            <div class="article-metadata col">
+            <div class="col">
                 <a class="mr-2" href="{% url 'user-posts' post.author.username %}">{{ post.author }}</a>
                 {% if LANGUAGE_CODE == "ja" %}
                     <small class="text-muted">{{ post.date_posted|date:"Y年F d日" }}</small>

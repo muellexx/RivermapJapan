@@ -17,26 +17,5 @@
     </div>
 {% endblock container_content %}
 {% block scripts %}
-<script>
-{% if isUpdate %}
-for (i = 2; i <= Math.min({{ numPics }} + 1, 4); i++) {
-    $('#hide_div_image' + i).show();
-}
-{% endif %}
-
-function showNextImage(num) {
-    numStr = num.toString();
-    image_id = '#id_image' + numStr;
-    if ($(image_id).val() == '') {
-        for (i = num + 1; i <= 4; i++) {
-            {% if isUpdate %}if (i <= {{ numPics }} + 1) continue; {% endif %}
-            nextNum = i.toString();
-            $('#hide_div_image' + nextNum).hide();
-            $('#id_image' + nextNum).val('');
-        }
-    } else {
-        $('#hide_div_image' + (num + 1).toString()).show();
-    }
-}
-</script>
+{% include 'show_next_image_script.html' %}
 {% endblock scripts %}

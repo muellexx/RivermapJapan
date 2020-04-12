@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Region, Prefecture, River, Observatory, Dam, Section, Spot, Comment
+from .models import Region, Prefecture, River, Observatory, Dam, Section, Spot, Comment, MapObjectComment
 
 
 class RivermapAdmin(admin.ModelAdmin):
@@ -30,4 +30,5 @@ admin.site.register(Dam)
 admin.site.register(Section, RiverObjectAdmin)
 admin.site.register(Spot, RiverObjectAdmin)
 admin.site.register(Comment)
+admin.site.register(MapObjectComment)
 

@@ -3,7 +3,7 @@ from itertools import groupby
 from operator import attrgetter
 
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Row, Column, Submit, HTML
+from crispy_forms.layout import Layout, Row, Column, Submit, HTML, Field, Div
 from django import forms
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import pgettext_lazy
@@ -276,11 +276,16 @@ class SpotEditForm(forms.ModelForm):
 class CommentAddForm(forms.ModelForm):
     class Meta:
         model = MapObjectComment
-        fields = ['title', 'content']
+        fields = ['title', 'content', 'image1', 'image2', 'image3', 'image4', 'parent']
         labels = {
             "title": _('Title'),
-            "content": _('Content')
+            "content": _('Content'),
+            "image1": _('Image 1'),
+            "image2": _('Image 2'),
+            "image3": _('Image 3'),
+            "image4": _('Image 4')
         }
+        widgets = {"parent": forms.HiddenInput()}
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -288,6 +293,11 @@ class CommentAddForm(forms.ModelForm):
         self.helper.layout = Layout(
             'title',
             'content',
+            'parent',
+            Field('image1', oninput="showNextImage(1)"),
+            Div(Field('image2', oninput="showNextImage(2)"), id="hide_div_image2", style="display: none;"),
+            Div(Field('image3', oninput="showNextImage(3)"), id="hide_div_image3", style="display: none;"),
+            Div(Field('image4'), id="hide_div_image4", style="display: none;"),
             Row(
                 HTML('<buton id="sb-new-comment-cancel" type="hidden" class="btn btn-primary" style="margin-right: 10px" onclick="newCommentCancel()">Cancel</buton>'),
                 Submit('submit', _('Post'))

@@ -135,14 +135,12 @@ def scrape_sections():
                             time = "00:00"
                         level = float(level)
                         current_level = level
+                        observatory.level = current_level
                     except ValueError:
                         current_level = None
                         pass
-
                     if latest_date_time and not latest_date_time < current_date_time:
                         continue
-
-                    # print('written ' + str(current_date_time))
 
                     data['level'].append({
                         'date': date,
@@ -160,11 +158,8 @@ def scrape_sections():
                     with open(settings.BASE_DIR + '/' + filename, 'w') as outfile:
                         json.dump(data, outfile, indent=4)
 
-                observatory.level = current_level
-
                 try:
                     observatory.date = current_date_time
-                    observatory.level = current_level
                     observatory.save()
                 except:
                     print("Error during observatory save at observatory " + observatory.name)
@@ -197,12 +192,21 @@ def json_comments():
                 'date_posted': timezone.localtime(comment.date_posted).strftime('%Y/%m/%d'),
                 'date_posted_jp': timezone.localtime(comment.date_posted).strftime('%Y年%m月%d日'),
             })
+        if comment.image1:
+            comments['comments'][-1]['image1'] = comment.image1.url
+        if comment.image2:
+            comments['comments'][-1]['image2'] = comment.image2.url
+        if comment.image3:
+            comments['comments'][-1]['image3'] = comment.image3.url
+        if comment.image4:
+            comments['comments'][-1]['image4'] = comment.image4.url
     try:
         with open('static/js/data/mapObjectComments.json', 'w') as outfile:
             json.dump(comments, outfile, indent=4)
     except FileNotFoundError:
         with open(settings.BASE_DIR+'/static/js/data/mapObjectComments.json', 'w') as outfile:
             json.dump(comments, outfile, indent=4)
+    return comments['comments'][-1]
 
 
 def json_sections():

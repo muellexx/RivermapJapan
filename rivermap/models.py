@@ -1,3 +1,4 @@
+from PIL import Image
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
@@ -6,6 +7,8 @@ from django.urls import reverse
 from django.utils import timezone
 from polymorphic.models import PolymorphicModel
 from django.utils.translation import get_language
+
+from blog.models import save_image
 
 """
 Models:
@@ -232,12 +235,40 @@ class Comment(PolymorphicModel):
     content = models.TextField()
     date_posted = models.DateTimeField(default=timezone.now)
     author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    image1 = models.ImageField(upload_to='comment_pics', null=True, blank=True)
+    image2 = models.ImageField(upload_to='comment_pics', null=True, blank=True)
+    image3 = models.ImageField(upload_to='comment_pics', null=True, blank=True)
+    image4 = models.ImageField(upload_to='comment_pics', null=True, blank=True)
 
     def __str__(self):
         return self.title
 
     class Meta:
         ordering = ['date_posted']
+
+    def num_pics(self):
+        num_pics = 0
+        if self.image1:
+            num_pics += 1
+        if self.image2:
+            num_pics += 1
+        if self.image3:
+            num_pics += 1
+        if self.image4:
+            num_pics += 1
+        return num_pics
+
+    def save(self, *args, **kwargs):
+        super(Comment, self).save(*args, **kwargs)
+        print('hi')
+        if self.image1:
+            save_image(Image.open(self.image1.path), self.image1.path)
+        if self.image2:
+            save_image(Image.open(self.image2.path), self.image2.path)
+        if self.image3:
+            save_image(Image.open(self.image3.path), self.image3.path)
+        if self.image4:
+            save_image(Image.open(self.image4.path), self.image4.path)
 
 
 class RiverComment(Comment):

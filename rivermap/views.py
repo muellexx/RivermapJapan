@@ -7,38 +7,31 @@ from django.db.models import Count
 from django.db.models.functions import Lower
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
-from django.utils import timezone
 from django.utils.safestring import mark_safe
-from django.views.generic import CreateView, DetailView, UpdateView, ListView
+from django.views.generic import DetailView, UpdateView, ListView
 from googletrans import Translator
 from django.utils.translation import gettext as _
 
 from .models import River, Prefecture, Section, Region, Spot
 from .forms import SectionAddForm, SectionEditForm, CommentAddForm, ObjectAddForm, SpotAddForm, \
     SpotEditForm
-from .utils import json_comments, json_sections, scrape_sections, json_spots, calculate_distance
+from .utils import json_comments, json_sections, json_spots, calculate_distance
 
 
 def rivermap(request):
-    response_data = {}
     if request.method == "POST":
         object_type = request.POST.get('object_type')
         if object_type == 'spot':
             section = get_object_or_404(Spot, pk=request.POST.get('section'))
         elif object_type == 'section':
             section = get_object_or_404(Section, pk=request.POST.get('section'))
-        form = CommentAddForm(request.POST)
+        form = CommentAddForm(request.POST, request.FILES)
         comment = form.save(commit=False)
         comment.author = request.user
         comment.parent = section
         comment.save()
 
-        response_data['image_url'] = comment.author.profile.image.url
-        response_data['author'] = comment.author.username
-        response_data['date_posted'] = timezone.localtime(comment.date_posted).strftime('%B %d, %Y')
-        response_data['title'] = request.POST.get('title')
-        response_data['content'] = request.POST.get('content')
-        json_comments()
+        response_data = json_comments()
         json_sections()
         json_spots()
 
@@ -56,7 +49,6 @@ class RiverListView(ListView):
 
     def get_queryset(self):
         return River.objects.filter(prefecture__slug=self.kwargs['prefecture']).annotate(count=Count('section')+Count('spot')).order_by('-count', 'name')
-        # return River.objects.filter(prefecture__slug=self.kwargs['prefecture']).order_by(Lower('name'))
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -120,64 +112,53 @@ class RiverDetailView(DetailView):
         return context
 
 
-def comment_post(request):
-    response_data = {}
-    object_type = request.POST.get('object_type')
-    if object_type == 'spot':
-        section = get_object_or_404(Spot, pk=request.POST.get('section'))
-    elif object_type == 'section':
-        section = get_object_or_404(Section, pk=request.POST.get('section'))
-    form = CommentAddForm(request.POST)
-    comment = form.save(commit=False)
-    comment.author = request.user
-    comment.parent = section
-    comment.save()
-
-    response_data['image_url'] = comment.author.profile.image.url
-    response_data['author'] = comment.author.username
-    response_data['date_posted'] = timezone.localtime(comment.date_posted).strftime('%B %d, %Y')
-    response_data['title'] = request.POST.get('title')
-    response_data['content'] = request.POST.get('content')
-
-    return response_data
-
-
 class SectionDetailView(DetailView):
     template_name = 'rivermap/riverobject_detail.html'
     model = Section
+    form_class = CommentAddForm
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['edit_url'] = 'section-update'
         context['object_type'] = 0
-        context['form'] = CommentAddForm
+        context['form'] = self.form_class(initial={'parent': self.object})
+        context['comments'] = self.object.mapobjectcomment_set.all().order_by('-date_posted')
         context['distance'] = calculate_distance(self.object.lat, self.object.lng, self.object.end_lat, self.object.end_lng)
         return context
 
     def post(self, request, *args, **kwargs):
-        response_data = comment_post(request)
-        json_comments()
+        form = self.form_class(request.POST, request.FILES)
+        form.instance.author = request.user
+        if form.is_valid():
+            form.save()
+        response_data = json_comments()
+        response_data['imageSize'] = 'main'
+        print(response_data)
         json_sections()
-
         return JsonResponse(response_data)
 
 
 class SpotDetailView(DetailView):
     template_name = 'rivermap/riverobject_detail.html'
     model = Spot
+    form_class = CommentAddForm
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['edit_url'] = 'spot-update'
         context['object_type'] = 1
-        context['form'] = CommentAddForm
+        context['form'] = self.form_class(initial={'parent': self.object})
+        context['comments'] = self.object.mapobjectcomment_set.all().order_by('-date_posted')
         return context
 
     def post(self, request, *args, **kwargs):
-        response_data = comment_post(request)
-        json_comments()
+        form = self.form_class(request.POST, request.FILES)
+        form.instance.author = request.user
+        if form.is_valid():
+            form.save()
+        response_data = json_comments()
+        response_data['imageSize'] = 'main'
         json_spots()
-
         return JsonResponse(response_data)
 
 
@@ -284,7 +265,6 @@ class SectionUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         else:
             form.instance.difficulty = cleaned_average + ' (' + cleaned_max + ')'
         redirect_url = super().form_valid(form)
-        # scrape_sections()
         json_sections()
         return redirect_url
 
@@ -322,7 +302,6 @@ class SpotUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         else:
             form.instance.difficulty = cleaned_average
         redirect_url = super().form_valid(form)
-        # scrape_sections()
         json_spots()
         return redirect_url
 
