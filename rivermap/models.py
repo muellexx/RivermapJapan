@@ -1,3 +1,5 @@
+import os
+
 from PIL import Image
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator
@@ -8,6 +10,7 @@ from django.utils import timezone
 from polymorphic.models import PolymorphicModel
 from django.utils.translation import get_language
 
+import rivermap
 from blog.models import save_image
 
 """
@@ -259,8 +262,29 @@ class Comment(PolymorphicModel):
         return num_pics
 
     def save(self, *args, **kwargs):
+        if Comment.objects.filter(id=self.id):
+            comment = Comment.objects.get(id=self.id)
+            for [before, after] in [[comment.image1, self.image1], [comment.image2, self.image2], [comment.image3, self.image3], [comment.image4, self.image4]]:
+                if before:
+                    if not after or not before.url == after.url:
+                        if os.path.isfile(before.path):
+                            os.remove(before.path)
+                            print(before.path)
+
+        if not self.image3:
+            self.image3 = self.image4
+            self.image4 = None
+        if not self.image2:
+            self.image2 = self.image3
+            self.image3 = self.image4
+            self.image4 = None
+        if not self.image1:
+            self.image1 = self.image2
+            self.image2 = self.image3
+            self.image3 = self.image4
+            self.image4 = None
+
         super(Comment, self).save(*args, **kwargs)
-        print('hi')
         if self.image1:
             save_image(Image.open(self.image1.path), self.image1.path)
         if self.image2:
@@ -269,6 +293,15 @@ class Comment(PolymorphicModel):
             save_image(Image.open(self.image3.path), self.image3.path)
         if self.image4:
             save_image(Image.open(self.image4.path), self.image4.path)
+        rivermap.utils.json_comments()
+
+    def delete(self):
+        self.image1.delete()
+        self.image1.delete()
+        self.image1.delete()
+        self.image1.delete()
+        super(Comment, self).delete()
+        rivermap.utils.json_comments()
 
 
 class RiverComment(Comment):
@@ -281,6 +314,9 @@ class ObservatoryComment(Comment):
 
 class MapObjectComment(Comment):
     parent = models.ForeignKey(MapObject, on_delete=models.CASCADE)
+
+    def get_absolute_url(self):
+        return self.parent.get_absolute_url()
 
 
 class CommentComment(models.Model):

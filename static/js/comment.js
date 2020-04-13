@@ -32,22 +32,22 @@ return html;
 }
 
 function loadComment(comment) {
-html = '<article class="media content-section">'
-html += '<div class="media-body">'
-html += '<div class="article-metadata row">'
-html += '<img class="rounded-circle comment-img" src="' + comment.image_url + '">'
-html += '<div class="col">'
-html += '<a class="mr-2" href="user/' + comment.author + '">' + comment.author + '</a>'
+html = '<article class="media content-section">';
+html += '<div class="media-body">';
+html += '<div class="article-metadata row">';
+html += '<img class="rounded-circle comment-img" src="' + comment.image_url + '">';
+html += '<div class="col">';
+html += '<a class="mr-2" href="user/' + comment.author + '">' + comment.author + '</a>';
 if(document.documentElement.lang == 'ja'){
-    html += '<small class="text-muted">' + comment.date_posted_jp + '</small>'
+    html += '<small class="text-muted">' + comment.date_posted_jp + '</small>';
 } else {
-    html += '<small class="text-muted">' + comment.date_posted + '</small>'
+    html += '<small class="text-muted">' + comment.date_posted + '</small>';
 }
-html += '<h4>' + comment.title + '</h4>'
-html += '</div></div>'
-html += '<p class="article-content">' + comment.content + '</p>'
+html += '<h4>' + comment.title + '</h4>';
+html += '</div></div>';
+html += '<p class="article-content">' + comment.content + '</p>';
 html += fourImages(comment);
-html += '</div></article>'
+html += '</div></article>';
 return html;
 }
 

@@ -8,11 +8,11 @@ from django.db.models.functions import Lower
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils.safestring import mark_safe
-from django.views.generic import DetailView, UpdateView, ListView
+from django.views.generic import DetailView, UpdateView, ListView, DeleteView
 from googletrans import Translator
 from django.utils.translation import gettext as _
 
-from .models import River, Prefecture, Section, Region, Spot
+from .models import River, Prefecture, Section, Region, Spot, Comment
 from .forms import SectionAddForm, SectionEditForm, CommentAddForm, ObjectAddForm, SpotAddForm, \
     SpotEditForm
 from .utils import json_comments, json_sections, json_spots, calculate_distance
@@ -319,3 +319,44 @@ class SpotUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
 def how_to_add(request):
     return render(request, 'rivermap/how_to_add.html', {'title': 'Help'})
+
+
+class CommentUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    template_name = 'rivermap/comment_form.html'
+    model = Comment
+    form_class = CommentAddForm
+
+    def form_valid(self, form):
+        if not form.instance.author:
+            form.instance.author = self.request.user
+        redirect_url = super().form_valid(form)
+        json_comments()
+        return redirect_url
+
+    def test_func(self):
+        comment = self.get_object()
+        if self.request.user == comment.author or self.request.user.is_staff:
+            return True
+        return False
+
+    def get_context_data(self, **kwargs):
+        context = super(CommentUpdateView, self).get_context_data(**kwargs)
+        context['isUpdate'] = True
+        context['numPics'] = self.object.num_pics()
+        context['cancel_link'] = self.object.parent.get_absolute_url()
+        return context
+
+
+class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    template_name = 'rivermap/comment_confirm_delete.html'
+    model = Comment
+    form_class = CommentAddForm
+
+    def test_func(self):
+        comment = self.get_object()
+        if self.request.user == comment.author or self.request.user.is_staff:
+            return True
+        return False
+
+    def get_success_url(self):
+        return self.object.parent.get_absolute_url()

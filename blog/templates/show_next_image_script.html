@@ -5,6 +5,12 @@ for (i = 2; i <= Math.min({{ numPics }} + 1, 4); i++) {
 }
 {% endif %}
 
+if (/Mobi|Android/i.test(navigator.userAgent)) {
+    $('#hide_div_image2').show();
+    $('#hide_div_image3').show();
+    $('#hide_div_image4').show();
+}
+
 function showNextImage(num) {
     numStr = num.toString();
     image_id = '#id_image' + numStr;

@@ -2,7 +2,8 @@ from django.urls import path
 from . import views
 from .views import RiverDetailView, RiverListView, \
     PrefectureListView, PrefectureDetailView, \
-    SectionDetailView, SectionUpdateView, SectionListView, SpotUpdateView, SpotDetailView, SpotListView
+    SectionDetailView, SectionUpdateView, SectionListView, SpotUpdateView, SpotDetailView, SpotListView, \
+    CommentUpdateView, CommentDeleteView
 
 urlpatterns = [
     path('', views.rivermap, name="rivermap"),
@@ -19,4 +20,6 @@ urlpatterns = [
     path('map/section/<int:pk>/update/', SectionUpdateView.as_view(), name='section-update'),
     path('map/spot/<int:pk>/update/', SpotUpdateView.as_view(), name='spot-update'),
     path('map/object/how-to-add/', views.how_to_add, name="how-to-add"),
+    path('map/comment/<int:pk>/update/', CommentUpdateView.as_view(), name='comment-update'),
+    path('map/comment/<int:pk>/delete/', CommentDeleteView.as_view(), name='comment-delete'),
 ]

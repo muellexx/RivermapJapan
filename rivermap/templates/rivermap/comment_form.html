@@ -1,0 +1,26 @@
+{% extends "base_container.html" %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+{% block container_content %}
+    <div class="content-section">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <fieldset class="form-group">
+                {% if isUpdate %}
+                <legend class="border-bottom mb-4">{% trans "Update Comment" %}</legend>
+                {% else %}
+                <legend class="border-bottom mb-4">{% trans "New Comment" %}</legend>
+                {% endif %}
+                {% crispy form %}
+            </fieldset>
+        </form>
+    </div>
+{% endblock container_content %}
+{% block scripts %}
+<script>
+    function newCommentCancel(){
+        window.location.href='{{ cancel_link }}'
+    }
+</script>
+{% include 'show_next_image_script.html' %}
+{% endblock scripts %}

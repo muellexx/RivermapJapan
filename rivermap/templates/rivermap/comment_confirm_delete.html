@@ -5,12 +5,13 @@
         <form method="POST">
             {% csrf_token %}
             <fieldset class="form-group">
-                <legend class="border-bottom mb-4">{% trans "Delete Post" %}</legend>
-                <h2>{% trans "Are you sure you want to delete the post" %} "{{ object.title }}"</h2>
+                <legend class="border-bottom mb-4">{% trans "Delete Comment" %}</legend>
+                <h5>{{ object.parent }}</h5>
+                <h2>{% trans "Are you sure you want to delete the comment" %} "{{ object.title }}"</h2>
             </fieldset>
             <div class="form-group">
                 <button class="btn btn-outline-danger" type="submit">{% trans "Yes, Delete" %}</button>
-                <a class="btn btn-outline-secondary" href="{% url 'blog-home' %}">{% trans "Cancel" %}</a>
+                <a class="btn btn-outline-secondary" href="{{ object.parent.get_absolute_url }}">{% trans "Cancel" %}</a>
             </div>
         </form>
     </div>
