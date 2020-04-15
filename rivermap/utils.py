@@ -43,6 +43,9 @@ def get_color(cl, lw, mw, hw):
     has_lw = lw or lw == 0
     has_mw = mw or mw == 0
     has_hw = hw or hw == 0
+    if not has_mw and has_lw and has_hw:
+        mw = (hw + lw) / 2
+        has_mw = True
     if has_hw and cl > hw:
         return 5
     if has_mw:
@@ -51,8 +54,11 @@ def get_color(cl, lw, mw, hw):
         elif has_hw and cl > mw:
             return 3
         elif cl > mw:
-            if has_lw and cl <= + 0.4 * (mw - lw):
-                return 3
+            if has_lw:
+                if cl <= mw + 0.4 * (mw - lw):
+                    return 3
+                else:
+                    return 5
             else:
                 return 0
         if has_hw and not has_lw and cl > mw - 0.4 * (hw - mw):
