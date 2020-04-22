@@ -142,6 +142,14 @@ function loadRivers(popup) {
                 }
             }
 
+            var border = new google.maps.Polyline({
+                path: riverCoordinates,
+                geodesic: true,
+                strokeColor: 'black',
+                strokeOpacity: 1.0,
+                strokeWeight: 8
+            });
+
             var river = new google.maps.Polyline({
                 path: riverCoordinates,
                 geodesic: true,
@@ -170,6 +178,7 @@ function loadRivers(popup) {
                 loadChart(rivers[i], 'sb-chart', 12);
             });
 
+            border.setMap(map);
             river.setMap(map);
             riverArray.push(river)
         }

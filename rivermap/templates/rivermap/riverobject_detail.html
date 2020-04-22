@@ -48,7 +48,7 @@
             </div>
             {% if object.dam %}
             <p id="sb-level">{% trans "Current Level:" %} {{ object.dam.level }} &#13221;/s</p>
-            <p id="sb-observatory">{% trans "Dam:" %} <a href="{{ object.observatory.url }}" target="_blank">{{ object.dam }}</a></p>
+            <p id="sb-observatory">{% trans "Dam:" %} <a href="{{ object.dam.url }}" target="_blank">{{ object.dam }}</a></p>
             <p id="sb-updated">{% trans "Updated:" %} {{ object.dam.date }}</p>
             {% else %}
             <p id="sb-level">{% trans "Current Level:" %} {{ object.observatory.level }} m</p>
