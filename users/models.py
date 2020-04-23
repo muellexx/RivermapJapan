@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from PIL import Image
+from django.utils import timezone
 
 from rivermap.models import Section, Spot
 
@@ -43,3 +44,11 @@ class Profile(models.Model):
 
     def get_comments(self):
         return self.user.comment_set.all().order_by('-date_posted')
+
+
+class ClientIP(models.Model):
+    ip = models.CharField(max_length=100, unique=True)
+    date_visited = models.DateTimeField(default=timezone.now)
+    count = models.IntegerField(default=1)
+    admin = models.BooleanField(default=False)
+    user = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL)
