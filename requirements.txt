@@ -3,7 +3,7 @@ beautifulsoup4==4.8.1
 bs4==0.0.1
 certifi==2019.11.28
 chardet==3.0.4
-Django==3.0.3
+Django==3.1.12
 django-crispy-forms==1.8.1
 django-polymorphic==2.1.2
 googletrans==2.4.0
