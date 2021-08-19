@@ -1,6 +1,7 @@
 import datetime
 import json
 import math
+import re
 
 from bs4 import BeautifulSoup as soup
 from urllib.request import urlopen as uReq
@@ -323,3 +324,23 @@ def json_spots():
     except FileNotFoundError:
         with open(settings.BASE_DIR+'/static/js/data/spot.json', 'w') as outfile:
             json.dump(spots, outfile, indent=4)
+
+
+def fix_urls():
+    for observatory in Dam.objects.all():
+        url = observatory.url
+        if '/pcfull/' in url:
+            continue
+        base = 'https://www.river.go.jp/kawabou/pcfull/'
+
+        number = re.search('obsrvId=(.*)&gamenId', url).group(1)
+
+        a = "tm?itmkndCd=" + number[7]
+        b = "&ofcCd=" + number[0:5]
+        c = "&obsCd=" + number[8:13]
+        d = "&isCurrent=true&fld=0"
+
+        nurl = base + a + b + c + d
+        observatory.url = nurl
+        observatory.save()
+
